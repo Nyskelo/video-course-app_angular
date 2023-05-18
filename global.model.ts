@@ -5,3 +5,9 @@ export interface Course {
 	duration: number;
 	description: string;
 }
+
+export interface User {
+	id: string;
+	firstName: string;
+	lastName: string;
+}
