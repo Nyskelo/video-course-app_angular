@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
 	selector: 'app-logo',
-	templateUrl: './logo.component.html',
-	styleUrls: ['./logo.component.scss'],
+	template:
+		'<img src="../../../../assets/img/video-course-logo.png" alt="logo" />',
+	styles: ['img{width: 100%;}'],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LogoComponent {}

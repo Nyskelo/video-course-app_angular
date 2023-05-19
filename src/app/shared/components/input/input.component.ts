@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
 	selector: 'app-input',
@@ -6,4 +6,12 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 	styleUrls: ['./input.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InputComponent {}
+export class InputComponent {
+	@Input() name = '';
+	@Input() id = '';
+	@Input() type = 'text';
+	@Input() title = 'text';
+	@Input() placeholder = 'Type here...';
+	@Input() heigth = '30';
+	@Input() width = '200';
+}

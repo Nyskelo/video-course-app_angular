@@ -1,0 +1,11 @@
+@import 'src/styles/base';
+
+.page-container {
+	position: relative;
+	min-height: 100vh;
+	background-color: $bg-light;
+}
+
+.contant-wrap {
+	padding-bottom: $indent1;
+}

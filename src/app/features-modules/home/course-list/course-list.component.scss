@@ -1,0 +1,45 @@
+@import 'src/styles/base';
+
+.container {
+	@include container;
+	text-align: center;
+}
+
+.card-container {
+	@include container;
+}
+
+.card-title {
+	display: flex;
+	justify-content: space-between;
+	color: $text-grey2;
+}
+.card-title p {
+	display: inline-flex;
+	align-items: center;
+	padding-left: 10px;
+	padding-bottom: 20px;
+	color: $text-grey1;
+}
+.card-detail {
+	display: grid;
+	grid-template-columns: 85% 1fr;
+	gap: 10px;
+	align-items: center;
+}
+.card-description {
+	color: $text-grey2;
+	text-align: justify;
+}
+.card-update {
+	display: flex;
+	justify-content: flex-end;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.material-icons {
+	font-size: medium;
+	font-weight: 600;
+	padding-right: 5px;
+}
