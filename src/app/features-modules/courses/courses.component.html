@@ -1,29 +1,32 @@
 <!-- Breadcrumbs -->
-<section>
-	<h4>Courses</h4>
-</section>
+<div class="wrapper">
+	<section>
+		<h4>Courses</h4>
+	</section>
 
-<main>
-	<!-- Searchbar, AddCourse button -->
-	<div class="search-container">
-		<div>
-			<app-input
-				[title]="'search'"
-				[placeholder]="'Type to search'"
-			></app-input>
-			<app-button [text]="'Search'" [bgColor]="'rgb(102,163,0)'"></app-button>
+	<main>
+		<!-- Searchbar, AddCourse button -->
+		<div class="search-container">
+			<div>
+				<app-input
+					[title]="'search'"
+					[placeholder]="'Type to search'"
+				></app-input>
+				<app-button [text]="'Search'" [bgColor]="'rgb(102,163,0)'"></app-button>
+			</div>
+			<div>
+				<app-button [text]="'Add course'"
+					><span class="material-icons"> add_circle </span></app-button
+				>
+			</div>
 		</div>
-		<div>
-			<app-button [text]="'Add course'"
-				><span class="material-icons"> add_circle </span></app-button
-			>
-		</div>
-	</div>
 
-	<!-- Courses list -->
-	<app-course-list></app-course-list>
-	<app-course-list></app-course-list>
+		<!-- Courses list -->
+		<app-course-list></app-course-list>
+		<app-course-list></app-course-list>
+		<app-course-list></app-course-list>
 
-	<!-- Load more -->
-	<div class="container"><a href="">Load more</a></div>
-</main>
+		<!-- Load more -->
+		<div class="container"><a href="">Load more</a></div>
+	</main>
+</div>

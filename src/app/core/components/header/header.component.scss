@@ -1,13 +1,13 @@
 @import 'src/styles/base';
 
 header {
-	box-sizing: border-box;
 	display: grid;
 	grid-template-columns: 100px 1fr;
 	align-items: center;
+	position: fixed;
+	width: 100%;
 	background-color: $bg;
 	color: $text-light;
-	margin: 0;
 	padding: 0 $indent1;
 	height: $indent1;
 }
