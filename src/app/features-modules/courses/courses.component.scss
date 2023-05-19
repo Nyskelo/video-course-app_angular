@@ -1,0 +1,40 @@
+@import 'src/styles/base';
+
+section {
+	background-color: $bg-light;
+	color: $text-grey2;
+	line-height: $indent1;
+	width: 100%;
+	padding: 0 $indent1;
+	height: $indent1;
+}
+main {
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
+	padding: 20px 50px;
+	gap: 20px;
+	background-color: $bg-light-grey;
+}
+.wrapper {
+	padding-top: $indent1;
+}
+.search-container div:nth-child(1) {
+	display: flex;
+	gap: 10px;
+}
+.search-container div:nth-child(2) {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.container {
+	@include container;
+	text-align: center;
+}
+
+.material-icons {
+	font-size: medium;
+	font-weight: 600;
+	padding-right: 5px;
+}

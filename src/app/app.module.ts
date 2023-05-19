@@ -3,16 +3,16 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { FooterComponent } from './core/components/footer/footer.component';
+import { HeaderComponent } from './core/components/header/header.component';
+import { LogoComponent } from './core/components/logo/logo.component';
+import { CoreModule } from './core/core.module';
+import { FeaturesModulesModule } from './features-modules/features-modules.module';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+	declarations: [AppComponent, HeaderComponent, FooterComponent, LogoComponent],
+	imports: [BrowserModule, AppRoutingModule, CoreModule, FeaturesModulesModule],
+	providers: [],
+	bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

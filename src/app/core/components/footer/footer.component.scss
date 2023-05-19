@@ -1,0 +1,15 @@
+@import 'src/styles/base';
+
+footer {
+	// box-sizing: border-box;
+	display: grid;
+	justify-content: right;
+	align-items: center;
+	padding-right: $indent1;
+	background-color: $bg;
+	color: $text-light;
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	height: $indent1;
+}
