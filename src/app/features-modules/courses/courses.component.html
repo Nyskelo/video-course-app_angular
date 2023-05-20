@@ -16,15 +16,13 @@
 			</div>
 			<div>
 				<app-button [text]="'Add course'"
-					><span class="material-icons"> add_circle </span></app-button
-				>
+					><app-i-plus class="icons"
+				/></app-button>
 			</div>
 		</div>
 
 		<!-- Courses list -->
-		<app-course-list></app-course-list>
-		<app-course-list></app-course-list>
-		<app-course-list></app-course-list>
+		<app-course-list [courses]="courses"></app-course-list>
 
 		<!-- Load more -->
 		<div class="container"><a href="">Load more</a></div>

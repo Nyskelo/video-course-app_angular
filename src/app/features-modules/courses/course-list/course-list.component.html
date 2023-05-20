@@ -1,31 +1,19 @@
-<div class="card-container">
+<div class="card-container" *ngFor="let course of courses">
 	<!-- Course card component will be here -->
 	<div class="card-title">
-		<h1>Title</h1>
+		<h1>{{ course.title }}</h1>
 		<div>
-			<p><span class="material-icons"> schedule </span> Time</p>
-			<p><span class="material-icons"> calendar_today </span>Date</p>
+			<p><app-i-schedule class="icons" /> {{ course.duration }}</p>
+			<p><app-i-calendar class="icons" />{{ course.creationDate }}</p>
 		</div>
 	</div>
 	<div class="card-detail">
 		<p class="card-description">
-			Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sunt suscipit
-			inventore minus commodi dolores, corporis quae magnam, vel id omnis nisi
-			consectetur ducimus iure rem, iusto veritatis odio nihil ipsum. Cupiditate
-			architecto atque officia corrupti eveniet voluptatum odio! Maxime, labore
-			voluptatibus? Porro laboriosam hic deleniti ducimus, vero consectetur
-			ducimus iure rem, iusto veritatis odio nihil ipsum. Cupiditate architecto
-			atque officia corrupti eveniet voluptatum odio! Maxime, labore
-			voluptatibus? Porro laboriosam hic deleniti ducimus, vero nesciunt
-			laudantium numquam.
+			{{ course.description }}
 		</p>
 		<div class="card-update">
-			<app-button [text]="'Edit'"
-				><span class="material-icons"> edit </span></app-button
-			>
-			<app-button [text]="'Delete'"
-				><span class="material-icons"> delete </span></app-button
-			>
+			<app-button [text]="'Edit'"><app-i-edit class="icons" /></app-button>
+			<app-button [text]="'Delete'"><app-i-delete class="icons" /></app-button>
 		</div>
 	</div>
 </div>
