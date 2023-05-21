@@ -10,4 +10,8 @@ button {
 	justify-content: center;
 	align-items: center;
 	cursor: pointer;
+	transition: all 100ms ease-out;
+}
+button:active {
+	transform: scale(0.95);
 }

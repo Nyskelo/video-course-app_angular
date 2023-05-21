@@ -16,7 +16,9 @@
 		</p>
 		<div class="card-update">
 			<app-button [text]="'Edit'"><app-i-edit class="icons" /></app-button>
-			<app-button [text]="'Delete'"><app-i-delete class="icons" /></app-button>
+			<app-button [text]="'Delete'" (click)="onDeleteCourse(course.id)"
+				><app-i-delete class="icons"
+			/></app-button>
 		</div>
 	</div>
 </div>

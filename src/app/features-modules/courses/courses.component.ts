@@ -29,6 +29,9 @@ export class CoursesComponent {
 		this.searchText = searchValue;
 		console.log(`Search value: ${this.searchText}`);
 	}
+	onDeleteCourseID(id: string) {
+		console.log(`Course with id #${id} has been deleted`);
+	}
 	onLoadMore(): void {
 		console.log('Loaded more was clicked!');
 	}
