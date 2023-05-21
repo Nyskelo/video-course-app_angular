@@ -2,8 +2,15 @@
 	<app-logo></app-logo>
 	<nav>
 		<ul>
-			<li><span class="material-icons"> person </span>User login</li>
-			<li><span class="material-icons"> output </span>Log off</li>
+			<li><app-i-output class="icons" />User login</li>
+			<li>
+				<app-button
+					[text]="'Log off'"
+					[bgColor]="'transparent'"
+					[fontSize]="'12px'"
+					><app-i-output class="icons"
+				/></app-button>
+			</li>
 		</ul>
 	</nav>
 </header>
