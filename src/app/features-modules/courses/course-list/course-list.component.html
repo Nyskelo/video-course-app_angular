@@ -1,4 +1,7 @@
-<div class="card-container" *ngFor="let course of courses">
+<div
+	class="card-container"
+	*ngFor="let course of courses; trackBy: trackCourseID"
+>
 	<!-- Course card component will be here -->
 	<div class="card-title">
 		<h1>{{ course.title }}</h1>
