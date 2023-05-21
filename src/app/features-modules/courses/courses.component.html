@@ -7,13 +7,7 @@
 	<main>
 		<!-- Searchbar, AddCourse button -->
 		<div class="search-container">
-			<div>
-				<app-input
-					[title]="'search'"
-					[placeholder]="'Type to search'"
-				></app-input>
-				<app-button [text]="'Search'" [bgColor]="'rgb(102,163,0)'"></app-button>
-			</div>
+			<app-searchbar (searchTextChanged)="onSearchTextEntered($event)" />
 			<div>
 				<app-button [text]="'Add course'"
 					><app-i-plus class="icons"
@@ -25,6 +19,13 @@
 		<app-course-list [courses]="courses"></app-course-list>
 
 		<!-- Load more -->
-		<div class="container"><a href="">Load more</a></div>
+		<div class="container">
+			<app-button
+				[text]="'Load more'"
+				[bgColor]="'transparent'"
+				[textColor]="'black'"
+				(click)="onLoadMore()"
+			/>
+		</div>
 	</main>
 </div>

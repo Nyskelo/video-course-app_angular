@@ -24,4 +24,12 @@ export class CoursesComponent {
 			description: 'lorem',
 		},
 	];
+	searchText = '';
+	onSearchTextEntered(searchValue: string) {
+		this.searchText = searchValue;
+		console.log(`Search value: ${this.searchText}`);
+	}
+	onLoadMore(): void {
+		console.log('Loaded more was clicked!');
+	}
 }

@@ -4,4 +4,6 @@
 	id="{{ id }}"
 	title="{{ title }}"
 	placeholder="{{ placeholder }}"
+	[(ngModel)]="value"
+	(input)="onChangedValue()"
 />
