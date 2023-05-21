@@ -10,18 +10,20 @@ import { Course } from 'src/app/utils/global.model';
 export class CoursesComponent {
 	courses: Course[] = [
 		{
-			id: '1',
-			title: 'titl1',
+			id: '165-3345-4444',
+			title: 'Video courses 1. Name tag',
 			creationDate: 'date',
-			duration: 122,
-			description: 'lorem',
+			duration: 60,
+			description:
+				'Elit minim consequat quis aute labore deserunt magna tempor proident.Proident excepteur minim officia eu anim aliqua incididunt commodo qui consequat reprehenderit minim adipisicing consectetur.Cupidatat dolor magna velit minim ut eiusmod.loCupidatat aliquip aliquip irure aliqua dolor laborum Lorem dolor ad cupidatat aliquip tempor sint.',
 		},
 		{
-			id: '2',
-			title: 'titl2',
+			id: '244-5567-4432',
+			title: 'Video courses 2. Name tag',
 			creationDate: 'date',
 			duration: 122,
-			description: 'lorem',
+			description:
+				'Occaecat aute ex ex minim pariatur.Irure cillum et mollit dolore commodo exercitation anim et et tempor.Non enim quis nulla est non.loCupidatat aliquip aliquip irure aliqua dolor laborum Lorem dolor ad cupidatat aliquip tempor sint.',
 		},
 	];
 	searchText = '';
