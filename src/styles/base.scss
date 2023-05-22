@@ -2,10 +2,27 @@
 
 $indent1: 50px;
 
+@mixin coverer {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	min-height: max-content;
+}
+
 @mixin container {
 	padding: 20px;
 	background-color: $bg-light;
 	border-radius: 5px;
 	box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 	margin-bottom: 10px;
+}
+
+@mixin inline-center-cell {
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 5px;
+	height: 30px;
+	padding: 5px;
 }

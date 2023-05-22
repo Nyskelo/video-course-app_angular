@@ -5,37 +5,39 @@
 	text-align: center;
 }
 
-.card-container {
-	@include container;
-}
-
-.card-title {
-	display: flex;
-	justify-content: space-between;
-	color: $text-grey2;
-}
-.card-title p {
-	display: inline-flex;
-	align-items: center;
-	padding-left: 10px;
-	padding-bottom: 20px;
-	color: $text-grey1;
-}
-.card-detail {
-	display: grid;
-	grid-template-columns: 85% 1fr;
-	gap: 10px;
-	align-items: center;
-}
-.card-description {
-	color: $text-grey2;
-	text-align: justify;
-}
-.card-update {
-	display: flex;
-	justify-content: flex-end;
-	flex-wrap: wrap;
-	gap: 10px;
+.card {
+	&-container {
+		@include container;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+	&-title {
+		display: flex;
+		justify-content: space-between;
+		color: $text-grey2;
+		p {
+			display: inline-flex;
+			padding-left: 10px;
+			color: $text-grey1;
+		}
+	}
+	&-detail {
+		display: grid;
+		grid-template-columns: 85% 1fr;
+		gap: 10px;
+		align-items: center;
+	}
+	&-description {
+		color: $text-grey2;
+		text-align: justify;
+	}
+	&-update {
+		display: flex;
+		justify-content: flex-end;
+		flex-wrap: wrap;
+		gap: 10px;
+	}
 }
 
 .material-icons {

@@ -11,22 +11,19 @@ section {
 main {
 	display: flex;
 	flex-direction: column;
-	box-sizing: border-box;
 	padding: 20px 50px;
 	gap: 20px;
-	background-color: $bg-light-grey;
-	min-height: calc(100vh - $indent1 * 2);
 }
-.wrapper {
-	padding-top: $indent1;
-}
-.search-container div:nth-child(1) {
-	display: flex;
-	gap: 10px;
-}
-.search-container div:nth-child(2) {
-	display: flex;
-	justify-content: flex-end;
+
+.search-container {
+	& div:nth-child(1) {
+		display: flex;
+		gap: 10px;
+	}
+	& div:nth-child(2) {
+		display: flex;
+		justify-content: flex-end;
+	}
 }
 
 .container {

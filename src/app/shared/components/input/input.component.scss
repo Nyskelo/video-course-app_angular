@@ -1,13 +1,8 @@
 @import 'src/styles/base';
 
 input {
+	@include inline-center-cell;
 	border: 1px solid $text-grey1;
-	border-radius: 5px;
-	padding: 5px;
-	height: 30px;
 	width: 200px;
-	display: inline-flex;
-	justify-content: center;
-	align-items: center;
 	margin-right: 5px;
 }

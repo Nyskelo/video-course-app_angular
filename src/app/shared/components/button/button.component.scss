@@ -1,17 +1,12 @@
 @import 'src/styles/base';
 
 button {
+	@include inline-center-cell;
 	border: none;
-	border-radius: 5px;
-	padding: 5px;
-	height: 30px;
 	min-width: 80px;
-	display: inline-flex;
-	justify-content: center;
-	align-items: center;
-	cursor: pointer;
 	transition: all 100ms ease-out;
-}
-button:active {
-	transform: scale(0.95);
+	cursor: pointer;
+	&:active {
+		transform: scale(0.95);
+	}
 }
