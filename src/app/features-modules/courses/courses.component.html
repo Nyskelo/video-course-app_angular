@@ -7,7 +7,7 @@
 	<main>
 		<!-- Searchbar, AddCourse button -->
 		<div class="search-container">
-			<app-searchbar (searchTextChanged)="onSearchTextEntered($event)" />
+			<app-searchbar (searchTextChanged)="onSearchClick($event)" />
 			<div>
 				<app-button [text]="'Add course'"
 					><app-i-plus class="icons"

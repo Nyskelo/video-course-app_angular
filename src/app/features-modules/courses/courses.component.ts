@@ -32,7 +32,7 @@ export class CoursesComponent implements OnInit {
 	}
 
 	searchText = '';
-	onSearchTextEntered(searchValue: string) {
+	onSearchClick(searchValue: string) {
 		this.searchText = searchValue;
 		console.log(`Search value: ${this.searchText}`);
 	}
