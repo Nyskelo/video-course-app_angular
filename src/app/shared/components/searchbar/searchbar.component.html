@@ -1,0 +1,12 @@
+<div>
+	<app-input
+		[title]="'search'"
+		[placeholder]="'Type to search'"
+		(valueChanged)="onInputValueChanged($event)"
+	></app-input>
+	<app-button
+		[text]="'Search'"
+		[bgColor]="'rgb(102,163,0)'"
+		(click)="onSearchTextChanged()"
+	/>
+</div>

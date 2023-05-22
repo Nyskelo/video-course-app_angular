@@ -15,6 +15,7 @@ main {
 	padding: 20px 50px;
 	gap: 20px;
 	background-color: $bg-light-grey;
+	min-height: calc(100vh - $indent1 * 2);
 }
 .wrapper {
 	padding-top: $indent1;
@@ -31,10 +32,4 @@ main {
 .container {
 	@include container;
 	text-align: center;
-}
-
-.material-icons {
-	font-size: medium;
-	font-weight: 600;
-	padding-right: 5px;
 }

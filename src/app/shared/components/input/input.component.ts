@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	EventEmitter,
+	Input,
+	Output,
+} from '@angular/core';
 
 @Component({
 	selector: 'app-input',
@@ -14,4 +20,10 @@ export class InputComponent {
 	@Input() placeholder = 'Type here...';
 	@Input() heigth = '30';
 	@Input() width = '200';
+
+	value = '';
+	@Output() valueChanged: EventEmitter<string> = new EventEmitter<string>();
+	onChangedValue() {
+		this.valueChanged.emit(this.value);
+	}
 }
