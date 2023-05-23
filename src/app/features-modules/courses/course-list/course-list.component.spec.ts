@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { HeaderComponent } from './header.component';
+import { CourseListComponent } from './course-list.component';
 
-describe('HeaderComponent', () => {
-	let component: HeaderComponent;
-	let fixture: ComponentFixture<HeaderComponent>;
+describe('CourseListComponent', () => {
+	let component: CourseListComponent;
+	let fixture: ComponentFixture<CourseListComponent>;
 
 	beforeEach(() => {
 		TestBed.configureTestingModule({
 			schemas: [NO_ERRORS_SCHEMA],
-			declarations: [HeaderComponent],
+			declarations: [CourseListComponent],
 		});
-		fixture = TestBed.createComponent(HeaderComponent);
+		fixture = TestBed.createComponent(CourseListComponent);
 		component = fixture.componentInstance;
 	});
 
