@@ -13,6 +13,7 @@ describe('CourseListComponent', () => {
 		});
 		fixture = TestBed.createComponent(CourseListComponent);
 		component = fixture.componentInstance;
+		fixture.detectChanges();
 	});
 
 	it('can load instance', () => {
@@ -20,7 +21,6 @@ describe('CourseListComponent', () => {
 	});
 
 	it('should emit deleteCourse when called onDeleteCourse method', async () => {
-		fixture.detectChanges();
 		const id = 888;
 		spyOn(component.deleteCourse, 'emit');
 
