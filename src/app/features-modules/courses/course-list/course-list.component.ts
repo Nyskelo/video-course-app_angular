@@ -16,13 +16,13 @@ import { Course } from 'src/app/utils/global.model';
 })
 export class CourseListComponent {
 	@Input() courses!: Course[];
-	@Output() deleteCourse: EventEmitter<string> = new EventEmitter();
+	@Output() deleteCourse: EventEmitter<number> = new EventEmitter();
 
-	trackCourseID(index: number, course: Course): string {
+	trackCourseID(index: number, course: Course): number {
 		return course.id;
 	}
 
-	onDeleteCourse(id: string) {
+	onDeleteCourse(id: number) {
 		this.deleteCourse.emit(id);
 	}
 }

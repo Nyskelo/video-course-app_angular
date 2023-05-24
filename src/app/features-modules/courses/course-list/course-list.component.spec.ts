@@ -21,7 +21,7 @@ describe('CourseListComponent', () => {
 
 	it('should emit deleteCourse when called onDeleteCourse method', async () => {
 		fixture.detectChanges();
-		const id = '888';
+		const id = 888;
 		spyOn(component.deleteCourse, 'emit');
 
 		component.onDeleteCourse(id);
