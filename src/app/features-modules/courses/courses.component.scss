@@ -30,3 +30,8 @@ main {
 	@include container;
 	text-align: center;
 }
+
+.btn-load {
+	--custom-bg-color: transparent;
+	--custom-color: black;
+}

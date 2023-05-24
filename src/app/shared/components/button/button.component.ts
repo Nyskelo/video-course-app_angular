@@ -9,7 +9,4 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 export class ButtonComponent {
 	@Input() text = 'Button';
 	@Input() type = 'button';
-	@Input() bgColor = '#009ECD';
-	@Input() textColor = '#fff';
-	@Input() fontSize = '12px';
 }

@@ -26,16 +26,4 @@ describe('ButtonComponent', () => {
 	it(`type has default value`, () => {
 		expect(component.type).toEqual(`button`);
 	});
-
-	it(`bgColor has default value`, () => {
-		expect(component.bgColor).toEqual(`#009ECD`);
-	});
-
-	it(`textColor has default value`, () => {
-		expect(component.textColor).toEqual(`#fff`);
-	});
-
-	it(`fontSize has default value`, () => {
-		expect(component.fontSize).toEqual(`12px`);
-	});
 });
