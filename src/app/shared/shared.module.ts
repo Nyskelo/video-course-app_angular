@@ -7,6 +7,7 @@ import { SearchbarComponent } from './components/searchbar/searchbar.component';
 import { FormsModule } from '@angular/forms';
 import { DurationPipe } from './pipes/duration.pipe';
 import { OrderByPipe } from './pipes/orderBy.pipe';
+import { FilterPipe } from './pipes/filter.pipe';
 
 @NgModule({
 	declarations: [
@@ -15,6 +16,7 @@ import { OrderByPipe } from './pipes/orderBy.pipe';
 		SearchbarComponent,
 		DurationPipe,
 		OrderByPipe,
+		FilterPipe,
 	],
 	imports: [CommonModule, FormsModule, IconsModule],
 	exports: [
@@ -26,6 +28,7 @@ import { OrderByPipe } from './pipes/orderBy.pipe';
 		SearchbarComponent,
 		DurationPipe,
 		OrderByPipe,
+		FilterPipe,
 	],
 })
 export class SharedModule {}

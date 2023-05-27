@@ -1,7 +1,7 @@
 export const mockCourses = [
 	{
 		id: 8693,
-		name: 'duis mollit reprehenderit ad',
+		name: 'JavaScript',
 		description:
 			'Est minim ea aute sunt laborum minim eu excepteur. Culpa sint exercitation mollit enim ad culpa aliquip laborum cillum. Dolor officia culpa labore ex eiusmod ut est ea voluptate ea nostrud.',
 		isTopRated: true,
@@ -17,7 +17,7 @@ export const mockCourses = [
 	},
 	{
 		id: 4980,
-		name: 'magna excepteur aute deserunt',
+		name: 'TypeScript',
 		description:
 			'Sunt culpa officia minim commodo eiusmod irure sunt nostrud. Mollit aliquip id occaecat officia proident anim dolor officia qui voluptate consectetur laborum. Duis incididunt culpa aliqua mollit do fugiat ea dolor mollit irure Lorem tempor.',
 		isTopRated: false,
@@ -43,7 +43,7 @@ export const mockCourses = [
 	},
 	{
 		id: 4282,
-		name: 'sit voluptate eiusmod ea',
+		name: 'Angular',
 		description:
 			'Commodo id sunt sunt adipisicing et aliquip voluptate laborum consectetur. Occaecat nisi sint exercitation ullamco adipisicing irure est in consectetur aute voluptate. Ea pariatur dolor anim ea reprehenderit ut non occaecat magna adipisicing exercitation nisi consequat.',
 		isTopRated: true,
@@ -64,7 +64,7 @@ export const mockCourses = [
 	},
 	{
 		id: 1936,
-		name: 'reprehenderit est veniam elit',
+		name: 'Java',
 		description:
 			'Consectetur veniam non nulla in laboris minim ipsum. Dolor aliqua irure sint do irure magna tempor culpa quis. Deserunt amet occaecat velit sit.',
 		isTopRated: true,
@@ -90,7 +90,7 @@ export const mockCourses = [
 	},
 	{
 		id: 2006,
-		name: 'reprehenderit eiusmod nostrud amet',
+		name: 'Vue',
 		description:
 			'Est consequat deserunt officia fugiat culpa in aliquip consectetur. Est nostrud occaecat cillum elit officia officia ea magna et minim officia commodo sunt. Deserunt duis minim magna nostrud enim enim commodo sit elit nostrud cillum aliquip est qui.',
 		isTopRated: true,
@@ -121,7 +121,7 @@ export const mockCourses = [
 	},
 	{
 		id: 1672,
-		name: 'officia exercitation tempor officia',
+		name: 'React',
 		description:
 			'Laborum reprehenderit tempor do cillum ipsum consequat deserunt. In enim amet laboris occaecat sit cillum. Voluptate tempor consequat incididunt non pariatur eiusmod sint duis est.',
 		isTopRated: false,

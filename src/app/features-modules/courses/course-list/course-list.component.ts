@@ -16,6 +16,7 @@ import { Course } from 'src/app/utils/global.model';
 })
 export class CourseListComponent {
 	@Input() courses!: Course[];
+	@Input() filterBy!: string;
 	@Output() deleteCourse: EventEmitter<number> = new EventEmitter();
 
 	trackCourseID(index: number, course: Course): number {
