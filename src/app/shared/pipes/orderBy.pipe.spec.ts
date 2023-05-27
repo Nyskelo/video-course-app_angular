@@ -12,41 +12,43 @@ describe('Pipe: OrderBye', () => {
 		{ date: '2016-05-31T02:02:36+00:00', id: '111' },
 	];
 
-	it('create an instance', () => {
-		expect(pipe).toBeTruthy();
-	});
-	it('transforms "mockArrayDesc" to "mockArrayAsc"', () => {
-		expect(pipe.transform(mockArrayDesc, 'date', 'asc')?.values).toBe(
-			mockArrayAsc.values
-		);
+	describe('should sort by sorting type in the correct date format:', () => {
+		it('transforms "mockArrayDesc" to "mockArrayAsc" if sort type is ascif sort type is asc', () => {
+			expect(pipe.transform(mockArrayDesc, 'date', 'asc')?.values).toBe(
+				mockArrayAsc.values
+			);
+		});
+
+		it('transforms "mockArrayAsc" to "mockArrayDesc" if sort type is desc', () => {
+			expect(pipe.transform(mockArrayAsc, 'date', 'desc')?.values).toBe(
+				mockArrayDesc.values
+			);
+		});
+
+		it('transforms "mockArrayAsc" to "mockArrayAssc" if sort type is not provide', () => {
+			expect(pipe.transform(mockArrayAsc, 'date')?.values).toBe(
+				mockArrayAsc.values
+			);
+		});
 	});
 
-	it('transforms "mockArrayAsc" to "mockArrayDesc"', () => {
-		expect(pipe.transform(mockArrayAsc, 'date', 'desc')?.values).toBe(
-			mockArrayDesc.values
-		);
-	});
+	describe('should sort by sorting type:', () => {
+		it('transforms "mockArrayDesc" to "mockArrayAsc" if sort type is asc', () => {
+			expect(pipe.transform(mockArrayDesc, 'id', 'asc')?.values).toBe(
+				mockArrayAsc.values
+			);
+		});
 
-	it('transforms "mockArrayAsc" to "mockArrayAssc"', () => {
-		expect(pipe.transform(mockArrayAsc, 'date')?.values).toBe(
-			mockArrayAsc.values
-		);
-	});
-	it('transforms "mockArrayDesc" to "mockArrayAsc"', () => {
-		expect(pipe.transform(mockArrayDesc, 'id', 'asc')?.values).toBe(
-			mockArrayAsc.values
-		);
-	});
+		it('transforms "mockArrayAsc" to "mockArrayDesc"  if sort type is desc', () => {
+			expect(pipe.transform(mockArrayAsc, 'id', 'desc')?.values).toBe(
+				mockArrayDesc.values
+			);
+		});
 
-	it('transforms "mockArrayAsc" to "mockArrayDesc"', () => {
-		expect(pipe.transform(mockArrayAsc, 'id', 'desc')?.values).toBe(
-			mockArrayDesc.values
-		);
-	});
-
-	it('transforms "mockArrayAsc" to "mockArrayAssc"', () => {
-		expect(pipe.transform(mockArrayAsc, 'id')?.values).toBe(
-			mockArrayAsc.values
-		);
+		it('transforms "mockArrayAsc" to "mockArrayAsc" if sort type is not provide', () => {
+			expect(pipe.transform(mockArrayAsc, 'id')?.values).toBe(
+				mockArrayAsc.values
+			);
+		});
 	});
 });

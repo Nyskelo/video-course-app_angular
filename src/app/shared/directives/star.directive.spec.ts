@@ -9,13 +9,13 @@ const mockElementRef: ElementRef = {
 };
 let renderer: jasmine.SpyObj<Renderer2>;
 
-describe('Directive: Star', () => {
+describe('StarDirective', () => {
 	beforeEach(() => {
 		TestBed.configureTestingModule({
 			providers: [Renderer2],
 		}).compileComponents();
 	});
-	it('should create an instance', () => {
+	it('should changed view if pass value true', () => {
 		renderer = jasmine.createSpyObj('renderer', [
 			'appendChild',
 			'createElement',

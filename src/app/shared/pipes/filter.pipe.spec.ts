@@ -7,13 +7,9 @@ describe('Pipe: Filtere', () => {
 	const items = [{ name: 'Alla' }, { name: 'Maria' }, { name: 'Olena' }];
 	beforeEach(() => spyOn(filterPipe, 'transform').and.callThrough());
 
-	it('create an instance', () => {
-		expect(filterPipe).toBeTruthy();
-	});
-	it('should return empty array if no items given', () => {
+	it('should return [{ name: "Alla" }] from item array', () => {
 		expect(filterPipe.transform(items, 'Alla', 'name')).toEqual([
 			{ name: 'Alla' },
 		]);
-		expect(filterPipe.transform).toHaveBeenCalled();
 	});
 });
