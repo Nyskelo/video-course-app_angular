@@ -9,6 +9,7 @@ import { DurationPipe } from './pipes/duration.pipe';
 import { OrderByPipe } from './pipes/orderBy.pipe';
 import { FilterPipe } from './pipes/filter.pipe';
 import { BorderByDateDirective } from './directives/borderByDate.directive';
+import { StarDirective } from './directives/star.directive';
 
 @NgModule({
 	declarations: [
@@ -19,6 +20,7 @@ import { BorderByDateDirective } from './directives/borderByDate.directive';
 		OrderByPipe,
 		FilterPipe,
 		BorderByDateDirective,
+		StarDirective,
 	],
 	imports: [CommonModule, FormsModule, IconsModule],
 	exports: [
@@ -32,6 +34,7 @@ import { BorderByDateDirective } from './directives/borderByDate.directive';
 		OrderByPipe,
 		FilterPipe,
 		BorderByDateDirective,
+		StarDirective,
 	],
 })
 export class SharedModule {}

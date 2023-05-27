@@ -7,10 +7,15 @@
 			let i = index
 		"
 		[appBorderByDate]="course.date"
+		[ngClass]="course.isTopRated ? 'bg-topRaitings' : ''"
 	>
-		<div class="card-title">
-			<h1>Video course {{ i + 1 }}. {{ course.name | uppercase }}</h1>
-			<div>
+		<div class="card-header">
+			<div class="title">
+				<h1 [appStar]="course.isTopRated">
+					Video course {{ i + 1 }}. {{ course.name | uppercase }}
+				</h1>
+			</div>
+			<div class="info">
 				<p><app-i-schedule /> {{ course.length | duration }}</p>
 				<p><app-i-calendar />{{ course.date | date : 'dd/MM/yyyy' }}</p>
 			</div>

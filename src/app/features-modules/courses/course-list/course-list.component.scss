@@ -12,21 +12,28 @@
 		flex-direction: column;
 		gap: 10px;
 	}
-	&-title {
+	&-header {
 		display: flex;
 		justify-content: space-between;
+		align-items: center;
 		color: $text-grey2;
-		p {
-			display: inline-flex;
-			padding-left: 10px;
+		.title {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			gap: 10px;
+		}
+		.info p {
 			color: $text-grey1;
+			padding-left: 10px;
+			display: inline-flex;
 		}
 	}
 	&-detail {
 		display: grid;
 		grid-template-columns: 80% 1fr;
-		gap: 10px;
 		align-items: center;
+		gap: 10px;
 	}
 	&-description {
 		color: $text-grey2;
@@ -43,5 +50,8 @@
 .material-icons {
 	font-size: medium;
 	font-weight: 600;
-	padding-right: 5px;
+}
+
+.bg-topRaitings {
+	background-image: linear-gradient(to right, #c6ffdd, #fcffa9, #fff5e3);
 }
