@@ -35,7 +35,6 @@ export class CourseListComponent implements OnInit, OnChanges {
 			'name'
 		);
 		this.filteredCourses$.next(updateCourses);
-		console.log(updateCourses);
 	}
 	ngOnInit(): void {
 		const updateCourses = this.filterPipe.transform(

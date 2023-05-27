@@ -4,23 +4,23 @@ import { Pipe, PipeTransform } from '@angular/core';
 	name: 'orderBy',
 })
 export class OrderByPipe implements PipeTransform {
-	transform(value: any, field: any, order?: 'desc' | 'asc') {
+	transform<T>(value: T, field: string, order?: 'desc' | 'asc') {
 		if (!Array.isArray(value)) {
 			return;
 		}
 		if (field === 'date') {
-			return value.sort((a: any, b: any) => {
+			return value.sort((a, b) => {
 				if (order === 'asc') {
-					return new Date(a[field]).getTime() - new Date(b[field]).getTime();
+					return new Date(a.date).getTime() - new Date(b.date).getTime();
 				}
 				if (order === 'desc') {
-					return new Date(b[field]).getTime() - new Date(a[field]).getTime();
+					return new Date(b.date).getTime() - new Date(a.date).getTime();
 				} else {
 					return 0;
 				}
 			});
 		}
-		return value.sort((a: any, b: any) => {
+		return value.sort(() => {
 			if (order === 'asc') {
 				return -1;
 			}
