@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { DurationPipe } from './pipes/duration.pipe';
 import { OrderByPipe } from './pipes/orderBy.pipe';
 import { FilterPipe } from './pipes/filter.pipe';
+import { BorderByDateDirective } from './directives/borderByDate.directive';
 
 @NgModule({
 	declarations: [
@@ -17,6 +18,7 @@ import { FilterPipe } from './pipes/filter.pipe';
 		DurationPipe,
 		OrderByPipe,
 		FilterPipe,
+		BorderByDateDirective,
 	],
 	imports: [CommonModule, FormsModule, IconsModule],
 	exports: [
@@ -29,6 +31,7 @@ import { FilterPipe } from './pipes/filter.pipe';
 		DurationPipe,
 		OrderByPipe,
 		FilterPipe,
+		BorderByDateDirective,
 	],
 })
 export class SharedModule {}

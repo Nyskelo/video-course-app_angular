@@ -1,10 +1,11 @@
 <div
 	class="card-container"
 	*ngFor="
-		let course of filteredCourses$ | async | orderBy : 'date' : 'asc';
+		let course of filteredCourses$ | async | orderBy : 'date' : 'desc';
 		trackBy: trackCourseID;
 		let i = index
 	"
+	[appBorderByDate]="course.date"
 >
 	<!-- Course card component will be here -->
 	<div class="card-title">
