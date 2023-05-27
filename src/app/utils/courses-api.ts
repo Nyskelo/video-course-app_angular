@@ -47,7 +47,7 @@ export const mockCourses = [
 		description:
 			'Commodo id sunt sunt adipisicing et aliquip voluptate laborum consectetur. Occaecat nisi sint exercitation ullamco adipisicing irure est in consectetur aute voluptate. Ea pariatur dolor anim ea reprehenderit ut non occaecat magna adipisicing exercitation nisi consequat.',
 		isTopRated: true,
-		date: '2017-03-25T12:57:37+00:00',
+		date: '2016-03-18T06:36:07+00:00',
 		authors: [
 			{
 				id: 3618,

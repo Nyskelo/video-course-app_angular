@@ -1,7 +1,7 @@
 <div
 	class="card-container"
 	*ngFor="
-		let course of courses | slice : 1 : 3;
+		let course of courses | slice : 1 : 3 | orderBy : 'date' : 'desc';
 		trackBy: trackCourseID;
 		let i = index
 	"
@@ -11,7 +11,7 @@
 		<h1>Video course {{ i + 1 }}. {{ course.name | uppercase }}</h1>
 		<div>
 			<p><app-i-schedule /> {{ course.length | duration }}</p>
-			<p><app-i-calendar />{{ course.date | date : 'dd/mm/yyyy' }}</p>
+			<p><app-i-calendar />{{ course.date | date : 'dd/MM/yyyy' }}</p>
 		</div>
 	</div>
 	<div class="card-detail">

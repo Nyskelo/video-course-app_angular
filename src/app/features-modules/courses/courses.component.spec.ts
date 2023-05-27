@@ -5,6 +5,7 @@ import { SearchbarComponent } from 'src/app/shared/components/searchbar/searchba
 import { ButtonComponent } from 'src/app/shared/components/button/button.component';
 import { CourseListComponent } from './course-list/course-list.component';
 import { DurationPipe } from 'src/app/shared/pipes/duration.pipe';
+import { OrderByPipe } from 'src/app/shared/pipes/orderBy.pipe';
 
 describe('CoursesComponent', () => {
 	let component: CoursesComponent;
@@ -19,6 +20,7 @@ describe('CoursesComponent', () => {
 				ButtonComponent,
 				CourseListComponent,
 				DurationPipe,
+				OrderByPipe,
 			],
 		});
 		fixture = TestBed.createComponent(CoursesComponent);
