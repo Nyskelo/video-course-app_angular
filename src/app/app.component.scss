@@ -3,6 +3,7 @@
 .page-container {
 	@include coverer;
 	background-color: $bg-light-grey;
+	min-height: 100%;
 	z-index: 1000;
 }
 
