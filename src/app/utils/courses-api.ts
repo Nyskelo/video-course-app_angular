@@ -13,7 +13,7 @@ export const mockCourses = [
 				lastName: 'Sosa',
 			},
 		],
-		length: 157,
+		length: 15,
 	},
 	{
 		id: 4980,
@@ -39,7 +39,7 @@ export const mockCourses = [
 				lastName: 'Bright',
 			},
 		],
-		length: 207,
+		length: 20,
 	},
 	{
 		id: 4282,

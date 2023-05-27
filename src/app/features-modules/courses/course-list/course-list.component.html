@@ -8,10 +8,10 @@
 >
 	<!-- Course card component will be here -->
 	<div class="card-title">
-		<h1>Video course {{ i + 1 }}. {{ course.name }}</h1>
+		<h1>Video course {{ i + 1 }}. {{ course.name | uppercase }}</h1>
 		<div>
-			<p><app-i-schedule /> {{ course.length }}</p>
-			<p><app-i-calendar />{{ course.date }}</p>
+			<p><app-i-schedule /> {{ course.length | duration }}</p>
+			<p><app-i-calendar />{{ course.date | date : 'dd/mm/yyyy' }}</p>
 		</div>
 	</div>
 	<div class="card-detail">

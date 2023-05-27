@@ -5,9 +5,15 @@ import { ButtonComponent } from './components/button/button.component';
 import { IconsModule } from './components/icons/_icons.module';
 import { SearchbarComponent } from './components/searchbar/searchbar.component';
 import { FormsModule } from '@angular/forms';
+import { DurationPipe } from './pipes/duration.pipe';
 
 @NgModule({
-	declarations: [InputComponent, ButtonComponent, SearchbarComponent],
+	declarations: [
+		InputComponent,
+		ButtonComponent,
+		SearchbarComponent,
+		DurationPipe,
+	],
 	imports: [CommonModule, FormsModule, IconsModule],
 	exports: [
 		CommonModule,
@@ -16,6 +22,7 @@ import { FormsModule } from '@angular/forms';
 		ButtonComponent,
 		IconsModule,
 		SearchbarComponent,
+		DurationPipe,
 	],
 })
 export class SharedModule {}
