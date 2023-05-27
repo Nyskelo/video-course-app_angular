@@ -24,6 +24,7 @@ describe('CoursesComponent', () => {
 				OrderByPipe,
 				FilterPipe,
 			],
+			providers: [FilterPipe],
 		});
 		fixture = TestBed.createComponent(CoursesComponent);
 		component = fixture.componentInstance;

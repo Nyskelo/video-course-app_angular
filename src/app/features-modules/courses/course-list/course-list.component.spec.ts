@@ -12,6 +12,7 @@ describe('CourseListComponent', () => {
 		TestBed.configureTestingModule({
 			schemas: [NO_ERRORS_SCHEMA],
 			declarations: [CourseListComponent, OrderByPipe, FilterPipe],
+			providers: [FilterPipe],
 		});
 		fixture = TestBed.createComponent(CourseListComponent);
 		component = fixture.componentInstance;
