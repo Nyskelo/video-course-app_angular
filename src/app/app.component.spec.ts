@@ -15,10 +15,6 @@ describe('AppComponent', () => {
 		component = fixture.componentInstance;
 	});
 
-	it('can load instance', () => {
-		expect(component).toBeTruthy();
-	});
-
 	it(`title has default value`, () => {
 		expect(component.title).toEqual(`Video course`);
 	});

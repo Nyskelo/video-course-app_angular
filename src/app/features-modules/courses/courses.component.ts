@@ -21,7 +21,6 @@ export class CoursesComponent implements OnInit {
 	ngOnInit(): void {
 		this.courses = this.coursesService.getCourses();
 		console.log(`Courses has been initilazed!`);
-		console.log(this.coursesService);
 	}
 
 	onSearchClick(searchValue: string) {

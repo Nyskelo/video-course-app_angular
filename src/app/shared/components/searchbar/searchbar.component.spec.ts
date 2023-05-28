@@ -21,17 +21,18 @@ describe('SearchbarComponent', () => {
 		fixture.detectChanges();
 	});
 
-	it('should be called onInputValueChanged when inputEvent occurs', () => {
-		component.onInputValueChanged('Value');
-		expect(component.enteredSearchValue).toBe('Value');
+	describe('onInputValueChanged', () => {
+		it('should changed enteredSearchValue to "NewValue"', () => {
+			component.onInputValueChanged('NewValue');
+			expect(component.enteredSearchValue).toBe('NewValue');
+		});
 	});
 
-	it('should emit searchTextChanged when called onSearchTextChanged method', async () => {
-		fixture.detectChanges();
-		spyOn(component.searchTextChanged, 'emit');
-
-		component.onSearchTextChanged();
-
-		expect(component.searchTextChanged.emit).toHaveBeenCalled();
+	describe('onSearchTextChanged', () => {
+		it('should emit searchTextChanged', async () => {
+			spyOn(component.searchTextChanged, 'emit');
+			component.onSearchTextChanged();
+			expect(component.searchTextChanged.emit).toHaveBeenCalled();
+		});
 	});
 });
