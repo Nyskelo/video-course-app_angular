@@ -1,13 +1,17 @@
 <div
 	class="card-container"
-	*ngFor="let course of courses; trackBy: trackCourseID"
+	*ngFor="
+		let course of courses | slice : 1 : 3;
+		trackBy: trackCourseID;
+		let i = index
+	"
 >
 	<!-- Course card component will be here -->
 	<div class="card-title">
-		<h1>{{ course.title }}</h1>
+		<h1>Video course {{ i + 1 }}. {{ course.name }}</h1>
 		<div>
-			<p><app-i-schedule class="icons" /> {{ course.duration }}</p>
-			<p><app-i-calendar class="icons" />{{ course.creationDate }}</p>
+			<p><app-i-schedule /> {{ course.length }}</p>
+			<p><app-i-calendar />{{ course.date }}</p>
 		</div>
 	</div>
 	<div class="card-detail">
@@ -15,9 +19,9 @@
 			{{ course.description }}
 		</p>
 		<div class="card-update">
-			<app-button [text]="'Edit'"><app-i-edit class="icons" /></app-button>
+			<app-button [text]="'Edit'"><app-i-edit /></app-button>
 			<app-button [text]="'Delete'" (click)="onDeleteCourse(course.id)"
-				><app-i-delete class="icons"
+				><app-i-delete
 			/></app-button>
 		</div>
 	</div>

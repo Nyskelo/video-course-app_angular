@@ -1,8 +1,1 @@
-<button
-	[type]="type"
-	[style.background]="bgColor"
-	[style.color]="textColor"
-	[style.fontSize]="fontSize"
->
-	<ng-content></ng-content>{{ text }}
-</button>
+<button [type]="type"><ng-content></ng-content>{{ text }}</button>

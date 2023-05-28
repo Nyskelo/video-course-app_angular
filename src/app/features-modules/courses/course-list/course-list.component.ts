@@ -3,10 +3,7 @@ import {
 	Component,
 	EventEmitter,
 	Input,
-	OnChanges,
-	OnInit,
 	Output,
-	SimpleChanges,
 	ViewEncapsulation,
 } from '@angular/core';
 import { Course } from 'src/app/utils/global.model';
@@ -17,22 +14,15 @@ import { Course } from 'src/app/utils/global.model';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	encapsulation: ViewEncapsulation.None,
 })
-export class CourseListComponent implements OnInit, OnChanges {
+export class CourseListComponent {
 	@Input() courses!: Course[];
-	@Output() deleteCourse: EventEmitter<string> = new EventEmitter();
+	@Output() deleteCourse: EventEmitter<number> = new EventEmitter();
 
-	ngOnChanges(changes: SimpleChanges): void {
-		console.log(`Change detected occurred:`, changes);
-	}
-	ngOnInit(): void {
-		console.log(`List of courses has been created!`);
-	}
-
-	trackCourseID(index: number, course: Course): string {
+	trackCourseID(index: number, course: Course): number {
 		return course.id;
 	}
 
-	onDeleteCourse(id: string) {
+	onDeleteCourse(id: number) {
 		this.deleteCourse.emit(id);
 	}
 }

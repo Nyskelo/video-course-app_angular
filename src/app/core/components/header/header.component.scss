@@ -26,3 +26,8 @@ li {
 .icons {
 	color: $text-grey2;
 }
+
+.btn-logoff {
+	--custom-bg-color: transparent;
+	--custom-color: #fff;
+}
