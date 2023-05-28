@@ -12,6 +12,12 @@ describe('Pipe: OrderBye', () => {
 		{ date: '2016-05-31T02:02:36+00:00', id: '111' },
 	];
 
+	describe('should return undefined if the value passed is not an array:', () => {
+		it('non-valid value passed and return undefined', () => {
+			expect(pipe.transform('', 'id', 'asc')?.values).toBeUndefined();
+		});
+	});
+
 	describe('should sort by sorting type in the correct date format:', () => {
 		it('transforms "mockArrayDesc" to "mockArrayAsc" if sort type is ascif sort type is asc', () => {
 			expect(pipe.transform(mockArrayDesc, 'date', 'asc')?.values).toBe(

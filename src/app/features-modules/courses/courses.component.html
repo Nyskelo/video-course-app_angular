@@ -17,13 +17,12 @@
 
 		<!-- Courses list -->
 		<app-course-list
-			[courses]="courses"
-			[filterBy]="searchText"
+			[courses]="filteredCourses$ | async"
 			(deleteCourse)="onDeleteCourseID($event)"
 		/>
 
 		<!-- Load more -->
-		<div class="container">
+		<div class="container" *ngIf="(filteredCourses$ | async)?.length !== 0">
 			<app-button
 				class="btn-load"
 				[text]="'Load more'"

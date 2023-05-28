@@ -2,7 +2,7 @@
 	<div
 		class="card-container"
 		*ngFor="
-			let course of filteredCourses$ | async | orderBy : 'date' : 'desc';
+			let course of courses | orderBy : 'date' : 'desc';
 			trackBy: trackCourseID;
 			let i = index
 		"
