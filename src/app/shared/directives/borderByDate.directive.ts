@@ -1,10 +1,10 @@
-import { Directive, ElementRef, Input } from '@angular/core';
+import { Directive, ElementRef, Input, Renderer2 } from '@angular/core';
 
 @Directive({
 	selector: '[appBorderByDate]',
 })
 export class BorderByDateDirective {
-	constructor(private element: ElementRef) {}
+	constructor(private element: ElementRef, private renderer: Renderer2) {}
 	@Input() set appBorderByDate(date: string) {
 		const FRESHDAYS = 14;
 		const fresh = new Date(
@@ -18,12 +18,18 @@ export class BorderByDateDirective {
 		const isReleasedState = creationDate > currentDate;
 
 		if (isFreshState) {
-			this.element.nativeElement.style.border = '2px solid #66a300';
+			this.renderer.setAttribute(
+				this.element.nativeElement,
+				'class',
+				'fresh-state'
+			);
 		}
 		if (isReleasedState) {
-			this.element.nativeElement.style.border = '2px solid #009ecd';
-		} else {
-			return;
+			this.renderer.setAttribute(
+				this.element.nativeElement,
+				'class',
+				'released-state'
+			);
 		}
 	}
 }

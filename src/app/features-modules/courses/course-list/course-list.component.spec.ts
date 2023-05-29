@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA, Renderer2 } from '@angular/core';
 import { CourseListComponent } from './course-list.component';
-import { OrderByPipe } from 'src/app/shared/pipes/orderBy.pipe';
-import { FilterPipe } from 'src/app/shared/pipes/filter.pipe';
+import { OrderByPipe } from '../../../shared/pipes/orderBy.pipe';
+import { FilterPipe } from '../../../shared/pipes/filter.pipe';
 
 describe('CourseListComponent', () => {
 	let component: CourseListComponent;
@@ -12,7 +12,7 @@ describe('CourseListComponent', () => {
 		TestBed.configureTestingModule({
 			schemas: [NO_ERRORS_SCHEMA],
 			declarations: [CourseListComponent, OrderByPipe, FilterPipe],
-			providers: [FilterPipe],
+			providers: [FilterPipe, Renderer2],
 		});
 		fixture = TestBed.createComponent(CourseListComponent);
 		component = fixture.componentInstance;
