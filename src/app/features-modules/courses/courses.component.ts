@@ -25,23 +25,26 @@ export class CoursesComponent implements OnInit {
 	ngOnInit(): void {
 		this.courses = this.coursesService.getCourses();
 		this.filteredCourses$ = of(this.courses);
-		console.log(`Courses has been initilazed!`);
 	}
 
 	onSearchClick(searchValue: string) {
 		this.searchText = searchValue;
+		this.onUpdateCourse(searchValue);
+	}
+	onDeleteCourseID(id: number) {
+		this.coursesService.removeCourseByID(id);
+		this.courses = this.courses.filter((course) => course.id !== id);
+		this.onUpdateCourse(this.searchText);
+	}
+	onLoadMore(): void {
+		console.log('Loaded more was clicked!');
+	}
+	onUpdateCourse(searchValue: string) {
 		const updatedCourses = this.filteredPipe.transform(
 			this.courses,
 			searchValue,
 			'name'
 		);
 		this.filteredCourses$ = of(updatedCourses);
-		console.log(`Search value: ${this.searchText}`);
-	}
-	onDeleteCourseID(id: number) {
-		console.log(`Course with id #${id} has been deleted`);
-	}
-	onLoadMore(): void {
-		console.log('Loaded more was clicked!');
 	}
 }

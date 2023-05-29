@@ -6,9 +6,26 @@ import { Course } from 'src/app/utils/global.model';
 	providedIn: 'root',
 })
 export class CoursesService {
-	courses: Course[] = mockCourses;
+	// static array
+	courses!: Course[] | undefined;
 
+	//methods
 	getCourses(): Course[] {
+		this.courses = mockCourses;
 		return this.courses;
+	}
+	getCourseByID(id: number): Course | undefined {
+		return this.courses?.find((course) => course.id === id);
+	}
+	updateCourseByID(courseToUpdate: Course): void {
+		this.courses = this.courses?.map((course) =>
+			course.id === courseToUpdate.id ? courseToUpdate : course
+		);
+	}
+	removeCourseByID(id: number) {
+		this.courses = this.courses?.filter((course) => course.id !== id);
+	}
+	createCourse(course: Course) {
+		this.courses?.push(course);
 	}
 }

@@ -19,16 +19,10 @@ describe('CourseListComponent', () => {
 		fixture.detectChanges();
 	});
 
-	it('can load instance', () => {
-		expect(component).toBeTruthy();
-	});
-
 	it('should emit deleteCourse when called onDeleteCourse method', async () => {
 		const id = 888;
 		spyOn(component.deleteCourse, 'emit');
-
 		component.onDeleteCourse(id);
-
 		expect(component.deleteCourse.emit).toHaveBeenCalledWith(id);
 	});
 });
