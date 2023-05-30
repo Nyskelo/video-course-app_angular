@@ -1,19 +1,37 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { User } from 'src/app/utils/global.model';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class AuthService {
-	login() {
-		console.log('You are log in');
+	private currentUserSubject = new BehaviorSubject<User>(new User());
+	private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
+	public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
+
+	login(user: User) {
+		this.currentUserSubject.next(user);
+		this.isAuthenticatedSubject.next(true);
+		console.log(`${user.firstName} ${user.lastName} - You are log in!`);
 	}
 	logout() {
-		console.log('You are log out');
+		console.log(
+			`${this.currentUserSubject.value.firstName} ${this.currentUserSubject.value.lastName} - You are log out!`
+		);
+		localStorage.clear();
+		this.isAuthenticatedSubject.next(false);
 	}
 	getUserInfo() {
-		console.log('User info: data');
+		return this.currentUserSubject.value;
 	}
 	isAuthenticated() {
-		console.log('User auth true or false');
+		return this.isAuthenticatedSubject.value;
+	}
+	set authenticat(value: boolean) {
+		this.isAuthenticatedSubject.next(value);
+	}
+	set currentUser(user: User) {
+		this.currentUserSubject.next(user);
 	}
 }
