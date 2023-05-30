@@ -1,8 +1,8 @@
 <div class="page-container">
 	<app-header></app-header>
 	<div class="contant-wrap">
-		<app-login></app-login>
-		<!-- <app-courses></app-courses> -->
+		<app-login *appIsAuthenticated="false"></app-login>
+		<app-courses *appIsAuthenticated="true"></app-courses>
 	</div>
 	<app-footer></app-footer>
 </div>

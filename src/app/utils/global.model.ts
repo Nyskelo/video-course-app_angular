@@ -13,8 +13,8 @@ export interface Author {
 	name: string;
 	lastName?: string;
 }
-export interface User {
-	id: string;
-	firstName: string;
-	lastName: string;
+export class User {
+	id!: string;
+	firstName!: string;
+	lastName!: string;
 }
