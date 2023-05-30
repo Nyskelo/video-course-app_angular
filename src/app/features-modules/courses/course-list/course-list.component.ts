@@ -26,6 +26,12 @@ export class CourseListComponent {
 	}
 
 	onDeleteCourse(id: number) {
-		this.deleteCourse.emit(id);
+		if (
+			confirm(`
+DELETE THE COURSE?
+You will not be able to recover it`)
+		) {
+			this.deleteCourse.emit(id);
+		}
 	}
 }

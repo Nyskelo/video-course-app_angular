@@ -7,7 +7,6 @@ import { FilterPipe } from '../../../shared/pipes/filter.pipe';
 describe('CourseListComponent', () => {
 	let component: CourseListComponent;
 	let fixture: ComponentFixture<CourseListComponent>;
-
 	beforeEach(() => {
 		TestBed.configureTestingModule({
 			schemas: [NO_ERRORS_SCHEMA],
@@ -22,6 +21,7 @@ describe('CourseListComponent', () => {
 	it('should emit deleteCourse when called onDeleteCourse method', async () => {
 		const id = 888;
 		spyOn(component.deleteCourse, 'emit');
+		spyOn(window, 'confirm').and.returnValue(true);
 		component.onDeleteCourse(id);
 		expect(component.deleteCourse.emit).toHaveBeenCalledWith(id);
 	});
