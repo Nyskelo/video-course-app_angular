@@ -18,8 +18,6 @@ export class InputComponent {
 	@Input() type = 'text';
 	@Input() title = 'text';
 	@Input() placeholder = 'Type here...';
-	@Input() heigth = '30';
-	@Input() width = '200';
 
 	value = '';
 	@Output() valueChanged: EventEmitter<string> = new EventEmitter<string>();

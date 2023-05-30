@@ -3,6 +3,7 @@
 input {
 	@include inline-center-cell;
 	border: 1px solid $text-grey1;
-	width: 200px;
+	width: var(--custom-width, 200px);
+	height: var(--custom-height, $indent-h-cell);
 	margin-right: 5px;
 }
