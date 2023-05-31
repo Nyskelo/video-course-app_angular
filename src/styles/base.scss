@@ -1,6 +1,7 @@
 @import 'colors';
 
 $indent1: 50px;
+$indent-h-cell: 30px;
 
 @mixin coverer {
 	position: absolute;
@@ -18,11 +19,22 @@ $indent1: 50px;
 	margin-bottom: 10px;
 }
 
+@mixin flex-center {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+@mixin flex-col {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
 @mixin inline-center-cell {
 	display: inline-flex;
 	justify-content: center;
 	align-items: center;
 	border-radius: 5px;
-	height: 30px;
+	height: $indent-h-cell;
 	padding: 5px;
 }

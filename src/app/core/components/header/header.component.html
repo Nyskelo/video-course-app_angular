@@ -1,10 +1,10 @@
 <header>
 	<app-logo></app-logo>
-	<nav>
+	<nav *appIsAuthenticated="true">
 		<ul>
-			<li><app-i-person class="icons" />User login</li>
+			<li><app-i-person class="icons" />{{ userName }} login</li>
 			<li>
-				<app-button [text]="'Log off'" class="btn-logoff"
+				<app-button [text]="'Log off'" class="btn-logoff" (click)="onLogout()"
 					><app-i-output class="icons"
 				/></app-button>
 			</li>

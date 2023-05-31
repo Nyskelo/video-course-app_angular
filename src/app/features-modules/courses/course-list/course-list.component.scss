@@ -55,3 +55,9 @@
 .bg-topRaitings {
 	background-image: linear-gradient(to right, #c6ffdd, #fcffa9, #fff5e3);
 }
+.fresh-state {
+	border: 2px solid $btn-green;
+}
+.released-state {
+	border: 2px solid $btn-blue;
+}

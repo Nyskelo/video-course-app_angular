@@ -1,3 +1,29 @@
-<p>
-  login works!
-</p>
+<div class="login">
+	<div class="login-form">
+		<h1 class="login-title">Login</h1>
+		<label for="email" class="label-title"
+			><p>Email: <span class="required">*required</span></p>
+			<app-input
+				[title]="'email'"
+				[placeholder]="'Email'"
+				[id]="'email'"
+				(valueChanged)="onInputEmailValue($event)"
+				class="input-login"
+			/>
+		</label>
+		<label for="password" class="label-title"
+			><p>Password: <span class="required">*required</span></p>
+			<app-input
+				[title]="'password'"
+				[placeholder]="'Password'"
+				[id]="'password'"
+				(valueChanged)="onInputPasswordValue($event)"
+				class="input-login"
+			/>
+		</label>
+		<div>
+			<a href="#"><span class="link">Forgot password?</span></a>
+			<app-button [text]="'Login'" class="btn-login" (click)="onSubmit()" />
+		</div>
+	</div>
+</div>

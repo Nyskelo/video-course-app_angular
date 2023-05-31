@@ -1,17 +1,22 @@
 /* tslint:disable:no-unused-variable */
-import { ElementRef } from '@angular/core';
+import { ElementRef, Renderer2 } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { BorderByDateDirective } from './borderByDate.directive';
 
-describe('BorderByDateDirective shoude changed border color by date creation if freshDate or releasedDate, atherwise do nothing', () => {
+let renderer: jasmine.SpyObj<Renderer2>;
+
+describe('BorderByDateDirective shoude set a class name by date creation if freshDate or releasedDate, atherwise do nothing', () => {
 	let fixture: BorderByDateDirective;
 	const mockElementRef: ElementRef = {
-		nativeElement: {
-			style: { border: 'none' },
-		},
+		nativeElement: 'div',
 	};
+	renderer = jasmine.createSpyObj('renderer', ['setAttribute']);
 
 	beforeEach(function () {
-		fixture = new BorderByDateDirective(mockElementRef);
+		TestBed.configureTestingModule({
+			providers: [Renderer2],
+		}).compileComponents();
+		fixture = new BorderByDateDirective(mockElementRef, renderer);
 		jasmine.clock().install();
 		const baseTime = new Date('2023-05-26T02:02:36+00:00');
 		jasmine.clock().mockDate(baseTime);
@@ -22,18 +27,24 @@ describe('BorderByDateDirective shoude changed border color by date creation if 
 	});
 
 	describe('if freshDate (creationDate >= currentDate-14days && creationDate < currentDate):', () => {
-		it('shoude changed border color to green', () => {
-			const green = '2px solid #66a300';
+		it('should set the classname "fresh-state"', () => {
 			fixture.appBorderByDate = '2023-05-20T02:02:36+00:00';
-			expect(mockElementRef.nativeElement.style.border).toEqual(green);
+			expect(renderer.setAttribute).toHaveBeenCalledWith(
+				mockElementRef.nativeElement,
+				'class',
+				'fresh-state'
+			);
 		});
 	});
 
 	describe('if releasedDate (creationDate > currentDate):', () => {
-		it('shoude changed border color to blue', () => {
-			const blue = '2px solid #009ecd';
+		it('should set the classname "released-state"', () => {
 			fixture.appBorderByDate = '2023-06-20T02:02:36+00:00';
-			expect(mockElementRef.nativeElement.style.border).toEqual(blue);
+			expect(renderer.setAttribute).toHaveBeenCalledWith(
+				mockElementRef.nativeElement,
+				'class',
+				'released-state'
+			);
 		});
 	});
 });

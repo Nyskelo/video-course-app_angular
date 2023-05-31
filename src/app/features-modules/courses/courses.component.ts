@@ -4,6 +4,8 @@ import {
 	inject,
 	OnInit,
 } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { FilterPipe } from 'src/app/shared/pipes/filter.pipe';
 import { Course } from 'src/app/utils/global.model';
 import { CoursesService } from './services/courses.service';
 
@@ -14,23 +16,35 @@ import { CoursesService } from './services/courses.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CoursesComponent implements OnInit {
+	constructor(private filteredPipe: FilterPipe) {}
 	coursesService: CoursesService = inject(CoursesService);
 	courses: Course[] = [];
+	filteredCourses$!: Observable<Course[]>;
 	searchText = '';
 
 	ngOnInit(): void {
 		this.courses = this.coursesService.getCourses();
-		console.log(`Courses has been initilazed!`);
+		this.filteredCourses$ = of(this.courses);
 	}
 
 	onSearchClick(searchValue: string) {
 		this.searchText = searchValue;
-		console.log(`Search value: ${this.searchText}`);
+		this.onUpdateCourse(searchValue);
 	}
 	onDeleteCourseID(id: number) {
-		console.log(`Course with id #${id} has been deleted`);
+		this.coursesService.removeCourseByID(id);
+		this.courses = this.courses.filter((course) => course.id !== id);
+		this.onUpdateCourse(this.searchText);
 	}
 	onLoadMore(): void {
 		console.log('Loaded more was clicked!');
+	}
+	onUpdateCourse(searchValue: string) {
+		const updatedCourses = this.filteredPipe.transform(
+			this.courses,
+			searchValue,
+			'name'
+		);
+		this.filteredCourses$ = of(updatedCourses);
 	}
 }

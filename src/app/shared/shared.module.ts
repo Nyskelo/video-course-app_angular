@@ -10,6 +10,7 @@ import { OrderByPipe } from './pipes/orderBy.pipe';
 import { FilterPipe } from './pipes/filter.pipe';
 import { BorderByDateDirective } from './directives/borderByDate.directive';
 import { StarDirective } from './directives/star.directive';
+import { IsAuthenticatedDirective } from './directives/isAuthenticated.directive';
 
 @NgModule({
 	declarations: [
@@ -21,6 +22,7 @@ import { StarDirective } from './directives/star.directive';
 		FilterPipe,
 		BorderByDateDirective,
 		StarDirective,
+		IsAuthenticatedDirective,
 	],
 	imports: [CommonModule, FormsModule, IconsModule],
 	exports: [
@@ -35,6 +37,7 @@ import { StarDirective } from './directives/star.directive';
 		FilterPipe,
 		BorderByDateDirective,
 		StarDirective,
+		IsAuthenticatedDirective,
 	],
 })
 export class SharedModule {}
