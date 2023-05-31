@@ -21,22 +21,20 @@ describe('LoginComponent', () => {
 	});
 
 	describe('onInputEmailValue', () => {
-		it('should emit logEmail', () => {
+		it('should set email value', () => {
 			spyOn(component, 'onInputEmailValue').and.callThrough();
-			spyOn(component.logEmail, 'emit');
 			const newInputValue = 'new-email';
 			component.onInputEmailValue(newInputValue);
-			expect(component.logEmail.emit).toHaveBeenCalledWith(newInputValue);
+			expect(component.email).toEqual(newInputValue);
 		});
 	});
 
 	describe('onInputPasswordValue', () => {
-		it('should emit logPassword', () => {
+		it('should set password value', () => {
 			spyOn(component, 'onInputPasswordValue').and.callThrough();
-			spyOn(component.logPassword, 'emit');
 			const newInputValue = 'new-password';
 			component.onInputPasswordValue(newInputValue);
-			expect(component.logPassword.emit).toHaveBeenCalledWith(newInputValue);
+			expect(component.password).toEqual(newInputValue);
 		});
 	});
 
@@ -49,20 +47,15 @@ describe('LoginComponent', () => {
 			expect(window.alert).toHaveBeenCalled();
 		});
 
-		it('should clear inputs and call the service login method if the data is valid', () => {
+		it('should call the service login method if the data is valid', () => {
 			spyOn(component, 'onSubmit').and.callThrough();
 			spyOn(serviceSpy, 'login').and.returnValue();
-			spyOn(component.logEmail, 'emit');
-			spyOn(component.logPassword, 'emit');
 
 			const newUser = { firstName: 'Pretty', lastName: 'GoodDay', id: '111' };
 			component.email = 'not empty';
 			component.password = 'not empty';
-
 			component.onSubmit();
 
-			expect(component.logEmail.emit).toHaveBeenCalledWith('');
-			expect(component.logPassword.emit).toHaveBeenCalledWith('');
 			expect(serviceSpy.login).toHaveBeenCalledWith(newUser);
 		});
 	});
