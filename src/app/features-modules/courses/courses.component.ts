@@ -8,7 +8,9 @@ import { Observable, of } from 'rxjs';
 import { FilterPipe } from 'src/app/shared/pipes/filter.pipe';
 import { Course } from 'src/app/utils/global.model';
 import { CoursesService } from './services/courses.service';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
 	selector: 'app-courses',
 	templateUrl: './courses.component.html',

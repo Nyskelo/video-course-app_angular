@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
 	selector: 'app-login',
 	templateUrl: './login.component.html',
@@ -8,6 +10,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 })
 export class LoginComponent {
 	constructor(private authService: AuthService) {}
+
 	email = '';
 	password = '';
 	authData = {
