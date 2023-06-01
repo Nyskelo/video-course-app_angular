@@ -72,7 +72,8 @@ describe('CourseCompositionComponent', () => {
 			expect(serviceSpy.isUpdating.action).toEqual(action.SAVE);
 		});
 		it('should update data', () => {
-			spyOn(window, 'alert').and.callThrough();
+			spyOn(window, 'alert');
+			component.onSave();
 			expect(window.alert).toHaveBeenCalled();
 		});
 	});
