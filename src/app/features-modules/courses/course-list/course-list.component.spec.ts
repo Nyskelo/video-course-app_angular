@@ -6,10 +6,13 @@ import { DurationPipe } from 'src/app/shared/pipes/duration.pipe';
 import { OrderByPipe } from 'src/app/shared/pipes/orderBy.pipe';
 import { FilterPipe } from 'src/app/shared/pipes/filter.pipe';
 import { CourseListComponent } from './course-list.component';
+import { action } from 'src/app/utils/global.model';
+import { CoursesService } from '../services/courses.service';
 
 describe('CourseListComponent', () => {
 	let component: CourseListComponent;
 	let fixture: ComponentFixture<CourseListComponent>;
+	let serviceSpy: jasmine.SpyObj<CoursesService>;
 
 	beforeEach(() => {
 		TestBed.configureTestingModule({
@@ -27,6 +30,9 @@ describe('CourseListComponent', () => {
 		fixture = TestBed.createComponent(CourseListComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
+		serviceSpy = TestBed.inject(
+			CoursesService
+		) as jasmine.SpyObj<CoursesService>;
 		spyOn(console, 'log').and.callThrough();
 		spyOn(window, 'confirm').and.callFake(() => true);
 	});
@@ -56,5 +62,14 @@ describe('CourseListComponent', () => {
 			`Course with id #${id} has been deleted`
 		);
 		expect(window.confirm).toHaveBeenCalled();
+	});
+
+	describe('onNewCourse', () => {
+		it('should change course action state to value passed', () => {
+			spyOn(component, 'onNewCourse').and.callThrough();
+			serviceSpy.isUpdating.action = action.CANCEL;
+			component.onNewCourse(action.ADD);
+			expect(serviceSpy.isUpdating.action).toEqual(action.ADD);
+		});
 	});
 });
