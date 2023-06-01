@@ -8,7 +8,7 @@ $indent-h-cell: 30px;
 	top: 0;
 	left: 0;
 	width: 100%;
-	min-height: max-content;
+	// min-height: max-content;
 }
 
 @mixin container {
@@ -17,6 +17,7 @@ $indent-h-cell: 30px;
 	border-radius: 5px;
 	box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 	margin-bottom: 10px;
+	// height: max-content;
 }
 
 @mixin flex-center {
@@ -34,7 +35,21 @@ $indent-h-cell: 30px;
 	display: inline-flex;
 	justify-content: center;
 	align-items: center;
-	border-radius: 5px;
+	border-radius: 3px;
 	height: $indent-h-cell;
 	padding: 5px;
+}
+
+@mixin label-title {
+	@include flex-col;
+	gap: 10px;
+	color: $text-grey2;
+	font-weight: bold;
+	font-size: 14px;
+	& .required {
+		font-size: xx-small;
+		font-weight: 100;
+		color: $text-grey1;
+		float: right;
+	}
 }

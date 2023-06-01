@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { CoursesService } from './services/courses.service';
 
 @Component({
 	selector: 'app-courses',
@@ -6,4 +7,9 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 	styleUrls: ['./courses.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CoursesComponent {}
+export class CoursesComponent {
+	constructor(private coursesService: CoursesService) {}
+	get isUpdating() {
+		return this.coursesService.isUpdating.state;
+	}
+}

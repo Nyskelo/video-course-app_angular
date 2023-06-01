@@ -1,9 +1,10 @@
-<input
-	type="{{ type }}"
+<textarea
 	name="{{ name }}"
 	id="{{ id }}"
 	title="{{ title }}"
 	placeholder="{{ placeholder }}"
 	[(ngModel)]="value"
 	(input)="onChangedValue()"
-/><ng-content></ng-content>
+	cols="{{ cols }}"
+	rows="{{ rows }}"
+></textarea>

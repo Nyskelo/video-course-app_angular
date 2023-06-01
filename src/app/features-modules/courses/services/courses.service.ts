@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { mockCourses } from 'src/app/utils/courses-api';
-import { Course } from 'src/app/utils/global.model';
+import { action, Course, CourseState } from 'src/app/utils/global.model';
 
 @Injectable({
 	providedIn: 'root',
@@ -8,6 +8,10 @@ import { Course } from 'src/app/utils/global.model';
 export class CoursesService {
 	// static array
 	courses!: Course[] | undefined;
+	isUpdating: CourseState = {
+		state: false,
+		action: action.CANCEL,
+	};
 
 	//methods
 	getCourses(): Course[] {

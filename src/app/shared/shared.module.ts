@@ -11,6 +11,7 @@ import { FilterPipe } from './pipes/filter.pipe';
 import { BorderByDateDirective } from './directives/borderByDate.directive';
 import { StarDirective } from './directives/star.directive';
 import { IsAuthenticatedDirective } from './directives/isAuthenticated.directive';
+import { TextareaComponent } from './components/textarea/textarea.component';
 
 @NgModule({
 	declarations: [
@@ -23,6 +24,7 @@ import { IsAuthenticatedDirective } from './directives/isAuthenticated.directive
 		BorderByDateDirective,
 		StarDirective,
 		IsAuthenticatedDirective,
+		TextareaComponent,
 	],
 	imports: [CommonModule, FormsModule, IconsModule],
 	exports: [
@@ -38,6 +40,7 @@ import { IsAuthenticatedDirective } from './directives/isAuthenticated.directive
 		BorderByDateDirective,
 		StarDirective,
 		IsAuthenticatedDirective,
+		TextareaComponent,
 	],
 })
 export class SharedModule {}

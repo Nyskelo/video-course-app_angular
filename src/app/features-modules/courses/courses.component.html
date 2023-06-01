@@ -3,6 +3,7 @@
 		<h4>Courses</h4>
 	</section>
 	<main>
-		<app-course-list />
+		<app-course-list *ngIf="!isUpdating" />
+		<app-course-composition *ngIf="isUpdating"></app-course-composition>
 	</main>
 </div>

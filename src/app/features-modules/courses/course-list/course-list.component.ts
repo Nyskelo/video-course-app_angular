@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { FilterPipe } from 'src/app/shared/pipes/filter.pipe';
-import { Course } from 'src/app/utils/global.model';
+import { action, Course } from 'src/app/utils/global.model';
 import { CoursesService } from '../services/courses.service';
 import { UntilDestroy } from '@ngneat/until-destroy';
 
@@ -27,6 +27,8 @@ export class CourseListComponent implements OnInit {
 	searchText = '';
 	courses: Course[] = [];
 	filteredCourses$!: Observable<Course[]>;
+	add = action.ADD;
+	edit = action.EDIT;
 
 	ngOnInit(): void {
 		this.courses = this.coursesService.getCourses();
@@ -65,5 +67,10 @@ You will not be able to recover it`)
 
 	onLoadMore(): void {
 		console.log('Loaded more was clicked!');
+	}
+
+	onNewCourse(action: action): void {
+		this.coursesService.isUpdating.state = true;
+		this.coursesService.isUpdating.action = action;
 	}
 }
