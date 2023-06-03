@@ -16,7 +16,6 @@ describe('LoginComponent', () => {
 	beforeEach(() => {
 		TestBed.configureTestingModule({
 			schemas: [NO_ERRORS_SCHEMA],
-			declarations: [LoginComponent],
 			providers: [{ provide: Router, useValue: mockRouter }],
 		});
 		fixture = TestBed.createComponent(LoginComponent);

@@ -2,10 +2,13 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { Router } from '@angular/router';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
 	selector: 'app-login',
+	standalone: true,
+	imports: [SharedModule],
 	templateUrl: './login.component.html',
 	styleUrls: ['./login.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
