@@ -9,6 +9,7 @@ import { FilterPipe } from 'src/app/shared/pipes/filter.pipe';
 import { action, Course } from 'src/app/utils/global.model';
 import { CoursesService } from '../services/courses.service';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { Router } from '@angular/router';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -21,7 +22,8 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 export class CourseListComponent implements OnInit {
 	constructor(
 		private filterPipe: FilterPipe,
-		private coursesService: CoursesService
+		private coursesService: CoursesService,
+		private router: Router
 	) {}
 
 	searchText = '';
@@ -72,5 +74,7 @@ You will not be able to recover it`)
 	onNewCourse(action: action): void {
 		this.coursesService.isUpdating.state = true;
 		this.coursesService.isUpdating.action = action;
+		action === 'Add' && this.router.navigate(['courses/new']);
+		action === 'Edit' && this.router.navigate(['courses/id']);
 	}
 }

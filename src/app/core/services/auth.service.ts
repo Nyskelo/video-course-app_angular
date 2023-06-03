@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { User } from 'src/app/utils/global.model';
+import { Router } from '@angular/router';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class AuthService {
+	constructor(private router: Router) {}
+	private token = localStorage.getItem('token');
 	private currentUserSubject = new BehaviorSubject<User>(new User());
-	private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
+	private isAuthenticatedSubject = new BehaviorSubject<boolean>(
+		Boolean(this.token)
+	);
 	public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
 	login(user: User) {
@@ -19,8 +24,9 @@ export class AuthService {
 		console.log(
 			`${this.currentUserSubject.value.firstName} ${this.currentUserSubject.value.lastName} - You are log out!`
 		);
-		localStorage.clear();
 		this.isAuthenticatedSubject.next(false);
+		localStorage.clear();
+		this.router.navigate(['login']);
 	}
 	getUserInfo() {
 		return this.currentUserSubject.value;

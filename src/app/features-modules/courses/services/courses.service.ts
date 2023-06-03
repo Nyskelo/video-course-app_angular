@@ -6,14 +6,12 @@ import { action, Course, CourseState } from 'src/app/utils/global.model';
 	providedIn: 'root',
 })
 export class CoursesService {
-	// static array
 	courses!: Course[] | undefined;
 	isUpdating: CourseState = {
 		state: false,
 		action: action.CANCEL,
 	};
 
-	//methods
 	getCourses(): Course[] {
 		this.courses = mockCourses;
 		return this.courses;

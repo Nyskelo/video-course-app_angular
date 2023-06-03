@@ -10,6 +10,8 @@ import { CoursesService } from './services/courses.service';
 export class CoursesComponent {
 	constructor(private coursesService: CoursesService) {}
 	get isUpdating() {
+		console.log(this.coursesService.isUpdating.state);
+
 		return this.coursesService.isUpdating.state;
 	}
 }

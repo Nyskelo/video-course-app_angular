@@ -1,9 +1,10 @@
-<div class="wrapper">
+<div class="wrapper" *appIsAuthenticated="true">
 	<section>
 		<h4>Courses</h4>
 	</section>
 	<main>
 		<app-course-list *ngIf="!isUpdating" />
-		<app-course-composition *ngIf="isUpdating"></app-course-composition>
+		<app-course-composition></app-course-composition>
+		<router-outlet></router-outlet>
 	</main>
 </div>

@@ -16,6 +16,9 @@ export class HeaderComponent {
 	}
 
 	get userName() {
-		return this.authService.getUserInfo().firstName;
+		return (
+			this.authService.getUserInfo().firstName ||
+			JSON.parse(localStorage.getItem('token') as string)[0].firstName
+		);
 	}
 }

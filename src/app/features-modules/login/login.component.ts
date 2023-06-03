@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { Router } from '@angular/router';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -10,7 +11,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
-	constructor(private authService: AuthService) {}
+	constructor(private authService: AuthService, private router: Router) {}
 
 	email = '';
 	password = '';
@@ -37,5 +38,6 @@ export class LoginComponent {
 		localStorage.setItem(`token`, JSON.stringify([newUser, this.authData]));
 
 		this.authService.login(newUser);
+		this.router.navigate(['courses']);
 	}
 }
