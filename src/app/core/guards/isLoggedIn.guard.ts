@@ -12,8 +12,6 @@ export class isLoggedInGuard {
 			this.router.navigate(['/login']);
 			return false;
 		}
-		// logged in, so return true
-		this.authService.isAuthenticated();
 		return true;
 	}
 }
