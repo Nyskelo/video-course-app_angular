@@ -25,6 +25,12 @@ export const enum action {
 	'CANCEL' = 'Cancel',
 	'SAVE' = 'Save',
 }
+export const enum customPath {
+	'coursesList' = 'courses',
+	'courseEdit' = 'courses/:id',
+	'courseAdd' = 'courses/new',
+	'login' = 'login',
+}
 
 export interface CourseState {
 	state: boolean;

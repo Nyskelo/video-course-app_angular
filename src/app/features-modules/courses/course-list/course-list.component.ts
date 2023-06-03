@@ -1,6 +1,7 @@
 import {
 	ChangeDetectionStrategy,
 	Component,
+	OnDestroy,
 	OnInit,
 	ViewEncapsulation,
 } from '@angular/core';
@@ -19,12 +20,15 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	encapsulation: ViewEncapsulation.None,
 })
-export class CourseListComponent implements OnInit {
+export class CourseListComponent implements OnInit, OnDestroy {
 	constructor(
 		private filterPipe: FilterPipe,
 		private coursesService: CoursesService,
 		private router: Router
 	) {}
+	ngOnDestroy(): void {
+		console.log('LIST - CoursesListComponent has been destroyed');
+	}
 
 	searchText = '';
 	courses: Course[] = [];
@@ -33,6 +37,7 @@ export class CourseListComponent implements OnInit {
 	edit = action.EDIT;
 
 	ngOnInit(): void {
+		console.log('LIST - CoursesListComponent has been init');
 		this.courses = this.coursesService.getCourses();
 		this.filteredCourses$ = of(this.courses);
 	}

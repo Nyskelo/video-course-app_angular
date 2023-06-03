@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { customPath } from './utils/global.model';
 
 const routes: Routes = [
 	{
@@ -10,7 +11,7 @@ const routes: Routes = [
 			).CoursesRoutingModule,
 	},
 	{
-		path: 'login',
+		path: customPath.login,
 		loadComponent: async () =>
 			await (
 				await import('./features-modules/login/login.component')

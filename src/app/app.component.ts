@@ -25,7 +25,6 @@ export class AppComponent implements OnInit {
 			.subscribe(() => {
 				const rt = this.getChild(this.activatedRoute);
 				rt.data.subscribe((data: { [key: string]: string }) => {
-					console.log(data);
 					this.titleService.setTitle(data['title']);
 				});
 			});

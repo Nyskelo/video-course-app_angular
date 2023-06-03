@@ -3,6 +3,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { Router } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { customPath } from 'src/app/utils/global.model';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -41,6 +42,6 @@ export class LoginComponent {
 		localStorage.setItem(`token`, JSON.stringify([newUser, this.authData]));
 
 		this.authService.login(newUser);
-		this.router.navigate(['courses']);
+		this.router.navigate([customPath.coursesList]);
 	}
 }

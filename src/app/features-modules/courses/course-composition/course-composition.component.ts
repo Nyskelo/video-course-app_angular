@@ -1,5 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { action, Course } from 'src/app/utils/global.model';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	OnDestroy,
+	OnInit,
+} from '@angular/core';
+import { action, Course, customPath } from 'src/app/utils/global.model';
 import { CoursesService } from '../services/courses.service';
 import { ActivatedRoute, Router } from '@angular/router';
 @Component({
@@ -8,12 +13,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 	styleUrls: ['./course-composition.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CourseCompositionComponent implements OnInit {
+export class CourseCompositionComponent implements OnInit, OnDestroy {
 	constructor(
 		private coursesService: CoursesService,
 		private router: Router,
 		private activatedRoute: ActivatedRoute
 	) {}
+	ngOnDestroy(): void {
+		console.log('ADD|EDIT - CourseCompos has been destroyed');
+	}
 	courseToUpdate!: Course;
 	formattetDuration = '';
 
@@ -24,8 +32,9 @@ export class CourseCompositionComponent implements OnInit {
 	authors = '';
 
 	ngOnInit(): void {
+		console.log('ADD|EDIT - CourseCompos has been init');
+
 		this.activatedRoute.data.subscribe(({ course }) => {
-			console.log(course);
 			if (course) {
 				this.courseToUpdate = course;
 				this.formattetDuration = course.length;
@@ -70,13 +79,13 @@ export class CourseCompositionComponent implements OnInit {
 		);
 		this.coursesService.isUpdating.state = false;
 		this.coursesService.isUpdating.action = action.SAVE;
-		this.router.navigate(['courses']);
+		this.router.navigate([customPath.coursesList]);
 	}
 
 	onCancel(): void {
 		this.coursesService.isUpdating.state = false;
 		this.coursesService.isUpdating.action = action.CANCEL;
-		this.router.navigate(['courses']);
+		this.router.navigate([customPath.coursesList]);
 	}
 
 	get action() {
