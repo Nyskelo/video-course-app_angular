@@ -8,11 +8,8 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
 	constructor(private router: Router) {}
-	private token = localStorage.getItem('token');
 	private currentUserSubject = new BehaviorSubject<User>(new User());
-	private isAuthenticatedSubject = new BehaviorSubject<boolean>(
-		Boolean(this.token)
-	);
+	private isAuthenticatedSubject = new BehaviorSubject<boolean>(Boolean(false));
 	public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
 	login(user: User) {

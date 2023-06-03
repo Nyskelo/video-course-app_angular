@@ -19,9 +19,10 @@ export class TextareaComponent {
 	@Input() placeholder = 'Add description';
 	@Input() cols = '30';
 	@Input() rows = '7';
+	@Input() value = '';
 
-	value = '';
 	@Output() valueChanged: EventEmitter<string> = new EventEmitter<string>();
+
 	onChangedValue() {
 		this.valueChanged.emit(this.value);
 	}

@@ -8,8 +8,8 @@ import { Observable, of } from 'rxjs';
 import { FilterPipe } from 'src/app/shared/pipes/filter.pipe';
 import { action, Course } from 'src/app/utils/global.model';
 import { CoursesService } from '../services/courses.service';
-import { UntilDestroy } from '@ngneat/until-destroy';
 import { Router } from '@angular/router';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -71,10 +71,10 @@ You will not be able to recover it`)
 		console.log('Loaded more was clicked!');
 	}
 
-	onNewCourse(action: action): void {
+	onNewCourse(action: action, course?: Course): void {
 		this.coursesService.isUpdating.state = true;
 		this.coursesService.isUpdating.action = action;
 		action === 'Add' && this.router.navigate(['courses/new']);
-		action === 'Edit' && this.router.navigate(['courses/id']);
+		action === 'Edit' && this.router.navigate([`courses/${course?.id}`]);
 	}
 }

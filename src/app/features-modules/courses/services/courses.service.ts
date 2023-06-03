@@ -6,7 +6,7 @@ import { action, Course, CourseState } from 'src/app/utils/global.model';
 	providedIn: 'root',
 })
 export class CoursesService {
-	courses!: Course[] | undefined;
+	courses: Course[] | undefined;
 	isUpdating: CourseState = {
 		state: false,
 		action: action.CANCEL,
@@ -19,15 +19,20 @@ export class CoursesService {
 	getCourseByID(id: number): Course | undefined {
 		return this.courses?.find((course) => course.id === id);
 	}
-	updateCourseByID(courseToUpdate: Course): void {
-		this.courses = this.courses?.map((course) =>
-			course.id === courseToUpdate.id ? courseToUpdate : course
-		);
-	}
+
 	removeCourseByID(id: number) {
 		this.courses = this.courses?.filter((course) => course.id !== id);
 	}
-	createCourse(course: Course) {
-		this.courses?.push(course);
+	setCourse(courseToUpdate: Course, passAction: action) {
+		if (passAction === action.ADD) {
+			this.courses?.push({
+				...courseToUpdate,
+				id: Date.now(),
+			});
+		} else {
+			this.courses = this.courses?.map((course) =>
+				course.id === courseToUpdate.id ? courseToUpdate : course
+			);
+		}
 	}
 }
