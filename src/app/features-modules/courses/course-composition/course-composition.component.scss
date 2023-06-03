@@ -1,0 +1,42 @@
+@import 'src/styles/base';
+.course {
+	@include flex-center;
+	&-form {
+		@include container;
+		@include flex-col;
+		box-shadow: 5px 5px 20px rgba(19, 19, 19, 0.2);
+		width: 30%;
+		min-width: 400px;
+		&-title {
+			justify-self: left;
+		}
+		& .label-title {
+			@include label-title;
+			position: relative;
+		}
+		& .input-course {
+			--custom-width: 100%;
+			--custom-height: 100%;
+		}
+		& .actions {
+			direction: rtl;
+			--custom-font-weight: bold;
+			& .btn-course {
+				--custom-bg-color: #66a300;
+				--custom-height: 40px;
+				display: inline-block;
+				margin-left: 10px;
+			}
+			& .cancel {
+				--custom-bg-color: #bbbbbb;
+				--custom-color: #5b5b5b;
+			}
+		}
+	}
+}
+.duration-info {
+	position: absolute;
+	bottom: 0;
+	width: 100px;
+	right: -110px;
+}

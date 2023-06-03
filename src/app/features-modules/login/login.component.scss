@@ -9,22 +9,11 @@
 		@include flex-col;
 		box-shadow: 5px 5px 20px rgba(19, 19, 19, 0.2);
 		width: 400px;
-		height: max-content;
 		&-title {
 			justify-self: left;
 		}
 		& .label-title {
-			@include flex-col;
-			gap: 10px;
-			color: $text-grey2;
-			font-weight: bold;
-			font-size: 14px;
-			& .required {
-				font-size: xx-small;
-				font-weight: 100;
-				color: $text-grey1;
-				float: right;
-			}
+			@include label-title;
 		}
 		& .link {
 			font-size: x-small;

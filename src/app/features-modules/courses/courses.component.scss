@@ -15,23 +15,7 @@ main {
 	gap: 20px;
 }
 
-.search-container {
-	& div:nth-child(1) {
-		display: flex;
-		gap: 10px;
-	}
-	& div:nth-child(2) {
-		display: flex;
-		justify-content: flex-end;
-	}
-}
-
 .container {
 	@include container;
 	text-align: center;
-}
-
-.btn-load {
-	--custom-bg-color: transparent;
-	--custom-color: black;
 }

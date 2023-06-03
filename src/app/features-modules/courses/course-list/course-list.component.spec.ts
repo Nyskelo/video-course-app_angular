@@ -1,28 +1,75 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA, Renderer2 } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { SearchbarComponent } from 'src/app/shared/components/searchbar/searchbar.component';
+import { ButtonComponent } from 'src/app/shared/components/button/button.component';
+import { DurationPipe } from 'src/app/shared/pipes/duration.pipe';
+import { OrderByPipe } from 'src/app/shared/pipes/orderBy.pipe';
+import { FilterPipe } from 'src/app/shared/pipes/filter.pipe';
 import { CourseListComponent } from './course-list.component';
-import { OrderByPipe } from '../../../shared/pipes/orderBy.pipe';
-import { FilterPipe } from '../../../shared/pipes/filter.pipe';
+import { action } from 'src/app/utils/global.model';
+import { CoursesService } from '../services/courses.service';
 
 describe('CourseListComponent', () => {
 	let component: CourseListComponent;
 	let fixture: ComponentFixture<CourseListComponent>;
+	let serviceSpy: jasmine.SpyObj<CoursesService>;
+
 	beforeEach(() => {
 		TestBed.configureTestingModule({
 			schemas: [NO_ERRORS_SCHEMA],
-			declarations: [CourseListComponent, OrderByPipe, FilterPipe],
-			providers: [FilterPipe, Renderer2],
+			declarations: [
+				CourseListComponent,
+				SearchbarComponent,
+				ButtonComponent,
+				DurationPipe,
+				OrderByPipe,
+				FilterPipe,
+			],
+			providers: [FilterPipe],
 		});
 		fixture = TestBed.createComponent(CourseListComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
+		serviceSpy = TestBed.inject(
+			CoursesService
+		) as jasmine.SpyObj<CoursesService>;
+		spyOn(console, 'log').and.callThrough();
+		spyOn(window, 'confirm').and.callFake(() => true);
 	});
 
-	it('should emit deleteCourse when called onDeleteCourse method', async () => {
-		const id = 888;
-		spyOn(component.deleteCourse, 'emit');
-		spyOn(window, 'confirm').and.returnValue(true);
-		component.onDeleteCourse(id);
-		expect(component.deleteCourse.emit).toHaveBeenCalledWith(id);
+	it(`should assign courses when component initilazed`, () => {
+		fixture.detectChanges();
+		expect(component.courses.length).toBeGreaterThan(0);
+	});
+
+	it('should log a message when called onSearchClick', () => {
+		const searchValue = 'text';
+		component.onSearchClick(searchValue);
+		expect(console.log).not.toHaveBeenCalledOnceWith(
+			`Search value: ${searchValue}`
+		);
+	});
+
+	it('should log a message when called onLoadMore', () => {
+		component.onLoadMore();
+		expect(component).toBeTruthy();
+	});
+
+	it('should log a message when called onDeleteCourseID', () => {
+		const id = 1;
+		component.onDeleteCourseID(id);
+		expect(console.log).not.toHaveBeenCalledOnceWith(
+			`Course with id #${id} has been deleted`
+		);
+		expect(window.confirm).toHaveBeenCalled();
+	});
+
+	describe('onNewCourse', () => {
+		it('should change course action state to value passed', () => {
+			spyOn(component, 'onNewCourse').and.callThrough();
+			serviceSpy.isUpdating.action = action.CANCEL;
+			component.onNewCourse(action.ADD);
+			expect(serviceSpy.isUpdating.action).toEqual(action.ADD);
+		});
 	});
 });

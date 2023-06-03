@@ -1,8 +1,18 @@
-<ng-container *ngIf="courses?.length !== 0; else empty">
+<!-- Searchbar, AddCourse button -->
+<div class="search-container">
+	<app-searchbar (searchTextChanged)="onSearchClick($event)" />
+	<div>
+		<app-button [text]="'Add course'" (click)="onNewCourse(add)"
+			><app-i-plus class="icons"
+		/></app-button>
+	</div>
+</div>
+<ng-container *ngIf="(filteredCourses$ | async)?.length !== 0; else empty">
+	<!-- Course-list -->
 	<div
 		class="card-container"
 		*ngFor="
-			let course of courses | orderBy : 'date' : 'desc';
+			let course of filteredCourses$ | async | orderBy : 'date' : 'desc';
 			trackBy: trackCourseID;
 			let i = index
 		"
@@ -25,14 +35,23 @@
 				{{ course.description }}
 			</p>
 			<div class="card-update">
-				<app-button [text]="'Edit'"><app-i-edit /></app-button>
-				<app-button [text]="'Delete'" (click)="onDeleteCourse(course.id)"
+				<app-button [text]="'Edit'" (click)="onNewCourse(edit)"
+					><app-i-edit
+				/></app-button>
+				<app-button [text]="'Delete'" (click)="onDeleteCourseID(course.id)"
 					><app-i-delete
 				/></app-button>
 			</div>
 		</div>
 	</div>
+
+	<!-- Load more -->
+	<div class="container" *ngIf="(filteredCourses$ | async)?.length !== 0">
+		<app-button class="btn-load" [text]="'Load more'" (click)="onLoadMore()" />
+	</div>
 </ng-container>
+
+<!-- NO-DATA containerLoad more -->
 <ng-template #empty
 	><div class="card-container">
 		NO DATA, FEEL FREE TO ADD NEW COURSE

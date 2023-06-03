@@ -18,3 +18,15 @@ export class User {
 	firstName!: string;
 	lastName!: string;
 }
+
+export const enum action {
+	'EDIT' = 'Edit',
+	'ADD' = 'Add',
+	'CANCEL' = 'Cancel',
+	'SAVE' = 'Save',
+}
+
+export interface CourseState {
+	state: boolean;
+	action: action;
+}

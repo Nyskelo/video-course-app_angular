@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
 	selector: 'app-footer',
@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
 		<span>Copyright {{ '&copy;' }} Videocourses. All rights reserved</span>
 	</footer>`,
 	styleUrls: ['./footer.component.scss'],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FooterComponent {}

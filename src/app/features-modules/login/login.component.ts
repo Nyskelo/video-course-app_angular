@@ -1,16 +1,17 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
 	selector: 'app-login',
 	templateUrl: './login.component.html',
 	styleUrls: ['./login.component.scss'],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
 	constructor(private authService: AuthService) {}
 
-	@Output() logEmail: EventEmitter<string> = new EventEmitter<string>();
-	@Output() logPassword: EventEmitter<string> = new EventEmitter<string>();
 	email = '';
 	password = '';
 	authData = {
@@ -20,25 +21,20 @@ export class LoginComponent {
 	};
 
 	onInputEmailValue(value: string) {
-		this.logEmail.emit(value);
 		this.email = value;
 	}
 	onInputPasswordValue(value: string) {
-		this.logPassword.emit(value);
 		this.password = value;
 	}
 
 	onSubmit() {
-		if (!this.email && !this.password) {
+		if (!this.email.trim() && !this.password.trim()) {
 			alert('Please complete the fields below');
 			return;
 		}
 
 		const newUser = { firstName: 'Pretty', lastName: 'GoodDay', id: '111' };
 		localStorage.setItem(`token`, JSON.stringify([newUser, this.authData]));
-
-		this.logEmail.emit('');
-		this.logPassword.emit('');
 
 		this.authService.login(newUser);
 	}

@@ -1,0 +1,72 @@
+<div class="course">
+	<div class="course-form">
+		<h1 class="course-title">{{ action }} Course</h1>
+		<!-- Title -->
+		<label for="title" class="label-title"
+			><p>Title: <span class="required">*required</span></p>
+			<app-input
+				[title]="'title'"
+				[id]="'title'"
+				[placeholder]="'Add title'"
+				class="input-course"
+				(valueChanged)="onInputTitleValue($event)"
+			/>
+		</label>
+
+		<!-- Description -->
+		<label for="description" class="label-title"
+			><p>Description: <span class="required">*required</span></p>
+			<app-textarea (valueChanged)="onInputDescriptionValue($event)" />
+		</label>
+
+		<!-- Duration -->
+		<label for="duration" class="label-title w-25"
+			><p>
+				Duration: <span class="required">*required</span
+				><span class="duration-info">{{ duration | duration }}</span>
+			</p>
+			<app-input
+				[title]="'duration'"
+				[type]="'number'"
+				[id]="'duration'"
+				class="input-course"
+				[placeholder]="'minutes'"
+				(valueChanged)="onInputDurationValue($event)"
+			></app-input>
+		</label>
+
+		<!-- Date -->
+		<label for="date" class="label-title w-25"
+			><p>Date: <span class="required">*required</span></p>
+			<app-input
+				[title]="'date'"
+				[id]="'date'"
+				[type]="'date'"
+				(valueChanged)="onInputDateValue($event)"
+				class="input-course"
+			/>
+		</label>
+
+		<!-- Authors -->
+		<label for="authors" class="label-title w-50"
+			><p>Authors: <span class="required">*required</span></p>
+			<app-input
+				[title]="'authors'"
+				[id]="'authors'"
+				[placeholder]="'Authors [x]'"
+				(valueChanged)="onInputAuthorsValue($event)"
+				class="input-course"
+			/>
+		</label>
+
+		<!-- Buttons -->
+		<div class="actions">
+			<app-button [text]="'Save'" (click)="onSave()" class="btn-course save" />
+			<app-button
+				[text]="'Cancel'"
+				(click)="onCancel()"
+				class="btn-course cancel"
+			/>
+		</div>
+	</div>
+</div>

@@ -1,33 +1,9 @@
-<!-- Breadcrumbs -->
 <div class="wrapper">
 	<section>
 		<h4>Courses</h4>
 	</section>
-
 	<main>
-		<!-- Searchbar, AddCourse button -->
-		<div class="search-container">
-			<app-searchbar (searchTextChanged)="onSearchClick($event)" />
-			<div>
-				<app-button [text]="'Add course'"
-					><app-i-plus class="icons"
-				/></app-button>
-			</div>
-		</div>
-
-		<!-- Courses list -->
-		<app-course-list
-			[courses]="filteredCourses$ | async"
-			(deleteCourse)="onDeleteCourseID($event)"
-		/>
-
-		<!-- Load more -->
-		<div class="container" *ngIf="(filteredCourses$ | async)?.length !== 0">
-			<app-button
-				class="btn-load"
-				[text]="'Load more'"
-				(click)="onLoadMore()"
-			/>
-		</div>
+		<app-course-list *ngIf="!isUpdating" />
+		<app-course-composition *ngIf="isUpdating"></app-course-composition>
 	</main>
 </div>
