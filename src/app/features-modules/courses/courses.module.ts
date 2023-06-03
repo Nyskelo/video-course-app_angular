@@ -15,7 +15,7 @@ import { CourseCompositionComponent } from './course-composition/course-composit
 		CourseCompositionComponent,
 	],
 	imports: [CommonModule, CoursesRoutingModule, SharedModule],
-	exports: [CoursesComponent],
+	exports: [CoursesComponent, CoursesRoutingModule],
 	providers: [FilterPipe],
 })
 export class CoursesModule {}
