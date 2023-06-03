@@ -24,8 +24,12 @@ export class AppComponent implements OnInit {
 			.pipe(filter((event: Event) => event instanceof NavigationEnd))
 			.subscribe(() => {
 				const rt = this.getChild(this.activatedRoute);
-				rt.data.subscribe((data: { [key: string]: string }) => {
-					this.titleService.setTitle(data['title']);
+				rt.data.subscribe(({ course, title }) => {
+					if (course) {
+						this.titleService.setTitle(course['name']);
+					} else {
+						this.titleService.setTitle(title);
+					}
 				});
 			});
 	}
