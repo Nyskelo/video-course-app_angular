@@ -3,7 +3,6 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { HeaderComponent } from './header.component';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
-import { User } from 'src/app/utils/global.model';
 
 let serviceSpy: jasmine.SpyObj<AuthService>;
 const user = { firstName: 'Pretty', lastName: 'Funny', id: '999' };
