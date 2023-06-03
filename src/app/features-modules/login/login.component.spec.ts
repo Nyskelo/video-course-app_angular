@@ -2,17 +2,22 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { LoginComponent } from './login.component';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { Router } from '@angular/router';
 
 let serviceSpy: jasmine.SpyObj<AuthService>;
 
 describe('LoginComponent', () => {
 	let component: LoginComponent;
 	let fixture: ComponentFixture<LoginComponent>;
+	const mockRouter = {
+		navigate: jasmine.createSpy('navigate'),
+	};
 
 	beforeEach(() => {
 		TestBed.configureTestingModule({
 			schemas: [NO_ERRORS_SCHEMA],
 			declarations: [LoginComponent],
+			providers: [{ provide: Router, useValue: mockRouter }],
 		});
 		fixture = TestBed.createComponent(LoginComponent);
 		component = fixture.componentInstance;

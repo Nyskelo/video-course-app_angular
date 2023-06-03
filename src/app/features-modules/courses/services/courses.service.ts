@@ -30,7 +30,7 @@ export class CoursesService {
 				id: Date.now(),
 			});
 		} else {
-			this.courses = this.courses?.map((course) =>
+			this.courses = this.courses?.map((course: Course) =>
 				course.id === courseToUpdate.id ? courseToUpdate : course
 			);
 		}

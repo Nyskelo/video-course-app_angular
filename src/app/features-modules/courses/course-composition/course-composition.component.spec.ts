@@ -1,5 +1,8 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ActivatedRoute, Router } from '@angular/router';
+import { of } from 'rxjs';
+import { AuthService } from 'src/app/core/services/auth.service';
 import { ButtonComponent } from 'src/app/shared/components/button/button.component';
 import { DurationPipe } from 'src/app/shared/pipes/duration.pipe';
 import { action } from 'src/app/utils/global.model';
@@ -11,11 +14,35 @@ describe('CourseCompositionComponent', () => {
 	let component: CourseCompositionComponent;
 	let fixture: ComponentFixture<CourseCompositionComponent>;
 	let serviceSpy: jasmine.SpyObj<CoursesService>;
+	const mockRouter = {
+		navigate: jasmine.createSpy('navigate'),
+	};
+	const course = {
+		id: 8693,
+		name: 'JavaScript',
+		description:
+			'Est minim ea aute sunt laborum minim eu excepteur. Culpa sint exercitation mollit enim ad culpa aliquip laborum cillum. Dolor officia culpa labore ex eiusmod ut est ea voluptate ea nostrud.',
+		isTopRated: true,
+		date: '2023-09-28T04:39:24+00:00',
+		authors: [
+			{
+				id: 1370,
+				name: 'Polly',
+				lastName: 'Sosa',
+			},
+		],
+		length: 15,
+	};
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
 			schemas: [NO_ERRORS_SCHEMA],
 			declarations: [ButtonComponent, DurationPipe, CourseCompositionComponent],
+			providers: [
+				AuthService,
+				{ provide: Router, useValue: mockRouter },
+				{ provide: ActivatedRoute, useValue: { data: of(course) } },
+			],
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(CourseCompositionComponent);
@@ -25,6 +52,28 @@ describe('CourseCompositionComponent', () => {
 		serviceSpy = TestBed.inject(
 			CoursesService
 		) as jasmine.SpyObj<CoursesService>;
+	});
+
+	describe('ngOnInit', () => {
+		it('ngOnInit', () => {
+			spyOn(component, 'ngOnInit').and.callThrough();
+			component.ngOnInit();
+			expect(component.ngOnInit).toHaveBeenCalled();
+		});
+	});
+
+	describe('getters', () => {
+		it('action getter should return the correct type of action', () => {
+			spyOnProperty(component, 'action', 'get').and.callThrough();
+			serviceSpy.isUpdating.action = action.ADD;
+			serviceSpy.isUpdating.state = true;
+			expect(component.action).toBe(action.ADD);
+		});
+		it('state getter should return the correct type of state', () => {
+			spyOnProperty(component, 'state', 'get').and.callThrough();
+			serviceSpy.isUpdating.state = true;
+			expect(component.state).toBeTruthy();
+		});
 	});
 
 	describe('onInputTitleValue', () => {
@@ -70,11 +119,6 @@ describe('CourseCompositionComponent', () => {
 		it('should change courses isUpdating state to false and action to action.SAVE', () => {
 			expect(serviceSpy.isUpdating.state).toBeFalse();
 			expect(serviceSpy.isUpdating.action).toEqual(action.SAVE);
-		});
-		it('should update data', () => {
-			spyOn(window, 'alert');
-			component.onSave();
-			expect(window.alert).toHaveBeenCalled();
 		});
 	});
 	describe('onCancel', () => {

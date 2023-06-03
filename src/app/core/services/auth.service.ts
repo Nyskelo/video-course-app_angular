@@ -16,6 +16,7 @@ export class AuthService {
 		this.currentUserSubject.next(user);
 		this.isAuthenticatedSubject.next(true);
 		console.log(`${user.firstName} ${user.lastName} - You are log in!`);
+		this.router.navigate(['courses']);
 	}
 	logout() {
 		console.log(
