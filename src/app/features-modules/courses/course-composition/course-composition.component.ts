@@ -89,16 +89,7 @@ export class CourseCompositionComponent implements OnInit, OnDestroy {
 	}
 
 	get action() {
-		const result = this.coursesService.isUpdating.action;
-		const isUpdatingAction =
-			(result === action.ADD || result === action.EDIT) &&
-			this.coursesService.isUpdating.state;
-
-		if (isUpdatingAction) {
-			return result;
-		} else {
-			return false;
-		}
+		return this.router.url.match(/new$/gi) ? 'Add' : 'Edit';
 	}
 	get state() {
 		return this.coursesService.isUpdating.state;
