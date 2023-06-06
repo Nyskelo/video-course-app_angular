@@ -22,7 +22,8 @@
 		<div class="card-header">
 			<div class="title">
 				<h1 [appStar]="course.isTopRated">
-					Video course {{ i + 1 }}. {{ course.name | uppercase }}
+					Video course {{ i + numCourse() }}.
+					{{ course.name | uppercase }}
 				</h1>
 			</div>
 			<div class="info">
@@ -45,8 +46,16 @@
 		</div>
 	</div>
 
+	<!-- Pagination-->
+	<app-pagination
+		[currentPage]="page()"
+		[limit]="limit"
+		[total]="total"
+		(changePage)="changePage($event)"
+	></app-pagination>
+
 	<!-- Load more -->
-	<div class="container" *ngIf="(filteredCourses$ | async)?.length !== 0">
+	<div class="container" *ngIf="false">
 		<app-button class="btn-load" [text]="'Load more'" (click)="onLoadMore()" />
 	</div>
 </ng-container>

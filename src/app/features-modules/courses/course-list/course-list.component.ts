@@ -1,11 +1,12 @@
 import {
 	ChangeDetectionStrategy,
 	Component,
-	OnDestroy,
+	computed,
 	OnInit,
+	signal,
 	ViewEncapsulation,
 } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { FilterPipe } from 'src/app/shared/pipes/filter.pipe';
 import { action, Course } from 'src/app/utils/global.model';
 import { CoursesService } from '../services/courses.service';
@@ -20,30 +21,51 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	encapsulation: ViewEncapsulation.None,
 })
-export class CourseListComponent implements OnInit, OnDestroy {
+export class CourseListComponent implements OnInit {
 	constructor(
 		private filterPipe: FilterPipe,
 		private coursesService: CoursesService,
 		private router: Router
 	) {}
-	ngOnDestroy(): void {
-		console.log('LIST - CoursesListComponent has been destroyed');
-	}
 
-	searchText = '';
 	courses: Course[] = [];
-	filteredCourses$!: Observable<Course[]>;
+	filteredCourses$ = new BehaviorSubject<Course[]>([]);
+
+	// buttons action-event
 	add = action.ADD;
 	edit = action.EDIT;
 
+	// searchbar
+	searchText = '';
+
+	// pagination
+	limit = 3;
+	page = signal<number>(1);
+	total = signal<number>(1);
+	numCourse = computed(() => this.page() * this.limit - (this.limit - 1));
+	startIndex = computed(() => (this.page() - 1) * this.limit);
+	endIndex = computed(() => this.startIndex() + this.limit);
+
+	getCoursesSlice(courses: Course[]) {
+		return courses.slice(this.startIndex(), this.endIndex());
+	}
+
 	ngOnInit(): void {
-		console.log('LIST - CoursesListComponent has been init');
 		this.courses = this.coursesService.getCourses();
-		this.filteredCourses$ = of(this.courses);
+		this.filteredCourses$.next(this.getCoursesSlice(this.courses));
+		this.total.set(Math.ceil(this.courses.length / this.limit));
 	}
 
 	trackCourseID(index: number, course: Course): number {
 		return course.id;
+	}
+
+	changePage(page: number): void {
+		if (page === this.page()) {
+			return;
+		}
+		this.page.set(page);
+		this.filteredCourses$.next(this.getCoursesSlice(this.courses));
 	}
 
 	onDeleteCourseID(id: number) {
@@ -64,12 +86,15 @@ You will not be able to recover it`)
 			searchValue,
 			'name'
 		);
-		this.filteredCourses$ = of(updatedCourses);
+		this.filteredCourses$.next(this.getCoursesSlice(updatedCourses));
 	}
 
 	onSearchClick(searchValue: string) {
+		if (searchValue !== this.searchText) {
+			this.onUpdateCourse(searchValue);
+		}
+		this.page.set(1);
 		this.searchText = searchValue;
-		this.onUpdateCourse(searchValue);
 	}
 
 	onLoadMore(): void {
