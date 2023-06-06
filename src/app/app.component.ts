@@ -3,6 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { AuthService } from './core/services/auth.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -16,10 +17,25 @@ export class AppComponent implements OnInit {
 	constructor(
 		private router: Router,
 		private titleService: Title,
-		private activatedRoute: ActivatedRoute
+		private activatedRoute: ActivatedRoute,
+		private authService: AuthService
 	) {}
 
+	token = JSON.parse(localStorage.getItem('token') as string);
 	ngOnInit() {
+		this.token && this.authService.authorization(this.token);
+		this.setTitle();
+	}
+
+	getChild(activatedRoute: ActivatedRoute): ActivatedRoute {
+		if (activatedRoute.firstChild) {
+			return this.getChild(activatedRoute.firstChild);
+		} else {
+			return activatedRoute;
+		}
+	}
+
+	setTitle() {
 		this.router.events
 			.pipe(filter((event: Event) => event instanceof NavigationEnd))
 			.subscribe(() => {
@@ -32,13 +48,5 @@ export class AppComponent implements OnInit {
 					}
 				});
 			});
-	}
-
-	getChild(activatedRoute: ActivatedRoute): ActivatedRoute {
-		if (activatedRoute.firstChild) {
-			return this.getChild(activatedRoute.firstChild);
-		} else {
-			return activatedRoute;
-		}
 	}
 }

@@ -1,31 +1,50 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { User } from 'src/app/utils/global.model';
+import { customPath, User, UserAuth } from 'src/app/utils/global.model';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class AuthService {
-	constructor(private router: Router) {}
+	constructor(private router: Router, private http: HttpClient) {}
 	private currentUserSubject = new BehaviorSubject<User>(new User());
 	private isAuthenticatedSubject = new BehaviorSubject<boolean>(Boolean(false));
-	public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
-	login(user: User) {
-		this.currentUserSubject.next(user);
-		this.isAuthenticatedSubject.next(true);
-		console.log(`${user.firstName} ${user.lastName} - You are log in!`);
-		this.router.navigate(['courses']);
+	public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
+	userInfoApi = 'http://localhost:3004/auth/userinfo';
+	loginApi = 'http://localhost:3004/auth/login';
+
+	login(userAuth: UserAuth) {
+		this.http.post<{ token: string }>(this.loginApi, userAuth).subscribe({
+			next: ({ token }) => {
+				localStorage.setItem('token', JSON.stringify(token));
+				this.authorization(token);
+			},
+			error: (err) => alert(`Error: ${err.status} - ${err.statusText}!`),
+			complete: () => console.info('Login request has been completed!'),
+		});
 	}
+
+	authorization(token: string) {
+		this.http.post<User>(this.userInfoApi, { token }).subscribe({
+			next: (userInfo) => {
+				this.currentUserSubject.next(userInfo);
+				this.isAuthenticatedSubject.next(true);
+				this.router.navigate([customPath.coursesList]);
+			},
+			error: (err) => alert(`Error: ${err.status} - ${err.statusText}!`),
+			complete: () => console.info('You are login!'),
+		});
+	}
+
 	logout() {
-		console.log(
-			`${this.currentUserSubject.value.firstName} ${this.currentUserSubject.value.lastName} - You are log out!`
-		);
 		this.isAuthenticatedSubject.next(false);
 		localStorage.clear();
-		this.router.navigate(['login']);
+		this.router.navigate([customPath.login]);
 	}
+
 	getUserInfo() {
 		return this.currentUserSubject.value;
 	}

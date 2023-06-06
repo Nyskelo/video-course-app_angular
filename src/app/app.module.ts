@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -11,7 +12,13 @@ import { FeaturesModulesModule } from './features-modules/features-modules.modul
 
 @NgModule({
 	declarations: [AppComponent, HeaderComponent, FooterComponent, LogoComponent],
-	imports: [BrowserModule, AppRoutingModule, CoreModule, FeaturesModulesModule],
+	imports: [
+		BrowserModule,
+		AppRoutingModule,
+		CoreModule,
+		FeaturesModulesModule,
+		HttpClientModule,
+	],
 	providers: [],
 	bootstrap: [AppComponent],
 })
