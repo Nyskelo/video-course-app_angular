@@ -69,11 +69,17 @@ describe('CourseListComponent', () => {
 	});
 
 	describe('onNewCourse', () => {
-		it('should change course action state to value passed', () => {
+		it('should update course if action.ADD', () => {
 			spyOn(component, 'onNewCourse').and.callThrough();
 			serviceSpy.isUpdating.action = action.CANCEL;
 			component.onNewCourse(action.ADD);
 			expect(serviceSpy.isUpdating.action).toEqual(action.ADD);
+		});
+		it('should add new course if action.EDIT', () => {
+			spyOn(component, 'onNewCourse').and.callThrough();
+			serviceSpy.isUpdating.action = action.CANCEL;
+			component.onNewCourse(action.EDIT);
+			expect(serviceSpy.isUpdating.action).toEqual(action.EDIT);
 		});
 	});
 });

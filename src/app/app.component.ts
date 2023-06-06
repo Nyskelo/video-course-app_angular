@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { AuthService } from './core/services/auth.service';
 
@@ -36,17 +35,14 @@ export class AppComponent implements OnInit {
 	}
 
 	setTitle() {
-		this.router.events
-			.pipe(filter((event: Event) => event instanceof NavigationEnd))
-			.subscribe(() => {
-				const rt = this.getChild(this.activatedRoute);
-				rt.data.subscribe(({ course, title }) => {
-					if (course) {
-						this.titleService.setTitle(course['name']);
-					} else {
-						this.titleService.setTitle(title);
-					}
-				});
+		this.router.events.subscribe(() => {
+			this.getChild(this.activatedRoute).data.subscribe(({ course, title }) => {
+				if (course) {
+					this.titleService.setTitle(course['name']);
+				} else {
+					this.titleService.setTitle(title);
+				}
 			});
+		});
 	}
 }

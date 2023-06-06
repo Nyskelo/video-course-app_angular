@@ -35,13 +35,13 @@ describe('CourseCompositionComponent', () => {
 	};
 
 	beforeEach(async () => {
-		await TestBed.configureTestingModule({
+		TestBed.configureTestingModule({
 			schemas: [NO_ERRORS_SCHEMA],
 			declarations: [ButtonComponent, DurationPipe, CourseCompositionComponent],
 			providers: [
 				AuthService,
 				{ provide: Router, useValue: mockRouter },
-				{ provide: ActivatedRoute, useValue: { data: of(course) } },
+				{ provide: ActivatedRoute, useValue: { data: of({ course: course }) } },
 			],
 		}).compileComponents();
 

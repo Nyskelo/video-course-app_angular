@@ -3,9 +3,19 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { HeaderComponent } from './header.component';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 let serviceSpy: jasmine.SpyObj<AuthService>;
-const user = { firstName: 'Pretty', lastName: 'Funny', id: '999' };
+const user = {
+	id: 2,
+	fakeToken: '58ebfdf7ec92657b493b24da',
+	name: {
+		first: 'Brock',
+		last: 'Beasley',
+	},
+	login: 'Morales',
+	password: 'id',
+};
 
 describe('HeaderComponent', () => {
 	let component: HeaderComponent;
@@ -13,12 +23,18 @@ describe('HeaderComponent', () => {
 	const mockRouter = {
 		navigate: jasmine.createSpy('navigate'),
 	};
+	const http = {
+		post: () => [],
+	};
 
 	beforeEach(() => {
 		TestBed.configureTestingModule({
 			schemas: [NO_ERRORS_SCHEMA],
 			declarations: [HeaderComponent],
-			providers: [{ provide: Router, useValue: mockRouter }],
+			providers: [
+				{ provide: Router, useValue: mockRouter },
+				{ provide: HttpClient, useValue: http },
+			],
 		});
 		serviceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
 		fixture = TestBed.createComponent(HeaderComponent);
@@ -37,9 +53,9 @@ describe('HeaderComponent', () => {
 			spyOnProperty(component, 'userName', 'get').and.callThrough();
 			spyOn(serviceSpy, 'getUserInfo').and.returnValue(user);
 			spyOn(Storage.prototype, 'getItem').and.returnValue(
-				JSON.stringify(user.firstName)
+				JSON.stringify(user.login)
 			);
-			expect(component.userName).toEqual(user.firstName);
+			expect(component.userName).toEqual(user.login);
 			expect(serviceSpy.getUserInfo).toHaveBeenCalled();
 		});
 	});
