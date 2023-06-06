@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { CoursesService } from './services/courses.service';
 
 @Component({
@@ -8,7 +9,13 @@ import { CoursesService } from './services/courses.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CoursesComponent {
-	constructor(private coursesService: CoursesService) {}
+	constructor(
+		private coursesService: CoursesService,
+		private titleService: Title
+	) {}
+	get routeTitle() {
+		return this.titleService.getTitle();
+	}
 	get isUpdating() {
 		return this.coursesService.isUpdating.state;
 	}

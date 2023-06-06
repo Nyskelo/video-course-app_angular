@@ -8,11 +8,15 @@ import { FilterPipe } from 'src/app/shared/pipes/filter.pipe';
 import { CourseListComponent } from './course-list.component';
 import { action } from 'src/app/utils/global.model';
 import { CoursesService } from '../services/courses.service';
+import { Router } from '@angular/router';
 
 describe('CourseListComponent', () => {
 	let component: CourseListComponent;
 	let fixture: ComponentFixture<CourseListComponent>;
 	let serviceSpy: jasmine.SpyObj<CoursesService>;
+	const mockRouter = {
+		navigate: jasmine.createSpy('navigate'),
+	};
 
 	beforeEach(() => {
 		TestBed.configureTestingModule({
@@ -25,7 +29,7 @@ describe('CourseListComponent', () => {
 				OrderByPipe,
 				FilterPipe,
 			],
-			providers: [FilterPipe],
+			providers: [FilterPipe, { provide: Router, useValue: mockRouter }],
 		});
 		fixture = TestBed.createComponent(CourseListComponent);
 		component = fixture.componentInstance;

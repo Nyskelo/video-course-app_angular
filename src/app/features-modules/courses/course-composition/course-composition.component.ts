@@ -1,20 +1,51 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { action } from 'src/app/utils/global.model';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	OnDestroy,
+	OnInit,
+} from '@angular/core';
+import { action, Course, customPath } from 'src/app/utils/global.model';
 import { CoursesService } from '../services/courses.service';
-
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
 	selector: 'app-course-composition',
 	templateUrl: './course-composition.component.html',
 	styleUrls: ['./course-composition.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CourseCompositionComponent {
-	constructor(private coursesService: CoursesService) {}
+export class CourseCompositionComponent implements OnInit, OnDestroy {
+	constructor(
+		private coursesService: CoursesService,
+		private router: Router,
+		private activatedRoute: ActivatedRoute
+	) {}
+	ngOnDestroy(): void {
+		console.log('ADD|EDIT - CourseCompos has been destroyed');
+	}
+	courseToUpdate!: Course;
+	formattetDuration = '';
+
 	title = '';
 	description = '';
 	duration = 0;
 	date = '';
 	authors = '';
+
+	ngOnInit(): void {
+		console.log('ADD|EDIT - CourseCompos has been init');
+
+		this.activatedRoute.data.subscribe(({ course }) => {
+			if (course) {
+				this.courseToUpdate = course;
+				this.formattetDuration = course.length;
+				this.duration = Number(course.length);
+				this.title = course.name;
+				this.description = course.description;
+				this.authors = course.authors[0].name;
+				this.date = new Date(course.date).toISOString().substring(0, 10);
+			}
+		});
+	}
 
 	onInputTitleValue(value: string) {
 		this.title = value;
@@ -34,23 +65,33 @@ export class CourseCompositionComponent {
 
 	onSave() {
 		const newCourse = {
-			title: this.title,
+			...this.courseToUpdate,
+			name: this.title,
 			description: this.description,
-			duration: this.duration,
+			length: this.duration,
 			date: this.date,
-			authors: this.authors,
+			authors: [{ name: this.authors, lastName: 'LN', id: Date.now() }],
+			isTopRated: false,
 		};
+		this.coursesService.setCourse(
+			newCourse,
+			this.coursesService.isUpdating.action
+		);
 		this.coursesService.isUpdating.state = false;
 		this.coursesService.isUpdating.action = action.SAVE;
-		alert(`New course has been added: ${JSON.stringify(newCourse)}`);
+		this.router.navigate([customPath.coursesList]);
 	}
 
 	onCancel(): void {
 		this.coursesService.isUpdating.state = false;
 		this.coursesService.isUpdating.action = action.CANCEL;
+		this.router.navigate([customPath.coursesList]);
 	}
 
 	get action() {
-		return this.coursesService.isUpdating.action;
+		return this.router.url.match(/new$/gi) ? 'Add' : 'Edit';
+	}
+	get state() {
+		return this.coursesService.isUpdating.state;
 	}
 }

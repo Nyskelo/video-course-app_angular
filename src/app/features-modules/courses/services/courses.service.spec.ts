@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { mockCourses } from 'src/app/utils/courses-api';
+import { action } from 'src/app/utils/global.model';
 
 import { CoursesService } from './courses.service';
 
@@ -19,20 +20,17 @@ describe('CoursesService', () => {
 			);
 		});
 	});
-	describe('updateCourseByID', () => {
-		it('should update course by ID', () => {
+	describe('setCourse', () => {
+		it('should add new course if action.ADD', () => {
+			const courseToAdd = mockCourses[0];
+			service.setCourse(courseToAdd, action.ADD);
+			expect(service.getCourseByID(courseToAdd['id'])).toBeDefined();
+		});
+		it('should update course by ID if action.EDIT', () => {
 			const courseToUpdate = mockCourses[0];
 			courseToUpdate.name = 'UpdatedCourse';
-			service.updateCourseByID(courseToUpdate);
+			service.setCourse(courseToUpdate, action.EDIT);
 			expect(mockCourses[0]['name']).toEqual('UpdatedCourse');
-		});
-	});
-	describe('createCourse', () => {
-		it('should add a new course', () => {
-			const newCourse = mockCourses[0];
-			newCourse.id = 1111;
-			service.createCourse(newCourse);
-			expect(service.getCourseByID(1111)).toBeDefined();
 		});
 	});
 });

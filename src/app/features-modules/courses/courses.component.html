@@ -1,9 +1,13 @@
-<div class="wrapper">
+<div class="wrapper" *appIsAuthenticated="true">
 	<section>
-		<h4>Courses</h4>
+		<h4 class="routeTitle">
+			Courses
+			<span *ngIf="routeTitle && routeTitle !== 'Courses'"
+				>/ {{ routeTitle }}</span
+			>
+		</h4>
 	</section>
 	<main>
-		<app-course-list *ngIf="!isUpdating" />
-		<app-course-composition *ngIf="isUpdating"></app-course-composition>
+		<router-outlet></router-outlet>
 	</main>
 </div>

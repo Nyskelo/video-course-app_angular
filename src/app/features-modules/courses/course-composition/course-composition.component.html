@@ -1,4 +1,4 @@
-<div class="course">
+<div class="course" *ngIf="action">
 	<div class="course-form">
 		<h1 class="course-title">{{ action }} Course</h1>
 		<!-- Title -->
@@ -9,6 +9,7 @@
 				[id]="'title'"
 				[placeholder]="'Add title'"
 				class="input-course"
+				[value]="title"
 				(valueChanged)="onInputTitleValue($event)"
 			/>
 		</label>
@@ -16,7 +17,10 @@
 		<!-- Description -->
 		<label for="description" class="label-title"
 			><p>Description: <span class="required">*required</span></p>
-			<app-textarea (valueChanged)="onInputDescriptionValue($event)" />
+			<app-textarea
+				(valueChanged)="onInputDescriptionValue($event)"
+				[value]="description"
+			/>
 		</label>
 
 		<!-- Duration -->
@@ -30,6 +34,7 @@
 				[type]="'number'"
 				[id]="'duration'"
 				class="input-course"
+				[value]="formattetDuration"
 				[placeholder]="'minutes'"
 				(valueChanged)="onInputDurationValue($event)"
 			></app-input>
@@ -42,6 +47,7 @@
 				[title]="'date'"
 				[id]="'date'"
 				[type]="'date'"
+				[value]="date"
 				(valueChanged)="onInputDateValue($event)"
 				class="input-course"
 			/>
@@ -54,6 +60,7 @@
 				[title]="'authors'"
 				[id]="'authors'"
 				[placeholder]="'Authors [x]'"
+				[value]="authors"
 				(valueChanged)="onInputAuthorsValue($event)"
 				class="input-course"
 			/>

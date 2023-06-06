@@ -7,12 +7,12 @@
 		/></app-button>
 	</div>
 </div>
-<ng-container *ngIf="(filteredCourses$ | async)?.length !== 0; else empty">
+<ng-container *ngIf="filteredCourses$ | async as courses; else empty">
 	<!-- Course-list -->
 	<div
 		class="card-container"
 		*ngFor="
-			let course of filteredCourses$ | async | orderBy : 'date' : 'desc';
+			let course of courses | orderBy : 'date' : 'desc';
 			trackBy: trackCourseID;
 			let i = index
 		"
@@ -35,7 +35,7 @@
 				{{ course.description }}
 			</p>
 			<div class="card-update">
-				<app-button [text]="'Edit'" (click)="onNewCourse(edit)"
+				<app-button [text]="'Edit'" (click)="onNewCourse(edit, course)"
 					><app-i-edit
 				/></app-button>
 				<app-button [text]="'Delete'" (click)="onDeleteCourseID(course.id)"

@@ -18,9 +18,10 @@ export class InputComponent {
 	@Input() type = 'text';
 	@Input() title = 'text';
 	@Input() placeholder = 'Type here...';
+	@Input() value = '';
 
-	value = '';
 	@Output() valueChanged: EventEmitter<string> = new EventEmitter<string>();
+
 	onChangedValue() {
 		this.valueChanged.emit(this.value);
 	}

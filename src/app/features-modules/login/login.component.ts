@@ -1,16 +1,21 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { Router } from '@angular/router';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { customPath } from 'src/app/utils/global.model';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
 	selector: 'app-login',
+	standalone: true,
+	imports: [SharedModule],
 	templateUrl: './login.component.html',
 	styleUrls: ['./login.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
-	constructor(private authService: AuthService) {}
+	constructor(private authService: AuthService, private router: Router) {}
 
 	email = '';
 	password = '';
@@ -37,5 +42,6 @@ export class LoginComponent {
 		localStorage.setItem(`token`, JSON.stringify([newUser, this.authData]));
 
 		this.authService.login(newUser);
+		this.router.navigate([customPath.coursesList]);
 	}
 }

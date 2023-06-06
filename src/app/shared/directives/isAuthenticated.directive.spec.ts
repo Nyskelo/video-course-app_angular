@@ -1,6 +1,7 @@
 /* tslint:disable:no-unused-variable */
 import { TemplateRef, ViewContainerRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { IsAuthenticatedDirective } from './isAuthenticated.directive';
 
@@ -15,16 +16,20 @@ describe('Directive: IsAuthenticated', () => {
 			'createEmbeddedView',
 			'clear',
 		]);
+		const mockRouter = {
+			navigate: jasmine.createSpy('navigate'),
+		};
 
 		TestBed.configureTestingModule({
 			providers: [
 				TemplateRef,
 				AuthService,
 				{ provide: ViewContainerRef, useValue: viewContainerRefSpy },
+				{ provide: Router, useValue: mockRouter },
 			],
 		}).compileComponents();
-
-		service = new AuthService();
+		const router = TestBed.inject(Router);
+		service = new AuthService(router);
 		spyOn(service, 'isAuthenticated').and.callThrough();
 		vcRef = TestBed.inject(ViewContainerRef);
 		directive = new IsAuthenticatedDirective(templateRef, service, vcRef);

@@ -1,6 +1,7 @@
 import {
 	ChangeDetectionStrategy,
 	Component,
+	OnDestroy,
 	OnInit,
 	ViewEncapsulation,
 } from '@angular/core';
@@ -8,6 +9,7 @@ import { Observable, of } from 'rxjs';
 import { FilterPipe } from 'src/app/shared/pipes/filter.pipe';
 import { action, Course } from 'src/app/utils/global.model';
 import { CoursesService } from '../services/courses.service';
+import { Router } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy({ checkProperties: true })
@@ -18,11 +20,15 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	encapsulation: ViewEncapsulation.None,
 })
-export class CourseListComponent implements OnInit {
+export class CourseListComponent implements OnInit, OnDestroy {
 	constructor(
 		private filterPipe: FilterPipe,
-		private coursesService: CoursesService
+		private coursesService: CoursesService,
+		private router: Router
 	) {}
+	ngOnDestroy(): void {
+		console.log('LIST - CoursesListComponent has been destroyed');
+	}
 
 	searchText = '';
 	courses: Course[] = [];
@@ -31,6 +37,7 @@ export class CourseListComponent implements OnInit {
 	edit = action.EDIT;
 
 	ngOnInit(): void {
+		console.log('LIST - CoursesListComponent has been init');
 		this.courses = this.coursesService.getCourses();
 		this.filteredCourses$ = of(this.courses);
 	}
@@ -69,8 +76,10 @@ You will not be able to recover it`)
 		console.log('Loaded more was clicked!');
 	}
 
-	onNewCourse(action: action): void {
+	onNewCourse(action: action, course?: Course): void {
 		this.coursesService.isUpdating.state = true;
 		this.coursesService.isUpdating.action = action;
+		action === 'Add' && this.router.navigate(['courses/new']);
+		action === 'Edit' && this.router.navigate([`courses/${course?.id}`]);
 	}
 }
