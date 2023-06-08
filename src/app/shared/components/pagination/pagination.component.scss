@@ -57,3 +57,11 @@
 	background-color: #eceeef;
 	border-color: #ddd;
 }
+.disabled {
+	pointer-events: none;
+	opacity: 0.6;
+}
+.load {
+	display: block;
+	float: right;
+}

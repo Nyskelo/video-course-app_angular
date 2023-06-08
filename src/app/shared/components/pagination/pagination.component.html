@@ -6,4 +6,11 @@
 	>
 		<span class="page-link">{{ page }}</span>
 	</li>
+	<li
+		class="page-link load"
+		(click)="loadMore.emit(pages().length + 1)"
+		[ngClass]="{ disabled: loadButton }"
+	>
+		LOAD MORE
+	</li>
 </ul>

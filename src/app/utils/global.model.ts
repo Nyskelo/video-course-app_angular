@@ -31,6 +31,7 @@ export const enum action {
 	'ADD' = 'Add',
 	'CANCEL' = 'Cancel',
 	'SAVE' = 'Save',
+	'DELETE' = 'Delete',
 }
 export const enum customPath {
 	'coursesList' = 'courses',
