@@ -129,7 +129,7 @@ export class CourseListComponent implements OnInit {
 ❓ DELETE THE COURSE
 You will not be able to recover it`)
 		)
-			this.coursesService.deleteCourse(course).subscribe(() => {});
+			this.coursesService.deleteCourse(course).subscribe();
 	}
 
 	onSearchClick(searchValue: string) {

@@ -2,6 +2,7 @@ import {
 	HttpClient,
 	HttpErrorResponse,
 	HttpHeaders,
+	HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of, retry, Subject, tap } from 'rxjs';
@@ -23,7 +24,7 @@ export class CoursesService {
 	};
 	url = `http://localhost:3004/courses`;
 
-	private handleError<T>(operation = 'operation', result?: T) {
+	private handleError<T>(operation: string, result?: T) {
 		return (error: HttpErrorResponse): Observable<T> => {
 			console.log(`${operation} failed: ${error.message}`);
 			return of(result as T);
@@ -42,10 +43,14 @@ export class CoursesService {
 		return this._saveOperationSuccessfulEvent$.asObservable();
 	}
 
-	getCourses(start = 0, count?: number) {
+	getCourses(start?: number, count?: number) {
+		let params = new HttpParams().append('sort', 'date');
+		start && (params = params.append('start', start));
+		count && (params = params.append('count', count));
+
 		return this.http
-			.get<Course[]>(`${this.url}?start=${start}&count=${count}`, {
-				params: { sort: 'date' },
+			.get<Course[]>(`${this.url}`, {
+				params,
 			})
 			.pipe(
 				tap((data) => console.log(`fetched ${data.length} courses`)),
