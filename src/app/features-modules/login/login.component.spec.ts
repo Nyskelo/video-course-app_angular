@@ -53,8 +53,9 @@ describe('LoginComponent', () => {
 		it('should not be called if any field is empty', () => {
 			spyOn(component, 'onSubmit').and.callThrough();
 			component.email.set('');
-			component.password.set('');
+			component.password.set('one');
 			component.onSubmit();
+			expect(window.alert).toHaveBeenCalled();
 		});
 
 		it('should call the service login method if the data is valid', () => {

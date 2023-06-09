@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
+import { catchError, of } from 'rxjs';
 import { mockCourses } from 'src/app/utils/courses-api';
 import {
 	HttpClientTestingModule,
@@ -7,21 +7,47 @@ import {
 } from '@angular/common/http/testing';
 
 import { CoursesService } from './courses.service';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Course } from 'src/app/utils/global.model';
 
 describe('CoursesService', () => {
 	let service: CoursesService;
 	let httpController: HttpTestingController;
+	let httpClient: HttpClient;
 
 	beforeEach(() => {
 		TestBed.configureTestingModule({
 			imports: [HttpClientTestingModule],
 		});
 		service = TestBed.inject(CoursesService);
+		httpClient = TestBed.inject(HttpClient);
 		httpController = TestBed.inject(HttpTestingController);
 		service.courses = mockCourses;
 		spyOn(console, 'log').and.callThrough();
 	});
 	afterEach(() => httpController.verify());
+	describe('handleError', () => {
+		it('handleError', () => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			spyOn(service as any, 'handleError').and.callThrough();
+			const emsg = 'failed';
+
+			httpClient
+				.get<Course>('http://localhost:3004/courses/')
+				.pipe(catchError(service['handleError']('getCourses', [])))
+				.subscribe({
+					error: (error: HttpErrorResponse) => {
+						expect(error.status).withContext('status').toEqual(404);
+						expect(error.error).withContext('message').toEqual(emsg);
+					},
+				});
+
+			const req = httpController.expectOne('http://localhost:3004/courses/');
+
+			req.flush(emsg, { status: 404, statusText: 'Not Found' });
+			expect(service['handleError']).toHaveBeenCalled();
+		});
+	});
 
 	describe('getCourseByID', () => {
 		it('should return course by ID', (done: DoneFn) => {

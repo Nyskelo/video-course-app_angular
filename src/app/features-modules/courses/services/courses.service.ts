@@ -60,7 +60,7 @@ export class CoursesService {
 	}
 
 	getCourseByID(id: number) {
-		return this.http.get<Course[]>(`${this.url}/${id}`).pipe(
+		return this.http.get<Course>(`${this.url}/${id}`).pipe(
 			tap(() => console.log(`fetched course id=${id}`)),
 			catchError(this.handleError<Course>(`getCourseByID id=${id}`))
 		);

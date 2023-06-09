@@ -72,6 +72,9 @@ describe('CourseListComponent', () => {
 					'saveOperationSuccessfulEvent$',
 					'get'
 				);
+				spyOn(component, 'setPagesSize')
+					.and.callThrough()
+					.and.returnValue(component.pageSize.set(0));
 				component.coursesSub$.set(mockCourses);
 			});
 
@@ -101,8 +104,8 @@ describe('CourseListComponent', () => {
 					});
 				});
 			});
-			it('should update course if action.DELETE', () => {
-				spyOn(service, 'getCourseByID').and.returnValue(of());
+			it('should delete course if action.DELETE', () => {
+				spyOn(service, 'getCourseByID').and.returnValue(of(mockCourses[0]));
 				const data = { action: action.DELETE, id: mockCourses[0]['id'] };
 				const newCourses = mockCourses.filter(
 					(e) => e.id !== mockCourses[0]['id']
@@ -113,7 +116,7 @@ describe('CourseListComponent', () => {
 					expect(res).toEqual(data);
 					service.getCourseByID(res.id).subscribe((data) => {
 						expect(component.coursesSub$()).toEqual(newCourses);
-						expect(data).not.toBeDefined();
+						expect(data).toEqual(mockCourses[0]);
 					});
 				});
 			});
@@ -157,10 +160,21 @@ describe('CourseListComponent', () => {
 	describe('initFetchCoursesFromAPI', () => {
 		it('initFetchCoursesFromAPI', () => {
 			component.coursesSub$.set([]);
+			spyOn(component, 'setPagesSize')
+				.and.callThrough()
+				.and.returnValue(component.pageSize.set(0));
 			spyOn(component, 'checkAndReturn').and.callThrough();
 			spyOn(service, 'getCourses').and.returnValue(of(mockCourses));
 			component.initFetchCoursesFromAPI();
 			expect(component.coursesSub$()).toEqual(mockCourses);
+		});
+	});
+	describe('checkAndReturn', () => {
+		it('should return empty array', () => {
+			const data = [mockCourses[0]];
+			spyOn(component, 'checkAndReturn').and.callThrough();
+			component.countToFetch = 1;
+			expect(component.checkAndReturn(data)).toEqual([]);
 		});
 	});
 
