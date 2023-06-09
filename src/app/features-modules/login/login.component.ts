@@ -42,7 +42,7 @@ export class LoginComponent implements OnDestroy {
 	}
 
 	onSubmit() {
-		if (!this.email().trim() && !this.password().trim()) {
+		if (!this.email().trim() || !this.password().trim()) {
 			alert('Please complete the fields below');
 			return;
 		}
