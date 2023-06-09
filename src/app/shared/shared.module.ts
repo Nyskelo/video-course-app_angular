@@ -12,6 +12,7 @@ import { BorderByDateDirective } from './directives/borderByDate.directive';
 import { StarDirective } from './directives/star.directive';
 import { IsAuthenticatedDirective } from './directives/isAuthenticated.directive';
 import { TextareaComponent } from './components/textarea/textarea.component';
+import { PaginationModule } from './components/pagination/pagination.module';
 
 @NgModule({
 	declarations: [
@@ -26,7 +27,7 @@ import { TextareaComponent } from './components/textarea/textarea.component';
 		IsAuthenticatedDirective,
 		TextareaComponent,
 	],
-	imports: [CommonModule, FormsModule, IconsModule],
+	imports: [CommonModule, FormsModule, IconsModule, PaginationModule],
 	exports: [
 		CommonModule,
 		FormsModule,
@@ -41,6 +42,7 @@ import { TextareaComponent } from './components/textarea/textarea.component';
 		StarDirective,
 		IsAuthenticatedDirective,
 		TextareaComponent,
+		PaginationModule,
 	],
 })
 export class SharedModule {}

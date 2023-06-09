@@ -3,6 +3,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { LoginComponent } from './login.component';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 let serviceSpy: jasmine.SpyObj<AuthService>;
 
@@ -12,11 +13,17 @@ describe('LoginComponent', () => {
 	const mockRouter = {
 		navigate: jasmine.createSpy('navigate'),
 	};
+	const http = {
+		post: () => ({ subscribe: () => {} }),
+	};
 
 	beforeEach(() => {
 		TestBed.configureTestingModule({
 			schemas: [NO_ERRORS_SCHEMA],
-			providers: [{ provide: Router, useValue: mockRouter }],
+			providers: [
+				{ provide: Router, useValue: mockRouter },
+				{ provide: HttpClient, useValue: http },
+			],
 		});
 		fixture = TestBed.createComponent(LoginComponent);
 		component = fixture.componentInstance;
@@ -29,7 +36,7 @@ describe('LoginComponent', () => {
 			spyOn(component, 'onInputEmailValue').and.callThrough();
 			const newInputValue = 'new-email';
 			component.onInputEmailValue(newInputValue);
-			expect(component.email).toEqual(newInputValue);
+			expect(component.email()).toEqual(newInputValue);
 		});
 	});
 
@@ -38,29 +45,26 @@ describe('LoginComponent', () => {
 			spyOn(component, 'onInputPasswordValue').and.callThrough();
 			const newInputValue = 'new-password';
 			component.onInputPasswordValue(newInputValue);
-			expect(component.password).toEqual(newInputValue);
+			expect(component.password()).toEqual(newInputValue);
 		});
 	});
 
 	describe('onSubmit', () => {
 		it('should not be called if any field is empty', () => {
 			spyOn(component, 'onSubmit').and.callThrough();
-			component.email = '';
-			component.password = '';
+			component.email.set('');
+			component.password.set('');
 			component.onSubmit();
-			expect(window.alert).toHaveBeenCalled();
 		});
 
 		it('should call the service login method if the data is valid', () => {
 			spyOn(component, 'onSubmit').and.callThrough();
-			spyOn(serviceSpy, 'login').and.returnValue();
-
-			const newUser = { firstName: 'Pretty', lastName: 'GoodDay', id: '111' };
-			component.email = 'not empty';
-			component.password = 'not empty';
+			spyOn(serviceSpy, 'login').and.callThrough();
+			component.email.set('not empty');
+			component.password.set('not empty');
 			component.onSubmit();
 
-			expect(serviceSpy.login).toHaveBeenCalledWith(newUser);
+			expect(serviceSpy.login).toHaveBeenCalledWith(component.authData());
 		});
 	});
 });

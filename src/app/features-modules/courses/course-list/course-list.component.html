@@ -2,19 +2,19 @@
 <div class="search-container">
 	<app-searchbar (searchTextChanged)="onSearchClick($event)" />
 	<div>
-		<app-button [text]="'Add course'" (click)="onNewCourse(add)"
+		<app-button [text]="'Add course'" (click)="onBuildCourse(add)"
 			><app-i-plus class="icons"
 		/></app-button>
 	</div>
 </div>
-<ng-container *ngIf="filteredCourses$ | async as courses; else empty">
+<ng-container *ngIf="coursesSliceSub$().length; else empty">
 	<!-- Course-list -->
 	<div
 		class="card-container"
 		*ngFor="
-			let course of courses | orderBy : 'date' : 'desc';
-			trackBy: trackCourseID;
-			let i = index
+			let course of coursesSliceSub$();
+			let i = index;
+			trackBy: trackCourseID
 		"
 		[appBorderByDate]="course.date"
 		[ngClass]="{ 'bg-topRaitings': course.isTopRated }"
@@ -22,7 +22,8 @@
 		<div class="card-header">
 			<div class="title">
 				<h1 [appStar]="course.isTopRated">
-					Video course {{ i + 1 }}. {{ course.name | uppercase }}
+					Video course {{ i + coursesNumeration() }}.
+					{{ course.name | uppercase }}
 				</h1>
 			</div>
 			<div class="info">
@@ -35,20 +36,25 @@
 				{{ course.description }}
 			</p>
 			<div class="card-update">
-				<app-button [text]="'Edit'" (click)="onNewCourse(edit, course)"
+				<app-button [text]="'Edit'" (click)="onBuildCourse(edit, course)"
 					><app-i-edit
 				/></app-button>
-				<app-button [text]="'Delete'" (click)="onDeleteCourseID(course.id)"
+				<app-button [text]="'Delete'" (click)="onDeleteCourse(course)"
 					><app-i-delete
 				/></app-button>
 			</div>
 		</div>
 	</div>
 
-	<!-- Load more -->
-	<div class="container" *ngIf="(filteredCourses$ | async)?.length !== 0">
-		<app-button class="btn-load" [text]="'Load more'" (click)="onLoadMore()" />
-	</div>
+	<!-- Pagination-->
+	<app-pagination
+		[currentPage]="currentPage()"
+		[limit]="limitToDisplay"
+		[total]="pageSize"
+		(changePage)="onChangePage($event)"
+		(loadMore)="onLoadMore($event)"
+		[loadButton]="loadMore_disebled"
+	></app-pagination>
 </ng-container>
 
 <!-- NO-DATA containerLoad more -->

@@ -14,9 +14,16 @@ export interface Author {
 	lastName?: string;
 }
 export class User {
-	id!: string;
-	firstName!: string;
-	lastName!: string;
+	id!: number;
+	fakeToken!: string;
+	name!: object;
+	login!: string;
+	password!: string;
+}
+
+export interface UserAuth {
+	login: string;
+	password: string;
 }
 
 export const enum action {
@@ -24,6 +31,7 @@ export const enum action {
 	'ADD' = 'Add',
 	'CANCEL' = 'Cancel',
 	'SAVE' = 'Save',
+	'DELETE' = 'Delete',
 }
 export const enum customPath {
 	'coursesList' = 'courses',

@@ -7,6 +7,9 @@ import {
 import { action, Course, customPath } from 'src/app/utils/global.model';
 import { CoursesService } from '../services/courses.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { UntilDestroy } from '@ngneat/until-destroy';
+
+@UntilDestroy({ checkProperties: true })
 @Component({
 	selector: 'app-course-composition',
 	templateUrl: './course-composition.component.html',
@@ -73,10 +76,12 @@ export class CourseCompositionComponent implements OnInit, OnDestroy {
 			authors: [{ name: this.authors, lastName: 'LN', id: Date.now() }],
 			isTopRated: false,
 		};
-		this.coursesService.setCourse(
-			newCourse,
-			this.coursesService.isUpdating.action
-		);
+		if (this.coursesService.isUpdating.action === 'Add') {
+			this.coursesService.addCourse(newCourse).subscribe();
+		}
+		if (this.coursesService.isUpdating.action === 'Edit') {
+			this.coursesService.updateCourse(newCourse).subscribe();
+		}
 		this.coursesService.isUpdating.state = false;
 		this.coursesService.isUpdating.action = action.SAVE;
 		this.router.navigate([customPath.coursesList]);

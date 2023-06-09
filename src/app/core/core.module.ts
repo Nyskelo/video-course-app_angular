@@ -1,13 +1,22 @@
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
 import { CoursesResolver } from './resolvers/courses.resolver';
+import { AuthTokenInterceptorService } from './services/auth-token-interceptor.service';
 import { AuthService } from './services/auth.service';
-import { UserService } from './services/user.service';
 
 @NgModule({
 	declarations: [],
 	imports: [SharedModule],
 	exports: [SharedModule],
-	providers: [AuthService, UserService, CoursesResolver],
+	providers: [
+		AuthService,
+		CoursesResolver,
+		{
+			provide: HTTP_INTERCEPTORS,
+			useClass: AuthTokenInterceptorService,
+			multi: true,
+		},
+	],
 })
 export class CoreModule {}

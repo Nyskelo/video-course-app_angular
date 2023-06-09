@@ -7,15 +7,17 @@ import { ButtonComponent } from 'src/app/shared/components/button/button.compone
 import { DurationPipe } from 'src/app/shared/pipes/duration.pipe';
 import { action } from 'src/app/utils/global.model';
 import { CoursesService } from '../services/courses.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { CourseCompositionComponent } from './course-composition.component';
 
 describe('CourseCompositionComponent', () => {
 	let component: CourseCompositionComponent;
 	let fixture: ComponentFixture<CourseCompositionComponent>;
-	let serviceSpy: jasmine.SpyObj<CoursesService>;
+	let service: CoursesService;
 	const mockRouter = {
 		navigate: jasmine.createSpy('navigate'),
+		url: 'courses/new',
 	};
 	const course = {
 		id: 8693,
@@ -35,23 +37,21 @@ describe('CourseCompositionComponent', () => {
 	};
 
 	beforeEach(async () => {
-		await TestBed.configureTestingModule({
+		TestBed.configureTestingModule({
 			schemas: [NO_ERRORS_SCHEMA],
+			imports: [HttpClientTestingModule],
 			declarations: [ButtonComponent, DurationPipe, CourseCompositionComponent],
 			providers: [
 				AuthService,
 				{ provide: Router, useValue: mockRouter },
-				{ provide: ActivatedRoute, useValue: { data: of(course) } },
+				{ provide: ActivatedRoute, useValue: { data: of({ course: course }) } },
 			],
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(CourseCompositionComponent);
 		component = fixture.componentInstance;
+		service = TestBed.inject(CoursesService);
 		fixture.detectChanges();
-
-		serviceSpy = TestBed.inject(
-			CoursesService
-		) as jasmine.SpyObj<CoursesService>;
 	});
 
 	describe('ngOnInit', () => {
@@ -65,18 +65,26 @@ describe('CourseCompositionComponent', () => {
 	describe('getters', () => {
 		it('action getter should return the correct type of action', () => {
 			spyOnProperty(component, 'action', 'get').and.callThrough();
-			serviceSpy.isUpdating.action = action.ADD;
-			serviceSpy.isUpdating.state = true;
+			mockRouter.url = 'courses/new';
+			service.isUpdating.action = action.ADD;
+			service.isUpdating.state = true;
 			expect(component.action).toBe(action.ADD);
+		});
+		it('action getter should return the correct type of action', () => {
+			spyOnProperty(component, 'action', 'get').and.callThrough();
+			mockRouter.url = 'courses/';
+			service.isUpdating.action = action.EDIT;
+			service.isUpdating.state = true;
+			expect(component.action).toBe(action.EDIT);
 		});
 		it('state getter should return the correct type of state', () => {
 			spyOnProperty(component, 'state', 'get').and.callThrough();
-			serviceSpy.isUpdating.state = true;
+			service.isUpdating.state = true;
 			expect(component.state).toBeTruthy();
 		});
 	});
 
-	describe('onInputTitleValue', () => {
+	describe('onInputTitleValue', async () => {
 		it('should change title to value passed', () => {
 			spyOn(component, 'onInputTitleValue').and.callThrough();
 			component.onInputTitleValue('newValue');
@@ -117,8 +125,20 @@ describe('CourseCompositionComponent', () => {
 			component.onSave();
 		});
 		it('should change courses isUpdating state to false and action to action.SAVE', () => {
-			expect(serviceSpy.isUpdating.state).toBeFalse();
-			expect(serviceSpy.isUpdating.action).toEqual(action.SAVE);
+			expect(service.isUpdating.state).toBeFalse();
+			expect(service.isUpdating.action).toEqual(action.SAVE);
+		});
+		it('should trigger service addCourse method when action.ADD', () => {
+			spyOn(service, 'addCourse').and.callThrough();
+			service.isUpdating.action = action.ADD;
+			component.onSave();
+			expect(service.addCourse).toHaveBeenCalled();
+		});
+		it('should trigger service updateCourse method when action.EDIT', () => {
+			spyOn(service, 'updateCourse').and.callThrough();
+			service.isUpdating.action = action.EDIT;
+			component.onSave();
+			expect(service.updateCourse).toHaveBeenCalled();
 		});
 	});
 	describe('onCancel', () => {
@@ -127,8 +147,8 @@ describe('CourseCompositionComponent', () => {
 			component.onCancel();
 		});
 		it('should change courses isUpdating state to false and action to action.CANCEL', () => {
-			expect(serviceSpy.isUpdating.state).toBeFalse();
-			expect(serviceSpy.isUpdating.action).toEqual(action.CANCEL);
+			expect(service.isUpdating.state).toBeFalse();
+			expect(service.isUpdating.action).toEqual(action.CANCEL);
 		});
 	});
 });

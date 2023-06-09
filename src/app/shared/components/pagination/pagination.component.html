@@ -1,0 +1,16 @@
+<ul class="pagination">
+	<li
+		*ngFor="let page of pages()"
+		[ngClass]="{ 'page-item': true, active: currentPage === page }"
+		(click)="changePage.emit(page)"
+	>
+		<span class="page-link">{{ page }}</span>
+	</li>
+	<li
+		class="page-link load"
+		(click)="loadMore.emit(pages().length + 1)"
+		[ngClass]="{ disabled: loadButton }"
+	>
+		LOAD MORE
+	</li>
+</ul>

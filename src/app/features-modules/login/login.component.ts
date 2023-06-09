@@ -1,9 +1,13 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	computed,
+	signal,
+} from '@angular/core';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { Router } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { customPath } from 'src/app/utils/global.model';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -17,31 +21,28 @@ import { customPath } from 'src/app/utils/global.model';
 export class LoginComponent {
 	constructor(private authService: AuthService, private router: Router) {}
 
-	email = '';
-	password = '';
-	authData = {
-		email: this.email,
-		password: this.password,
-		token: 'token',
-	};
+	email = signal('');
+	password = signal('');
+	authData = computed(() => {
+		return {
+			login: this.email(),
+			password: this.password(),
+		};
+	});
 
 	onInputEmailValue(value: string) {
-		this.email = value;
+		this.email.set(value);
 	}
 	onInputPasswordValue(value: string) {
-		this.password = value;
+		this.password.set(value);
 	}
 
 	onSubmit() {
-		if (!this.email.trim() && !this.password.trim()) {
+		if (!this.email().trim() && !this.password().trim()) {
 			alert('Please complete the fields below');
 			return;
 		}
 
-		const newUser = { firstName: 'Pretty', lastName: 'GoodDay', id: '111' };
-		localStorage.setItem(`token`, JSON.stringify([newUser, this.authData]));
-
-		this.authService.login(newUser);
-		this.router.navigate([customPath.coursesList]);
+		this.authService.login(this.authData());
 	}
 }
