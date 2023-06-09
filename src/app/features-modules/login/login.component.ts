@@ -2,6 +2,7 @@ import {
 	ChangeDetectionStrategy,
 	Component,
 	computed,
+	OnDestroy,
 	signal,
 } from '@angular/core';
 import { AuthService } from 'src/app/core/services/auth.service';
@@ -18,8 +19,11 @@ import { SharedModule } from 'src/app/shared/shared.module';
 	styleUrls: ['./login.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginComponent {
+export class LoginComponent implements OnDestroy {
 	constructor(private authService: AuthService, private router: Router) {}
+	ngOnDestroy(): void {
+		console.log('LOGIN - LoginComponent has been destroyed');
+	}
 
 	email = signal('');
 	password = signal('');

@@ -2,6 +2,7 @@ import {
 	ChangeDetectionStrategy,
 	Component,
 	computed,
+	OnDestroy,
 	OnInit,
 	signal,
 	ViewEncapsulation,
@@ -22,14 +23,16 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	encapsulation: ViewEncapsulation.None,
 })
-export class CourseListComponent implements OnInit {
+export class CourseListComponent implements OnInit, OnDestroy {
 	constructor(
 		private filterPipe: FilterPipe,
 		private coursesService: CoursesService,
 		private router: Router,
 		private http: HttpClient
 	) {}
-
+	ngOnDestroy(): void {
+		console.log('LIST - CourseList has been destroyed');
+	}
 	coursesSub$ = signal<Course[]>([]);
 	coursesSliceSub$ = signal<Course[]>([]);
 	saveOperationSuccessfulSubscription!: Subscription;
