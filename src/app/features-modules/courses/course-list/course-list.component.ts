@@ -70,24 +70,27 @@ export class CourseListComponent implements OnInit, OnDestroy {
 		this.saveOperationSuccessfulSubscription =
 			this.coursesService.saveOperationSuccessfulEvent$.subscribe((res) => {
 				this.coursesService.getCourseByID(res.id).subscribe((data) => {
-					if (res.action === action.EDIT) {
-						//→update course
-						this.coursesSub$.set(
-							this.coursesSub$()
-								.filter((el) => el.id !== res.id)
-								.concat(data)
-						);
-					} else {
-						res.action === action.DELETE &&
-							//→delete course
+					switch (res.action) {
+						case action.EDIT:
+							this.coursesSub$.set(
+								this.coursesSub$()
+									.filter((el) => el.id !== res.id)
+									.concat(data)
+							);
+							break;
+
+						case action.DELETE:
 							this.coursesSub$.set(
 								this.coursesSub$().filter((el) => el.id !== res.id)
 							);
+							break;
 
-						res.action === action.ADD &&
-							//→add course
+						case action.ADD:
 							this.coursesSub$.mutate((values) => values.push(data as Course));
+							break;
+					}
 
+					if (res.action !== action.EDIT) {
 						//--->update pages count and current page
 						this.setPagesSize(this.coursesSub$());
 						this.currentPage.set(this.pageSize() || 1);
