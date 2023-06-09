@@ -96,7 +96,7 @@ describe('CourseListComponent', () => {
 				component.ngOnInit();
 				service.saveOperationSuccessfulEvent$.subscribe((res) => {
 					expect(res).toEqual(data);
-					service.getCourseByID(res.id).subscribe((e) => {
+					service.getCourseByID(res.id).subscribe(() => {
 						expect(component.coursesSub$()).toEqual(newCourses);
 					});
 				});

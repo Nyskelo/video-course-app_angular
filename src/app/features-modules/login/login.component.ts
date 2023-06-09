@@ -8,7 +8,6 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { Router } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { customPath } from 'src/app/utils/global.model';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
