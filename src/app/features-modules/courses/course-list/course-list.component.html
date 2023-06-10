@@ -1,11 +1,9 @@
 <!-- Searchbar, AddCourse button -->
 <div class="search-container">
 	<app-searchbar (searchTextChanged)="onSearchClick($event)" />
-	<div>
-		<app-button [text]="'Add course'" (click)="onBuildCourse(add)"
-			><app-i-plus class="icons"
-		/></app-button>
-	</div>
+	<app-button [text]="'Add course'" (click)="onBuildCourse(add)"
+		><app-i-plus class="icons"
+	/></app-button>
 </div>
 <ng-container *ngIf="coursesSliceSub$().length; else empty">
 	<!-- Course-list -->

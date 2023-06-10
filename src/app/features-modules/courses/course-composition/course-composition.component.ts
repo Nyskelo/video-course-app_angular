@@ -4,6 +4,7 @@ import {
 	OnDestroy,
 	OnInit,
 	QueryList,
+	ViewChild,
 	ViewChildren,
 } from '@angular/core';
 import { action, Course, customPath } from 'src/app/utils/global.model';
@@ -11,6 +12,7 @@ import { CoursesService } from '../services/courses.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { InputComponent } from 'src/app/shared/components/input/input.component';
+import { TextareaComponent } from 'src/app/shared/components/textarea/textarea.component';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -26,6 +28,7 @@ export class CourseCompositionComponent implements OnInit, OnDestroy {
 		private activatedRoute: ActivatedRoute
 	) {}
 	@ViewChildren(InputComponent) inputs!: QueryList<InputComponent>;
+	@ViewChild(TextareaComponent) textarea!: TextareaComponent;
 	ngOnDestroy(): void {
 		console.log('ADD|EDIT - CourseCompos has been destroyed');
 	}
@@ -111,5 +114,6 @@ export class CourseCompositionComponent implements OnInit, OnDestroy {
 			input.value = '';
 			input.valueChanged.emit(input.value);
 		});
+		this.textarea.valueChanged.emit('');
 	}
 }

@@ -1,10 +1,12 @@
 import {
+	AfterViewInit,
 	ChangeDetectionStrategy,
 	Component,
 	computed,
 	OnDestroy,
 	OnInit,
 	signal,
+	ViewChild,
 	ViewEncapsulation,
 } from '@angular/core';
 import { FilterPipe } from 'src/app/shared/pipes/filter.pipe';
@@ -12,8 +14,17 @@ import { action, Course } from 'src/app/utils/global.model';
 import { CoursesService } from '../services/courses.service';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { Subscription } from 'rxjs';
+import {
+	debounceTime,
+	distinctUntilChanged,
+	filter,
+	Subject,
+	Subscription,
+	switchMap,
+	tap,
+} from 'rxjs';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { SearchbarComponent } from 'src/app/shared/components/searchbar/searchbar.component';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -23,13 +34,15 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	encapsulation: ViewEncapsulation.None,
 })
-export class CourseListComponent implements OnInit, OnDestroy {
+export class CourseListComponent implements OnInit, OnDestroy, AfterViewInit {
 	constructor(
 		private filterPipe: FilterPipe,
 		private coursesService: CoursesService,
 		private router: Router,
 		private http: HttpClient
 	) {}
+	@ViewChild(SearchbarComponent) child!: SearchbarComponent;
+
 	ngOnDestroy(): void {
 		console.log('LIST - CourseList has been destroyed');
 	}
@@ -42,7 +55,8 @@ export class CourseListComponent implements OnInit, OnDestroy {
 	edit = action.EDIT;
 
 	// searchbar
-	searchText = '';
+	inputSearch$: Subject<string> = new Subject();
+	inputEventSubscription!: Subscription;
 
 	// pagination
 	limitToDisplay = 5;
@@ -104,6 +118,32 @@ export class CourseListComponent implements OnInit, OnDestroy {
 			});
 	}
 
+	ngAfterViewInit(): void {
+		//--->subsctibe to search input event
+		this.inputEventSubscription = this.inputSearch$
+			.pipe(
+				filter((term) => term.trim().length > 2 || term.length === 0),
+				tap((term) => {
+					term.length === 0
+						? (this.loadMore_disebled = false)
+						: (this.loadMore_disebled = true);
+				}),
+				debounceTime(500),
+				distinctUntilChanged(),
+				switchMap((term) =>
+					term
+						? this.coursesService.searchCourses(term)
+						: this.coursesService.getCourses(0, this.countToFetch - 1)
+				)
+			)
+			.subscribe((data) => {
+				this.coursesSub$.set(data);
+				this.coursesSliceSub$.set(this.coursesSub$());
+				this.setPagesSize(this.coursesSub$());
+				this.currentPage.set(1);
+			});
+	}
+
 	//fetch more data
 	onLoadMore(page: number): void {
 		this.coursesService
@@ -118,8 +158,8 @@ export class CourseListComponent implements OnInit, OnDestroy {
 				);
 				this.currentPage.set(page);
 			});
+		this.child.onClear();
 	}
-
 	//update list of courses by current page
 	onChangePage(page: number): void {
 		if (page === this.currentPage()) {
@@ -139,18 +179,7 @@ You will not be able to recover it`)
 	}
 
 	onSearchClick(searchValue: string) {
-		if (searchValue !== this.searchText) {
-			this.loadMore_disebled = true;
-			this.coursesService.searchCourses(searchValue).subscribe((data) => {
-				this.coursesSub$.set(data);
-				this.coursesSliceSub$.set(this.coursesSub$());
-				this.setPagesSize(this.coursesSub$());
-				this.currentPage.set(1);
-			});
-		} else {
-			this.loadMore_disebled && this.initFetchCoursesFromAPI();
-			this.loadMore_disebled = false;
-		}
+		this.inputSearch$.next(searchValue);
 	}
 
 	onBuildCourse(action: action, course?: Course): void {
@@ -158,6 +187,7 @@ You will not be able to recover it`)
 		this.coursesService.isUpdating.action = action;
 		action === this.add && this.router.navigate(['courses/new']);
 		action === this.edit && this.router.navigate([`courses/${course?.id}`]);
+		this.child.onClear();
 	}
 
 	initFetchCoursesFromAPI() {

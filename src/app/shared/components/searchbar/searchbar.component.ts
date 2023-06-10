@@ -5,6 +5,7 @@ import {
 	Output,
 	ViewChild,
 } from '@angular/core';
+
 import { InputComponent } from '../input/input.component';
 
 @Component({
@@ -14,18 +15,16 @@ import { InputComponent } from '../input/input.component';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchbarComponent {
-	@ViewChild(InputComponent, { static: true }) someInput!: InputComponent;
+	@ViewChild(InputComponent) childInput!: InputComponent;
 	@Output() searchTextChanged: EventEmitter<string> =
 		new EventEmitter<string>();
 
-	enteredSearchValue = '';
-
-	onSearchTextChanged() {
-		this.searchTextChanged.emit(this.enteredSearchValue);
-		this.someInput.value = '';
-		this.someInput.valueChanged.emit(this.someInput.value);
+	onClear() {
+		this.childInput.value = '';
+		this.childInput.valueChanged.emit(this.childInput.value);
 	}
+
 	onInputValueChanged(searchValue: string) {
-		this.enteredSearchValue = searchValue;
+		this.searchTextChanged.emit(searchValue);
 	}
 }
