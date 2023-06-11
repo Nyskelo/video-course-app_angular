@@ -55,6 +55,7 @@ export class CourseListComponent implements OnInit, OnDestroy, AfterViewInit {
 	edit = action.EDIT;
 
 	// searchbar
+	searchText = '';
 	inputSearch$: Subject<string> = new Subject();
 	inputEventSubscription!: Subscription;
 
@@ -82,40 +83,48 @@ export class CourseListComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.initFetchCoursesFromAPI();
 		//--->subsctibe to Edit / Add / Delete actions
 		this.saveOperationSuccessfulSubscription =
-			this.coursesService.saveOperationSuccessfulEvent$.subscribe((res) => {
-				this.coursesService.getCourseByID(res.id).subscribe((data) => {
-					switch (res.action) {
-						case action.EDIT:
-							this.coursesSub$.set(
-								this.coursesSub$()
-									.filter((el) => el.id !== res.id)
-									.concat(data)
-							);
-							break;
-
-						case action.DELETE:
+			this.coursesService.saveOperationSuccessfulEvent$
+				.pipe(
+					tap((res) => {
+						if (res.action === action.DELETE) {
 							this.coursesSub$.set(
 								this.coursesSub$().filter((el) => el.id !== res.id)
 							);
-							break;
+							this.coursesSliceSub$.set(
+								this.getCoursesSliceByPage(this.coursesSub$())
+							);
+							this.setPagesSize(this.coursesSub$());
+							this.currentPage.set(this.pageSize() || 1);
+						}
+					})
+				)
+				.subscribe((res) => {
+					res.action !== action.DELETE &&
+						this.coursesService.getCourseByID(res.id).subscribe((data) => {
+							switch (res.action) {
+								case action.EDIT:
+									this.coursesSub$.set(
+										this.coursesSub$()
+											.filter((el) => el.id !== res.id)
+											.concat(data)
+									);
+									break;
 
-						case action.ADD:
-							this.coursesSub$.mutate((values) => values.push(data as Course));
-							break;
-					}
-
-					if (res.action !== action.EDIT) {
-						//--->update pages count and current page
-						this.setPagesSize(this.coursesSub$());
-						this.currentPage.set(this.pageSize() || 1);
-					}
-
-					//--->update list of courses by current page
-					this.coursesSliceSub$.set(
-						this.getCoursesSliceByPage(this.coursesSub$())
-					);
+								case action.ADD:
+									this.coursesSub$.mutate((values) =>
+										values.push(data as Course)
+									);
+									this.setPagesSize(this.coursesSub$());
+									this.currentPage.set(this.pageSize() || 1);
+									break;
+							}
+							//--->update list of courses by current page
+							this.coursesSliceSub$.set(
+								this.getCoursesSliceByPage(this.coursesSub$())
+							);
+							window.scrollTo(0, document.body.scrollHeight);
+						});
 				});
-			});
 	}
 
 	ngAfterViewInit(): void {
@@ -129,7 +138,13 @@ export class CourseListComponent implements OnInit, OnDestroy, AfterViewInit {
 						: (this.loadMore_disebled = true);
 				}),
 				debounceTime(500),
-				distinctUntilChanged(),
+				distinctUntilChanged((a, b) => {
+					const regex = new RegExp(`${a}`, 'gi');
+					if (this.coursesSub$().length <= 1 && b.match(regex)) {
+						return true;
+					}
+					return a === b;
+				}),
 				switchMap((term) =>
 					term
 						? this.coursesService.searchCourses(term)
@@ -146,6 +161,7 @@ export class CourseListComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	//fetch more data
 	onLoadMore(page: number): void {
+		this.searchText !== '' && this.child.onClear();
 		this.coursesService
 			.getCourses(this.startToFetch(), this.countToFetch)
 			.subscribe((data) => {
@@ -158,7 +174,6 @@ export class CourseListComponent implements OnInit, OnDestroy, AfterViewInit {
 				);
 				this.currentPage.set(page);
 			});
-		this.child.onClear();
 	}
 	//update list of courses by current page
 	onChangePage(page: number): void {
@@ -179,6 +194,7 @@ You will not be able to recover it`)
 	}
 
 	onSearchClick(searchValue: string) {
+		this.searchText = searchValue;
 		this.inputSearch$.next(searchValue);
 	}
 
@@ -187,7 +203,7 @@ You will not be able to recover it`)
 		this.coursesService.isUpdating.action = action;
 		action === this.add && this.router.navigate(['courses/new']);
 		action === this.edit && this.router.navigate([`courses/${course?.id}`]);
-		this.child.onClear();
+		this.searchText !== '' && this.child.onClear();
 	}
 
 	initFetchCoursesFromAPI() {

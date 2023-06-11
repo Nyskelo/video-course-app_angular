@@ -15,8 +15,6 @@ import {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputComponent {
-	@ViewChild('input', { static: true }) input!: ElementRef;
-
 	@Input() name = '';
 	@Input() id = '';
 	@Input() type = 'text';
@@ -28,9 +26,5 @@ export class InputComponent {
 
 	onChangedValue() {
 		this.valueChanged.emit(this.value);
-	}
-
-	get inputRef() {
-		return this.input;
 	}
 }
