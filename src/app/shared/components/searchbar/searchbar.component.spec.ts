@@ -23,16 +23,16 @@ describe('SearchbarComponent', () => {
 
 	describe('onInputValueChanged', () => {
 		it('should changed enteredSearchValue to "NewValue"', () => {
+			spyOn(component.searchTextChanged, 'emit');
 			component.onInputValueChanged('NewValue');
-			expect(component.enteredSearchValue).toBe('NewValue');
+			expect(component.searchTextChanged.emit).toHaveBeenCalledWith('NewValue');
 		});
 	});
-
-	describe('onSearchTextChanged', () => {
-		it('should emit searchTextChanged', async () => {
-			spyOn(component.searchTextChanged, 'emit');
-			component.onSearchTextChanged();
-			expect(component.searchTextChanged.emit).toHaveBeenCalled();
+	describe('onClear', () => {
+		it('should reset input value', () => {
+			spyOn(component.childInput.valueChanged, 'emit');
+			component.onClear();
+			expect(component.childInput.valueChanged.emit).toHaveBeenCalledWith('');
 		});
 	});
 });

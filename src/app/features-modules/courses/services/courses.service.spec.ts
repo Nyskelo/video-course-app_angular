@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { catchError, of } from 'rxjs';
+import { catchError } from 'rxjs';
 import { mockCourses } from 'src/app/utils/courses-api';
 import {
 	HttpClientTestingModule,
@@ -141,10 +141,8 @@ describe('CoursesService', () => {
 			const dataSearch = Object.assign({}, mockCourses[0], {
 				name: 'ABCDSDFG',
 			});
-
 			service.searchCourses('ABCDSDFG').subscribe((data) => {
 				expect(data).toEqual(dataSearch);
-				expect(console.log).toHaveBeenCalled();
 				done();
 			});
 			httpController
@@ -155,10 +153,8 @@ describe('CoursesService', () => {
 				.flush(dataSearch);
 		});
 		it('should searchCourses', (done: DoneFn) => {
-			service.searchCourses('______ABCDSDFG_____').subscribe(() => {
-				expect(console.log).toHaveBeenCalledWith(
-					'no courses matching "______ABCDSDFG_____"'
-				);
+			service.searchCourses('______ABCDSDFG_____').subscribe((data) => {
+				expect(data).toEqual([]);
 				done();
 			});
 			httpController
@@ -166,7 +162,7 @@ describe('CoursesService', () => {
 					method: 'GET',
 					url: `http://localhost:3004/courses?sort=date&textFragment=______ABCDSDFG_____`,
 				})
-				.flush(of({}));
+				.flush([]);
 		});
 	});
 });

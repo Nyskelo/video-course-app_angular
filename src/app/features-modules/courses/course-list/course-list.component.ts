@@ -91,11 +91,11 @@ export class CourseListComponent implements OnInit, OnDestroy, AfterViewInit {
 							this.coursesSub$.set(
 								this.coursesSub$().filter((el) => el.id !== res.id)
 							);
+							this.setPagesSize(this.coursesSub$());
+							this.currentPage.set(this.pageSize() || 1);
 							this.coursesSliceSub$.set(
 								this.getCoursesSliceByPage(this.coursesSub$())
 							);
-							this.setPagesSize(this.coursesSub$());
-							this.currentPage.set(this.pageSize() || 1);
 						}
 					})
 				)

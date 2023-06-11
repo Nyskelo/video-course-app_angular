@@ -123,8 +123,39 @@ describe('CourseListComponent', () => {
 		});
 	});
 
+	describe('ngAfterViewInit', () => {
+		it('searchResultSubject$', (done: DoneFn) => {
+			spyOnProperty(service, 'searchResultSubject$', 'get').and.returnValue(
+				of('Match 0')
+			);
+			spyOn(window, 'setTimeout').and.callThrough();
+			component.ngAfterViewInit();
+			service.searchResultSubject$.subscribe((msg) => {
+				expect(msg).toEqual('Match 0');
+				setTimeout(() => {
+					expect(component.searchResult()).toBe('');
+					done();
+				}, 1500);
+			});
+		});
+		it('inputEventSubscription', () => {
+			spyOn(component.inputSearch$, 'pipe').and.returnValue(of('aaa'));
+			component.onSearchClick('');
+			component.inputSearch$.subscribe((term) => {
+				expect(term).toEqual('');
+			});
+		});
+	});
+
 	describe('onLoadMore', () => {
 		it('should fetch one course', () => {
+			spyOn(service, 'getCourses').and.returnValue(of([mockCourses[0]]));
+			component.onLoadMore(1);
+			expect(component.coursesSub$()).toEqual([mockCourses[0]]);
+		});
+		it('should fetch one course and clear inputs', () => {
+			spyOn(component.child, 'onClear').and.callFake(() => {});
+			component.searchText = 'not empty';
 			spyOn(service, 'getCourses').and.returnValue(of([mockCourses[0]]));
 			component.onLoadMore(1);
 			expect(component.coursesSub$()).toEqual([mockCourses[0]]);
@@ -141,20 +172,12 @@ describe('CourseListComponent', () => {
 		});
 	});
 	describe('onSearchClick', () => {
-		it('should search by passed value', () => {
-			spyOn(service, 'searchCourses').and.returnValue(of([mockCourses[0]]));
+		it('should set new search value', () => {
+			spyOn(component.inputSearch$, 'next').and.callThrough();
 			component.onSearchClick(mockCourses[0]['name']);
-			expect(service.searchCourses).toHaveBeenCalledWith(
+			expect(component.inputSearch$.next).toHaveBeenCalledWith(
 				mockCourses[0]['name']
 			);
-		});
-		it('should search by passed value or return init courses if value false', () => {
-			spyOn(service, 'searchCourses').and.returnValue(of([mockCourses[0]]));
-			spyOn(component, 'initFetchCoursesFromAPI').and.callThrough();
-			component.loadMore_disebled = true;
-			component.onSearchClick('');
-			expect(service.searchCourses).not.toHaveBeenCalled();
-			expect(component.initFetchCoursesFromAPI).toHaveBeenCalled();
 		});
 	});
 	describe('initFetchCoursesFromAPI', () => {
@@ -194,9 +217,11 @@ describe('CourseListComponent', () => {
 	});
 
 	describe('onBuildCourse', () => {
-		it('should update course if action.ADD', () => {
+		it('should update course if action.ADD and clear inputs if searchText not empty', () => {
 			spyOn(component, 'onBuildCourse').and.callThrough();
+			spyOn(component.child, 'onClear').and.callFake(() => {});
 			service.isUpdating.action = action.CANCEL;
+			component.searchText = 'not empty';
 			component.onBuildCourse(action.ADD);
 			expect(service.isUpdating.action).toEqual(action.ADD);
 		});

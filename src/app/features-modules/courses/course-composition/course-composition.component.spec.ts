@@ -11,6 +11,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { CourseCompositionComponent } from './course-composition.component';
 import { InputComponent } from 'src/app/shared/components/input/input.component';
+import { TextareaComponent } from 'src/app/shared/components/textarea/textarea.component';
 
 describe('CourseCompositionComponent', () => {
 	let component: CourseCompositionComponent;
@@ -46,6 +47,7 @@ describe('CourseCompositionComponent', () => {
 				DurationPipe,
 				CourseCompositionComponent,
 				InputComponent,
+				TextareaComponent,
 			],
 			providers: [
 				AuthService,

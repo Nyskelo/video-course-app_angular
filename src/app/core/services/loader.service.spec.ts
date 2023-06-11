@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-variable */
 
-import { TestBed, async, inject } from '@angular/core/testing';
+import { TestBed, inject } from '@angular/core/testing';
 import { LoaderService } from './loader.service';
 
 describe('Service: Loader', () => {
@@ -10,7 +10,14 @@ describe('Service: Loader', () => {
 		});
 	});
 
-	it('should ...', inject([LoaderService], (service: LoaderService) => {
-		expect(service).toBeTruthy();
+	it('hide', inject([LoaderService], (service: LoaderService) => {
+		spyOn(service.isLoading, 'next').and.callThrough();
+		service.hide();
+		expect(service.isLoading.next).toHaveBeenCalledWith(false);
+	}));
+	it('show', inject([LoaderService], (service: LoaderService) => {
+		spyOn(service.isLoading, 'next').and.callThrough();
+		service.show();
+		expect(service.isLoading.next).toHaveBeenCalledWith(true);
 	}));
 });
