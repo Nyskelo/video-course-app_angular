@@ -1,6 +1,11 @@
 <!-- Searchbar, AddCourse button -->
 <div class="search-container">
-	<app-searchbar (searchTextChanged)="onSearchClick($event)" />
+	<div>
+		<app-searchbar (searchTextChanged)="onSearchClick($event)" />
+		<span *ngIf="searchResult()" class="searchResult">{{
+			searchResult()
+		}}</span>
+	</div>
 	<app-button [text]="'Add course'" (click)="onBuildCourse(add)"
 		><app-i-plus class="icons"
 	/></app-button>

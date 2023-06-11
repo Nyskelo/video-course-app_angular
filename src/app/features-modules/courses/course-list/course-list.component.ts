@@ -58,6 +58,7 @@ export class CourseListComponent implements OnInit, OnDestroy, AfterViewInit {
 	searchText = '';
 	inputSearch$: Subject<string> = new Subject();
 	inputEventSubscription!: Subscription;
+	searchResult = signal('');
 
 	// pagination
 	limitToDisplay = 5;
@@ -128,6 +129,14 @@ export class CourseListComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	ngAfterViewInit(): void {
+		//--->subsctibe to search result matching
+		this.coursesService.searchResultSubject$.subscribe((msg) => {
+			this.searchResult.set(msg);
+			setTimeout(() => {
+				this.searchResult.set('');
+			}, 1500);
+		});
+
 		//--->subsctibe to search input event
 		this.inputEventSubscription = this.inputSearch$
 			.pipe(

@@ -36,11 +36,17 @@ export class CoursesService {
 		id: number;
 	}> = new Subject();
 
+	private _searchResultSubject$: Subject<string> = new Subject();
+
 	get saveOperationSuccessfulEvent$(): Observable<{
 		action: action;
 		id: number;
 	}> {
 		return this._saveOperationSuccessfulEvent$.asObservable();
+	}
+
+	get searchResultSubject$(): Observable<string> {
+		return this._searchResultSubject$.asObservable();
 	}
 
 	getCourses(start?: number, count?: number) {
@@ -74,8 +80,10 @@ export class CoursesService {
 			.pipe(
 				tap((x) =>
 					x.length
-						? console.log(`found ${x.length} courses matching "${term}"`)
-						: console.log(`no courses matching "${term}"`)
+						? this._searchResultSubject$.next(
+								`found ${x.length} courses matching "${term}"`
+						  )
+						: this._searchResultSubject$.next(`no courses matching "${term}"`)
 				),
 				catchError(this.handleError<Course[]>('searchCourses', []))
 			);
