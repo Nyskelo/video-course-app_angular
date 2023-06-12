@@ -33,14 +33,14 @@ export class CoursesService {
 
 	private _saveOperationSuccessfulEvent$: Subject<{
 		action: action;
-		id: number;
+		course?: Course;
 	}> = new Subject();
 
 	private _searchResultSubject$: Subject<string> = new Subject();
 
 	get saveOperationSuccessfulEvent$(): Observable<{
 		action: action;
-		id: number;
+		course?: Course;
 	}> {
 		return this._saveOperationSuccessfulEvent$.asObservable();
 	}
@@ -59,7 +59,12 @@ export class CoursesService {
 				params,
 			})
 			.pipe(
-				tap((data) => console.log(`fetched ${data.length} courses`)),
+				tap((data) => {
+					console.log(`fetched ${data.length} courses`);
+					this._saveOperationSuccessfulEvent$.next({
+						action: data.length ? action.GET : action.EMPTY,
+					});
+				}),
 				retry(2),
 				catchError(this.handleError<Course[]>('getCourses', []))
 			);
@@ -78,13 +83,16 @@ export class CoursesService {
 				params: { sort: 'date', textFragment: `${term}` },
 			})
 			.pipe(
-				tap((x) =>
+				tap((x) => {
 					x.length
 						? this._searchResultSubject$.next(
 								`found ${x.length} courses matching "${term}"`
 						  )
-						: this._searchResultSubject$.next(`no courses matching "${term}"`)
-				),
+						: this._searchResultSubject$.next(`no courses matching "${term}"`),
+						this._saveOperationSuccessfulEvent$.next({
+							action: x.length ? action.SEARCH : action.EMPTY,
+						});
+				}),
 				catchError(this.handleError<Course[]>('searchCourses', []))
 			);
 	}
@@ -97,7 +105,7 @@ export class CoursesService {
 				map(() =>
 					this._saveOperationSuccessfulEvent$.next({
 						action: action.EDIT,
-						id: course.id,
+						course: course,
 					})
 				),
 				catchError(this.handleError<Course>('updateCourse'))
@@ -112,7 +120,7 @@ export class CoursesService {
 			map((course) =>
 				this._saveOperationSuccessfulEvent$.next({
 					action: action.ADD,
-					id: course.id,
+					course: course,
 				})
 			),
 			catchError(this.handleError<Course>('addCourse'))
@@ -127,7 +135,7 @@ export class CoursesService {
 					console.log(`deleted course id=${course.id}`);
 					this._saveOperationSuccessfulEvent$.next({
 						action: action.DELETE,
-						id: course.id,
+						course: course,
 					});
 				}),
 				catchError(this.handleError<Course>('deleteCourse'))

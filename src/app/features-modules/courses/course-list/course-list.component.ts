@@ -18,13 +18,21 @@ import {
 	debounceTime,
 	distinctUntilChanged,
 	filter,
+	Observable,
 	Subject,
 	Subscription,
-	switchMap,
 	tap,
 } from 'rxjs';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { SearchbarComponent } from 'src/app/shared/components/searchbar/searchbar.component';
+import { Store, select } from '@ngrx/store';
+import {
+	AppStateInterface,
+	coursesSelector,
+	errorSelector,
+	isLoadingSelector,
+} from '../store/selectors';
+import * as CoursesActions from 'src/app/features-modules/courses/store/actions';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -35,12 +43,20 @@ import { SearchbarComponent } from 'src/app/shared/components/searchbar/searchba
 	encapsulation: ViewEncapsulation.None,
 })
 export class CourseListComponent implements OnInit, OnDestroy, AfterViewInit {
+	isLoading$!: Observable<boolean>;
+	error$: Observable<string | null>;
+	courses$: Observable<Course[]>;
 	constructor(
 		private filterPipe: FilterPipe,
 		private coursesService: CoursesService,
 		private router: Router,
-		private http: HttpClient
-	) {}
+		private http: HttpClient,
+		private store: Store<AppStateInterface>
+	) {
+		this.isLoading$ = this.store.pipe(select(isLoadingSelector));
+		this.error$ = this.store.pipe(select(errorSelector));
+		this.courses$ = this.store.pipe(select(coursesSelector));
+	}
 	@ViewChild(SearchbarComponent) child!: SearchbarComponent;
 
 	ngOnDestroy(): void {
@@ -71,62 +87,35 @@ export class CourseListComponent implements OnInit, OnDestroy, AfterViewInit {
 			(Math.ceil(this.coursesSub$().length / this.limitToDisplay) || 1) *
 			this.limitToDisplay
 	);
-	countToFetch = this.limitToDisplay + 1;
+	countToFetch = computed(
+		() =>
+			this.pageSize() * this.limitToDisplay - this.coursesSub$().length ||
+			this.limitToDisplay
+	);
+
 	startIndex = computed(() => (this.currentPage() - 1) * this.limitToDisplay);
 	endIndex = computed(() => this.startIndex() + this.limitToDisplay);
 	coursesNumeration = computed(
-		() => this.currentPage() * this.limitToDisplay - (this.limitToDisplay - 1)
+		() => this.currentPage() * this.limitToDisplay - this.limitToDisplay + 1
 	);
 
 	loadMore_disebled = !(this.coursesSub$().length <= this.limitToDisplay);
 
 	ngOnInit(): void {
 		//init fetch
-		this.initFetchCoursesFromAPI();
+		this.store.dispatch(
+			CoursesActions.getCourses({
+				start: 0,
+				count: this.countToFetch(),
+			})
+		);
 		//--->subsctibe to Edit / Add / Delete actions
 		this.saveOperationSuccessfulSubscription =
-			this.coursesService.saveOperationSuccessfulEvent$
-				.pipe(
-					tap((res) => {
-						if (res.action === action.DELETE) {
-							this.coursesSub$.set(
-								this.coursesSub$().filter((el) => el.id !== res.id)
-							);
-							this.setPagesSize(this.coursesSub$());
-							this.currentPage.set(this.pageSize() || 1);
-							this.coursesSliceSub$.set(
-								this.getCoursesSliceByPage(this.coursesSub$())
-							);
-						}
-					})
-				)
-				.subscribe((res) => {
-					res.action !== action.DELETE &&
-						this.coursesService.getCourseByID(res.id).subscribe((data) => {
-							switch (res.action) {
-								case action.EDIT:
-									this.coursesSub$.set(
-										this.coursesSub$()
-											.filter((el) => el.id !== res.id)
-											.concat(data)
-									);
-									break;
-
-								case action.ADD:
-									this.coursesSub$.mutate((values) =>
-										values.push(data as Course)
-									);
-									this.setPagesSize(this.coursesSub$());
-									this.currentPage.set(this.pageSize() || 1);
-									break;
-							}
-							//--->update list of courses by current page
-							this.coursesSliceSub$.set(
-								this.getCoursesSliceByPage(this.coursesSub$())
-							);
-							window.scrollTo(0, document.body.scrollHeight);
-						});
-				});
+			this.coursesService.saveOperationSuccessfulEvent$.subscribe((res) => {
+				res.action !== action.EMPTY && this.setCoursesView();
+				(res.action === action.SEARCH || res.action === action.EMPTY) &&
+					(this.loadMore_disebled = true);
+			});
 	}
 
 	ngAfterViewInit(): void {
@@ -155,37 +144,37 @@ export class CourseListComponent implements OnInit, OnDestroy, AfterViewInit {
 					}
 					return a === b;
 				}),
-				switchMap((term) =>
-					term
-						? this.coursesService.searchCourses(term)
-						: this.coursesService.getCourses(0, this.countToFetch - 1)
-				)
+				tap((term) => {
+					if (term) {
+						this.store.dispatch(
+							CoursesActions.searchCourses({
+								term,
+							})
+						);
+					} else {
+						this.store.dispatch(
+							CoursesActions.getCourses({
+								start: 0,
+								count: this.countToFetch(),
+							})
+						);
+					}
+				})
 			)
-			.subscribe((data) => {
-				this.coursesSub$.set(data);
-				this.coursesSliceSub$.set(this.coursesSub$());
-				this.setPagesSize(this.coursesSub$());
-				this.currentPage.set(1);
-			});
+			.subscribe();
 	}
 
 	//fetch more data
-	onLoadMore(page: number): void {
+	onLoadMore(): void {
 		this.searchText !== '' && this.child.onClear();
-		this.coursesService
-			.getCourses(this.startToFetch(), this.countToFetch)
-			.subscribe((data) => {
-				data = this.checkAndReturn(data);
-
-				this.coursesSub$.set([...this.coursesSub$(), ...data]);
-				this.setPagesSize(this.coursesSub$());
-				this.coursesSliceSub$.set(
-					this.getCoursesSliceByPage(this.coursesSub$())
-				);
-				this.currentPage.set(page);
-			});
+		this.store.dispatch(
+			CoursesActions.getCourses({
+				start: this.startToFetch(),
+				count: this.countToFetch(),
+			})
+		);
 	}
-	//update list of courses by current page
+
 	onChangePage(page: number): void {
 		if (page === this.currentPage()) {
 			return;
@@ -200,7 +189,11 @@ export class CourseListComponent implements OnInit, OnDestroy, AfterViewInit {
 ❓ DELETE THE COURSE
 You will not be able to recover it`)
 		)
-			this.coursesService.deleteCourse(course).subscribe();
+			this.store.dispatch(
+				CoursesActions.deleteCourse({
+					course: course,
+				})
+			);
 	}
 
 	onSearchClick(searchValue: string) {
@@ -216,34 +209,16 @@ You will not be able to recover it`)
 		this.searchText !== '' && this.child.onClear();
 	}
 
-	initFetchCoursesFromAPI() {
-		this.coursesService.getCourses(0, this.countToFetch).subscribe((data) => {
-			data = this.checkAndReturn(data);
-
+	setCoursesView() {
+		this.courses$.subscribe((data) => {
 			this.initState = true;
 			this.coursesSub$.set(data);
 			this.setPagesSize(this.coursesSub$());
-			this.coursesSliceSub$.set(this.getCoursesSliceByPage(data));
+			this.coursesSliceSub$.set(this.getCoursesSliceByPage(this.coursesSub$()));
 			this.currentPage.set(this.pageSize() || 1);
 		});
 	}
 
-	checkAndReturn(data: Course[]) {
-		this.isFullyLoaded(data);
-		const isPlenty = data.length === this.countToFetch;
-		//Delete course added to check if next fetch true
-		const slice = data.slice(0, -1);
-		data = isPlenty ? slice : data;
-
-		return data;
-	}
-	isFullyLoaded(data: Course[]) {
-		//Disable the 'load more' button if nothing left to fetch from the server
-		const result =
-			data.length < this.countToFetch || data.length < this.limitToDisplay;
-
-		result ? (this.loadMore_disebled = true) : false;
-	}
 	setPagesSize(courses: Course[]) {
 		this.pageSize.set(Math.ceil(courses.length / this.limitToDisplay));
 	}
