@@ -8,10 +8,12 @@ import { AuthService } from '../services/auth.service';
 export class isLoggedInGuard {
 	constructor(private authService: AuthService, private router: Router) {}
 	canActivate() {
-		if (!this.authService.isAuthenticated()) {
-			this.router.navigate(['/login']);
-			return false;
-		}
-		return true;
+		this.authService.isAuthenticated$.subscribe((res) => {
+			if (!res) {
+				this.router.navigate(['/login']);
+				return false;
+			}
+			return true;
+		});
 	}
 }

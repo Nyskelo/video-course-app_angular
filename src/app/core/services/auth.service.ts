@@ -13,6 +13,8 @@ export class AuthService {
 	private isAuthenticatedSubject = new BehaviorSubject<boolean>(Boolean(false));
 
 	public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
+	public currentUser$ = this.currentUserSubject.asObservable();
+
 	userInfoApi = 'http://localhost:3004/auth/userinfo';
 	loginApi = 'http://localhost:3004/auth/login';
 

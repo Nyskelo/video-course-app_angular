@@ -9,13 +9,14 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 	styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent {
-	constructor(private authService: AuthService) {}
+	user!: string;
+	constructor(private authService: AuthService) {
+		this.authService.currentUser$.subscribe((user) => {
+			this.user = user.login;
+		});
+	}
 
 	onLogout() {
 		this.authService.logout();
-	}
-
-	get userName() {
-		return this.authService.getUserInfo().login;
 	}
 }
