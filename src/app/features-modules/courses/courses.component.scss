@@ -3,10 +3,12 @@
 section {
 	background-color: $bg-light;
 	color: $text-grey2;
-	line-height: $indent1;
 	width: 100%;
 	padding: 0 $indent1;
 	height: $indent1;
+	& h4 {
+		line-height: $indent1;
+	}
 }
 main {
 	display: flex;

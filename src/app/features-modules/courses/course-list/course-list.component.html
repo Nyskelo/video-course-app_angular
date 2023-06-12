@@ -1,11 +1,14 @@
 <!-- Searchbar, AddCourse button -->
-<div class="search-container">
-	<app-searchbar (searchTextChanged)="onSearchClick($event)" />
+<div class="search-container" *ngIf="initState">
 	<div>
-		<app-button [text]="'Add course'" (click)="onBuildCourse(add)"
-			><app-i-plus class="icons"
-		/></app-button>
+		<app-searchbar (searchTextChanged)="onSearchClick($event)" />
+		<span *ngIf="searchResult()" class="searchResult">{{
+			searchResult()
+		}}</span>
 	</div>
+	<app-button [text]="'Add course'" (click)="onBuildCourse(add)"
+		><app-i-plus class="icons"
+	/></app-button>
 </div>
 <ng-container *ngIf="coursesSliceSub$().length; else empty">
 	<!-- Course-list -->
@@ -59,7 +62,7 @@
 
 <!-- NO-DATA containerLoad more -->
 <ng-template #empty
-	><div class="card-container">
+	><div class="card-container" *ngIf="initState">
 		NO DATA, FEEL FREE TO ADD NEW COURSE
 	</div></ng-template
 >

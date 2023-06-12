@@ -10,6 +10,8 @@ import { CoursesService } from '../services/courses.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { CourseCompositionComponent } from './course-composition.component';
+import { InputComponent } from 'src/app/shared/components/input/input.component';
+import { TextareaComponent } from 'src/app/shared/components/textarea/textarea.component';
 
 describe('CourseCompositionComponent', () => {
 	let component: CourseCompositionComponent;
@@ -40,7 +42,13 @@ describe('CourseCompositionComponent', () => {
 		TestBed.configureTestingModule({
 			schemas: [NO_ERRORS_SCHEMA],
 			imports: [HttpClientTestingModule],
-			declarations: [ButtonComponent, DurationPipe, CourseCompositionComponent],
+			declarations: [
+				ButtonComponent,
+				DurationPipe,
+				CourseCompositionComponent,
+				InputComponent,
+				TextareaComponent,
+			],
 			providers: [
 				AuthService,
 				{ provide: Router, useValue: mockRouter },

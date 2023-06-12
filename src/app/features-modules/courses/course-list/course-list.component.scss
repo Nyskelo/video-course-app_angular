@@ -63,17 +63,15 @@
 }
 .search-container {
 	margin-bottom: 20px;
-	& div:nth-child(1) {
-		display: flex;
-		gap: 10px;
-	}
-	& div:nth-child(2) {
-		display: flex;
-		justify-content: flex-end;
-	}
+	display: flex;
+	justify-content: space-between;
 }
 
 .btn-load {
 	--custom-bg-color: transparent;
 	--custom-color: black;
+}
+
+.searchResult {
+	color: grey;
 }

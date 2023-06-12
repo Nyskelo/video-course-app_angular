@@ -12,15 +12,17 @@ import { AuthService } from './core/services/auth.service';
 })
 export class AppComponent implements OnInit {
 	title = 'Video course';
+	token = '';
 
 	constructor(
 		private router: Router,
 		private titleService: Title,
 		private activatedRoute: ActivatedRoute,
 		private authService: AuthService
-	) {}
+	) {
+		this.token = JSON.parse(localStorage.getItem('token') as string);
+	}
 
-	token = JSON.parse(localStorage.getItem('token') as string);
 	ngOnInit() {
 		this.token && this.authService.authorization(this.token);
 		this.setTitle();
