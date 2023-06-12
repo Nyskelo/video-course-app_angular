@@ -1,5 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -12,6 +12,9 @@ import { CoreModule } from './core/core.module';
 import { FeaturesModulesModule } from './features-modules/features-modules.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StoreModule } from '@ngrx/store';
 
 @NgModule({
 	declarations: [
@@ -29,6 +32,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 		HttpClientModule,
 		BrowserAnimationsModule,
 		MatProgressSpinnerModule,
+		EffectsModule.forRoot([]),
+		StoreModule.forRoot({}),
+		StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
 	],
 	providers: [],
 	bootstrap: [AppComponent],
