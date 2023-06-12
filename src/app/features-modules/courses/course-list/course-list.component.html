@@ -1,5 +1,5 @@
 <!-- Searchbar, AddCourse button -->
-<div class="search-container">
+<div class="search-container" *ngIf="initState">
 	<div>
 		<app-searchbar (searchTextChanged)="onSearchClick($event)" />
 		<span *ngIf="searchResult()" class="searchResult">{{
@@ -62,7 +62,7 @@
 
 <!-- NO-DATA containerLoad more -->
 <ng-template #empty
-	><div class="card-container">
+	><div class="card-container" *ngIf="initState">
 		NO DATA, FEEL FREE TO ADD NEW COURSE
 	</div></ng-template
 >

@@ -20,7 +20,10 @@ import { SharedModule } from 'src/app/shared/shared.module';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnDestroy {
-	constructor(private authService: AuthService, private router: Router) {}
+	token = '';
+	constructor(private authService: AuthService, private router: Router) {
+		this.token = JSON.parse(localStorage.getItem('token') as string);
+	}
 	ngOnDestroy(): void {
 		console.log('LOGIN - LoginComponent has been destroyed');
 	}

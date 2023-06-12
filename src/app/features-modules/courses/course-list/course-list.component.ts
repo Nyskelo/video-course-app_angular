@@ -46,6 +46,7 @@ export class CourseListComponent implements OnInit, OnDestroy, AfterViewInit {
 	ngOnDestroy(): void {
 		console.log('LIST - CourseList has been destroyed');
 	}
+	initState = false;
 	coursesSub$ = signal<Course[]>([]);
 	coursesSliceSub$ = signal<Course[]>([]);
 	saveOperationSuccessfulSubscription!: Subscription;
@@ -219,6 +220,7 @@ You will not be able to recover it`)
 		this.coursesService.getCourses(0, this.countToFetch).subscribe((data) => {
 			data = this.checkAndReturn(data);
 
+			this.initState = true;
 			this.coursesSub$.set(data);
 			this.setPagesSize(this.coursesSub$());
 			this.coursesSliceSub$.set(this.getCoursesSliceByPage(data));
