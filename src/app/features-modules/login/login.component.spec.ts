@@ -1,11 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { LoginComponent } from './login.component';
-import { AuthService } from 'src/app/core/services/auth.service';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-
-let serviceSpy: jasmine.SpyObj<AuthService>;
+import { Store } from '@ngrx/store';
+import { BehaviorSubject, of } from 'rxjs';
+class StoreMock {
+	select = jasmine
+		.createSpy()
+		.and.returnValue(
+			of({ userNameSelector: 'Peter', isLoggedInSelector: true })
+		);
+}
+const storeSubjectMock = new BehaviorSubject(StoreMock);
+const mockedStore = {
+	pipe: () => storeSubjectMock.asObservable(),
+	dispatch: () => jasmine.createSpy(),
+};
 
 describe('LoginComponent', () => {
 	let component: LoginComponent;
@@ -23,11 +34,11 @@ describe('LoginComponent', () => {
 			providers: [
 				{ provide: Router, useValue: mockRouter },
 				{ provide: HttpClient, useValue: http },
+				{ provide: Store, useValue: mockedStore },
 			],
 		});
 		fixture = TestBed.createComponent(LoginComponent);
 		component = fixture.componentInstance;
-		serviceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
 		spyOn(window, 'alert');
 	});
 
@@ -59,13 +70,11 @@ describe('LoginComponent', () => {
 		});
 
 		it('should call the service login method if the data is valid', () => {
-			spyOn(component, 'onSubmit').and.callThrough();
-			spyOn(serviceSpy, 'login').and.callThrough();
+			spyOn(mockedStore, 'dispatch').and.callThrough();
 			component.email.set('not empty');
 			component.password.set('not empty');
 			component.onSubmit();
-
-			expect(serviceSpy.login).toHaveBeenCalledWith(component.authData());
+			expect(mockedStore.dispatch).toHaveBeenCalled();
 		});
 	});
 });

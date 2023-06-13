@@ -1,13 +1,14 @@
 /* tslint:disable:no-unused-variable */
-import { HttpClient } from '@angular/common/http';
 import { TemplateRef, ViewContainerRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { IsAuthenticatedDirective } from './isAuthenticated.directive';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { AppStateInterface } from 'src/app/store';
+import { isLoggedInSelector } from 'src/app/store/user/selectors';
 
-let service: AuthService;
-let httpClientSpy: jasmine.SpyObj<HttpClient>;
+let store$: MockStore<AppStateInterface>;
+
 let templateRef: jasmine.SpyObj<TemplateRef<HTMLElement>>;
 let vcRef: ViewContainerRef;
 let directive: IsAuthenticatedDirective;
@@ -18,40 +19,44 @@ describe('Directive: IsAuthenticated', () => {
 			'createEmbeddedView',
 			'clear',
 		]);
-		const mockRouter = {
-			navigate: jasmine.createSpy('navigate'),
-		};
 
 		TestBed.configureTestingModule({
 			providers: [
 				TemplateRef,
 				AuthService,
 				{ provide: ViewContainerRef, useValue: viewContainerRefSpy },
-				{ provide: Router, useValue: mockRouter },
+				provideMockStore({
+					initialState: {
+						user: {
+							user: [],
+							isLoggedIn: true,
+						},
+					},
+				}),
 			],
 		}).compileComponents();
-		const router = TestBed.inject(Router);
-		httpClientSpy = jasmine.createSpyObj('HttpClient', ['get', 'post']);
-		service = new AuthService(router, httpClientSpy);
-		spyOn(service, 'isAuthenticated').and.callThrough();
+		store$ = TestBed.inject(MockStore);
 		vcRef = TestBed.inject(ViewContainerRef);
-		directive = new IsAuthenticatedDirective(templateRef, service, vcRef);
+		directive = new IsAuthenticatedDirective(templateRef, store$, vcRef);
 	});
 	describe('ngOnInit', () => {
-		it('should show viewContainerRef if both boolean values are true', () => {
-			service.authenticat = true;
+		it('should return auth true', () => {
+			store$.overrideSelector(isLoggedInSelector, true);
+			store$.refreshState();
 			directive.condition = true;
 			directive.ngOnInit();
-			service.isAuthenticated$.subscribe(() => {
-				expect(service.isAuthenticated()).toBeTruthy();
+			directive.isAuthenticated$.subscribe((bool) => {
+				expect(bool).toEqual(true);
 			});
 		});
-		it('should be cleared viewContainerRef if boolean values are different', () => {
-			service.authenticat = false;
+		it('should clear ViewContainer if auth false', () => {
+			const mockSelector = store$.overrideSelector(isLoggedInSelector, true);
+			mockSelector.setResult(false);
+			store$.refreshState();
 			directive.condition = true;
 			directive.ngOnInit();
-			service.isAuthenticated$.subscribe(() => {
-				expect(service.isAuthenticated()).toBeFalsy();
+			directive.isAuthenticated$.subscribe((bool) => {
+				expect(bool).toEqual(false);
 			});
 		});
 	});

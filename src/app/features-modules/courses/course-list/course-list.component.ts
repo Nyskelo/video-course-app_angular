@@ -19,7 +19,6 @@ import {
 	filter,
 	Observable,
 	Subject,
-	Subscription,
 	tap,
 } from 'rxjs';
 import { UntilDestroy } from '@ngneat/until-destroy';
@@ -55,7 +54,7 @@ export class CourseListComponent implements OnInit, OnDestroy, AfterViewInit {
 	initState = false;
 	coursesSub$ = signal<Course[]>([]);
 	coursesSliceSub$ = signal<Course[]>([]);
-	saveOperationSuccessfulSubscription!: Subscription;
+	// saveOperationSuccessfulSubscription!: Subscription;
 
 	// buttons action-event
 	add = action.ADD;
@@ -99,12 +98,11 @@ export class CourseListComponent implements OnInit, OnDestroy, AfterViewInit {
 			})
 		);
 		//--->subsctibe to Edit / Add / Delete actions
-		this.saveOperationSuccessfulSubscription =
-			this.coursesService.saveOperationSuccessfulEvent$.subscribe((res) => {
-				res.action !== action.EMPTY && this.setCoursesView();
-				(res.action === action.SEARCH || res.action === action.EMPTY) &&
-					(this.loadMore_disebled = true);
-			});
+		this.coursesService.saveOperationSuccessfulEvent$.subscribe((res) => {
+			res.action !== action.EMPTY && this.setCoursesView();
+			(res.action === action.SEARCH || res.action === action.EMPTY) &&
+				(this.loadMore_disebled = true);
+		});
 	}
 
 	ngAfterViewInit(): void {

@@ -9,7 +9,7 @@ export interface UserStateInterface {
 	isLoggedIn: boolean;
 	error: string | null;
 }
-export const initStateCourses: UserStateInterface = {
+export const initStateUser: UserStateInterface = {
 	isLoading: false,
 	user: new User(),
 	isLoggedIn: false,
@@ -17,7 +17,7 @@ export const initStateCourses: UserStateInterface = {
 };
 
 export const userReducers = createReducer(
-	initStateCourses,
+	initStateUser,
 	//Login
 	on(UserAction.userLogin, (state) => ({
 		...state,
