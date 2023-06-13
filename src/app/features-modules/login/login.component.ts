@@ -9,6 +9,9 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { Router } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { Store } from '@ngrx/store';
+import * as UserActions from 'src/app/store/user/actions';
+import { AppStateInterface } from 'src/app/store';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -21,7 +24,11 @@ import { SharedModule } from 'src/app/shared/shared.module';
 })
 export class LoginComponent implements OnDestroy {
 	token = '';
-	constructor(private authService: AuthService, private router: Router) {
+	constructor(
+		private authService: AuthService,
+		private router: Router,
+		private store: Store<AppStateInterface>
+	) {
 		this.token = JSON.parse(localStorage.getItem('token') as string);
 	}
 	ngOnDestroy(): void {
@@ -49,6 +56,11 @@ export class LoginComponent implements OnDestroy {
 			alert('Please complete the fields below');
 			return;
 		}
+		this.store.dispatch(
+			UserActions.userLogin({
+				auth: this.authData(),
+			})
+		);
 
 		this.authService.login(this.authData());
 	}
