@@ -74,7 +74,6 @@ export class CourseListComponent implements OnInit, OnDestroy, AfterViewInit {
 	// searchbar
 	searchText = '';
 	inputSearch$: Subject<string> = new Subject();
-	inputEventSubscription!: Subscription;
 	searchResult = signal('');
 
 	// pagination
@@ -128,7 +127,7 @@ export class CourseListComponent implements OnInit, OnDestroy, AfterViewInit {
 		});
 
 		//--->subsctibe to search input event
-		this.inputEventSubscription = this.inputSearch$
+		this.inputSearch$
 			.pipe(
 				filter((term) => term.trim().length > 2 || term.length === 0),
 				tap((term) => {

@@ -38,7 +38,7 @@ export class CoursesEffects {
 						});
 					}),
 					catchError((error) =>
-						of(CoursesActions.getCoursesFailure({ error: error.message }))
+						of(CoursesActions.deleteCourseFailure({ error: error.message }))
 					)
 				);
 			})
@@ -55,7 +55,7 @@ export class CoursesEffects {
 						});
 					}),
 					catchError((error) =>
-						of(CoursesActions.getCoursesFailure({ error: error.message }))
+						of(CoursesActions.updateCourseFailure({ error: error.message }))
 					)
 				);
 			})
@@ -72,7 +72,7 @@ export class CoursesEffects {
 						});
 					}),
 					catchError((error) =>
-						of(CoursesActions.getCoursesFailure({ error: error.message }))
+						of(CoursesActions.addCourseFailure({ error: error.message }))
 					)
 				);
 			})
@@ -89,7 +89,7 @@ export class CoursesEffects {
 						});
 					}),
 					catchError((error) =>
-						of(CoursesActions.getCoursesFailure({ error: error.message }))
+						of(CoursesActions.searchCoursesFailure({ error: error.message }))
 					)
 				);
 			})
