@@ -27,12 +27,12 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 import { SearchbarComponent } from 'src/app/shared/components/searchbar/searchbar.component';
 import { Store, select } from '@ngrx/store';
 import {
-	AppStateInterface,
 	coursesSelector,
 	errorSelector,
 	isLoadingSelector,
-} from '../store/selectors';
-import * as CoursesActions from 'src/app/features-modules/courses/store/actions';
+} from 'src/app/store/courses/selectors';
+import * as CoursesActions from 'src/app/store/courses/actions';
+import { AppStateInterface } from 'src/app/store';
 
 @UntilDestroy({ checkProperties: true })
 @Component({

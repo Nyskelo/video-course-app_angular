@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap, of } from 'rxjs';
-import { CoursesService } from '../services/courses.service';
+import { CoursesService } from 'src/app/features-modules/courses/services/courses.service';
 import * as CoursesActions from './actions';
 
 @Injectable()

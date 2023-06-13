@@ -14,8 +14,8 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 import { InputComponent } from 'src/app/shared/components/input/input.component';
 import { TextareaComponent } from 'src/app/shared/components/textarea/textarea.component';
 import { Store } from '@ngrx/store';
-import { AppStateInterface } from '../store/selectors';
-import * as CoursesActions from 'src/app/features-modules/courses/store/actions';
+import * as CoursesActions from 'src/app/store/courses/actions';
+import { AppStateInterface } from 'src/app/store';
 
 @UntilDestroy({ checkProperties: true })
 @Component({

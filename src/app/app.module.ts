@@ -15,6 +15,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreModule } from '@ngrx/store';
+import { coursesReducers } from './store/courses/reducers';
+import { userReducers } from './store/user/reducers';
+import { CoursesEffects } from './store/courses/effects';
+import { UserEffects } from './store/user/effects';
 
 @NgModule({
 	declarations: [
@@ -32,8 +36,8 @@ import { StoreModule } from '@ngrx/store';
 		HttpClientModule,
 		BrowserAnimationsModule,
 		MatProgressSpinnerModule,
-		EffectsModule.forRoot([]),
-		StoreModule.forRoot({}),
+		EffectsModule.forRoot([CoursesEffects, UserEffects]),
+		StoreModule.forRoot({ courses: coursesReducers, user: userReducers }),
 		StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
 	],
 	providers: [],

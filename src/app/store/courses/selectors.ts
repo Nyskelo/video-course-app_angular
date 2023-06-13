@@ -1,9 +1,5 @@
 import { createSelector } from '@ngrx/store';
-import { CoursesStateInterface } from 'src/app/features-modules/courses/store/reducers';
-
-export interface AppStateInterface {
-	courses: CoursesStateInterface;
-}
+import { AppStateInterface } from '..';
 
 export const selectFeature = (state: AppStateInterface) => state.courses;
 

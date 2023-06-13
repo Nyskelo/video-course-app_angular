@@ -14,7 +14,7 @@ export const initStateCourses: CoursesStateInterface = {
 	error: null,
 };
 
-export const reducers = createReducer(
+export const coursesReducers = createReducer(
 	initStateCourses,
 	//Get courses
 	on(CoursesAction.getCourses, (state) => ({
