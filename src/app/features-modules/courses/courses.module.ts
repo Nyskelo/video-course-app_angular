@@ -9,17 +9,13 @@ import { CourseCompositionComponent } from './course-composition/course-composit
 import { RouteReuseStrategy } from '@angular/router';
 import { CustomRouteReuseStrategy } from 'src/app/features-modules/courses/cache-reuse-strategy.strategy';
 
-
 @NgModule({
 	declarations: [
 		CoursesComponent,
 		CourseListComponent,
 		CourseCompositionComponent,
 	],
-	imports: [
-		CoursesRoutingModule,
-		SharedModule,
-	],
+	imports: [CoursesRoutingModule, SharedModule],
 	exports: [CoursesComponent, CoursesRoutingModule],
 	providers: [
 		FilterPipe,

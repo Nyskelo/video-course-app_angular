@@ -13,7 +13,6 @@ import { FilterPipe } from 'src/app/shared/pipes/filter.pipe';
 import { action, Course } from 'src/app/utils/global.model';
 import { CoursesService } from '../services/courses.service';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import {
 	debounceTime,
 	distinctUntilChanged,
@@ -26,11 +25,7 @@ import {
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { SearchbarComponent } from 'src/app/shared/components/searchbar/searchbar.component';
 import { Store, select } from '@ngrx/store';
-import {
-	coursesSelector,
-	errorSelector,
-	isLoadingSelector,
-} from 'src/app/store/courses/selectors';
+import { coursesSelector } from 'src/app/store/courses/selectors';
 import * as CoursesActions from 'src/app/store/courses/actions';
 import { AppStateInterface } from 'src/app/store';
 
@@ -43,18 +38,13 @@ import { AppStateInterface } from 'src/app/store';
 	encapsulation: ViewEncapsulation.None,
 })
 export class CourseListComponent implements OnInit, OnDestroy, AfterViewInit {
-	isLoading$!: Observable<boolean>;
-	error$: Observable<string | null>;
 	courses$: Observable<Course[]>;
 	constructor(
 		private filterPipe: FilterPipe,
 		private coursesService: CoursesService,
 		private router: Router,
-		private http: HttpClient,
 		private store: Store<AppStateInterface>
 	) {
-		this.isLoading$ = this.store.pipe(select(isLoadingSelector));
-		this.error$ = this.store.pipe(select(errorSelector));
 		this.courses$ = this.store.pipe(select(coursesSelector));
 	}
 	@ViewChild(SearchbarComponent) child!: SearchbarComponent;

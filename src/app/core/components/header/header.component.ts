@@ -1,9 +1,13 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import * as UserActions from 'src/app/store/user/actions';
 import { AppStateInterface } from 'src/app/store';
+import { Observable } from 'rxjs';
+import {
+	isLoggedInSelector,
+	userNameSelector,
+} from 'src/app/store/user/selectors';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -12,18 +16,14 @@ import { AppStateInterface } from 'src/app/store';
 	styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent {
-	user!: string;
-	constructor(
-		private authService: AuthService,
-		private store: Store<AppStateInterface>
-	) {
-		this.authService.currentUser$.subscribe((user) => {
-			this.user = user.login;
-		});
+	userName$!: Observable<string>;
+	isGoggedIn$!: Observable<boolean>;
+	constructor(private store: Store<AppStateInterface>) {
+		this.userName$ = this.store.pipe(select(userNameSelector));
+		this.isGoggedIn$ = this.store.pipe(select(isLoggedInSelector));
 	}
 
 	onLogout() {
-		this.authService.logout();
 		this.store.dispatch(UserActions.userLogout());
 	}
 }

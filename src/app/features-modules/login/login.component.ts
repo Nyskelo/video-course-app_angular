@@ -5,9 +5,7 @@ import {
 	OnDestroy,
 	signal,
 } from '@angular/core';
-import { AuthService } from 'src/app/core/services/auth.service';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { Router } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { Store } from '@ngrx/store';
 import * as UserActions from 'src/app/store/user/actions';
@@ -24,11 +22,7 @@ import { AppStateInterface } from 'src/app/store';
 })
 export class LoginComponent implements OnDestroy {
 	token = '';
-	constructor(
-		private authService: AuthService,
-		private router: Router,
-		private store: Store<AppStateInterface>
-	) {
+	constructor(private store: Store<AppStateInterface>) {
 		this.token = JSON.parse(localStorage.getItem('token') as string);
 	}
 	ngOnDestroy(): void {
@@ -61,7 +55,5 @@ export class LoginComponent implements OnDestroy {
 				auth: this.authData(),
 			})
 		);
-
-		this.authService.login(this.authData());
 	}
 }

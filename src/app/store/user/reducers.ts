@@ -26,6 +26,7 @@ export const userReducers = createReducer(
 	on(UserAction.userLoginSuccess, (state, action) => ({
 		...state,
 		isLoading: false,
+		isLoggedIn: true,
 		user: {
 			...state.user,
 			fakeToken: action.token,
