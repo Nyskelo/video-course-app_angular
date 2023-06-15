@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 import { CoursesRoutingModule } from './courses-routing.module';
 import { CoursesComponent } from './courses.component';
@@ -16,7 +15,7 @@ import { CustomRouteReuseStrategy } from 'src/app/features-modules/courses/cache
 		CourseListComponent,
 		CourseCompositionComponent,
 	],
-	imports: [CommonModule, CoursesRoutingModule, SharedModule],
+	imports: [CoursesRoutingModule, SharedModule],
 	exports: [CoursesComponent, CoursesRoutingModule],
 	providers: [
 		FilterPipe,

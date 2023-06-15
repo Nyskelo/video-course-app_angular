@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { catchError } from 'rxjs';
 import { mockCourses } from 'src/app/utils/courses-api';
 import {
 	HttpClientTestingModule,
@@ -7,45 +6,57 @@ import {
 } from '@angular/common/http/testing';
 
 import { CoursesService } from './courses.service';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Course } from 'src/app/utils/global.model';
+import { action } from 'src/app/utils/global.model';
+import { of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 describe('CoursesService', () => {
 	let service: CoursesService;
 	let httpController: HttpTestingController;
-	let httpClient: HttpClient;
+	let httpClientSpy: jasmine.SpyObj<HttpClient>;
 
 	beforeEach(() => {
 		TestBed.configureTestingModule({
 			imports: [HttpClientTestingModule],
 		});
 		service = TestBed.inject(CoursesService);
-		httpClient = TestBed.inject(HttpClient);
+		httpClientSpy = jasmine.createSpyObj('HttpClient', ['get', 'post']);
 		httpController = TestBed.inject(HttpTestingController);
 		service.courses = mockCourses;
 		spyOn(console, 'log').and.callThrough();
 	});
 	afterEach(() => httpController.verify());
-	describe('handleError', () => {
-		it('handleError', () => {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			spyOn(service as any, 'handleError').and.callThrough();
-			const emsg = 'failed';
 
-			httpClient
-				.get<Course>('http://localhost:3004/courses/')
-				.pipe(catchError(service['handleError']('getCourses', [])))
-				.subscribe({
-					error: (error: HttpErrorResponse) => {
-						expect(error.status).withContext('status').toEqual(404);
-						expect(error.error).withContext('message').toEqual(emsg);
-					},
+	describe('saveOperationSuccessfulEvent$', () => {
+		it('should return value', () => {
+			spyOnProperty(service, 'saveOperationSuccessfulEvent$', 'get')
+				.and.returnValue(
+					of({
+						action: action.ADD,
+						course: mockCourses[0],
+					})
+				)
+				.and.callThrough();
+
+			service.saveOperationSuccessfulEvent$.subscribe((data) => {
+				expect(data).toEqual({
+					action: action.ADD,
+					course: mockCourses[0],
 				});
+			});
+		});
+	});
 
-			const req = httpController.expectOne('http://localhost:3004/courses/');
-
-			req.flush(emsg, { status: 404, statusText: 'Not Found' });
-			expect(service['handleError']).toHaveBeenCalled();
+	describe('searchResultSubject$', () => {
+		it('should return value', () => {
+			spyOnProperty(service, 'searchResultSubject$', 'get')
+				.and.returnValue(of('Msg'))
+				.and.callThrough();
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			(service as any)._searchResultSubject$.next('Msg');
+			service.searchResultSubject$.subscribe((data) => {
+				expect(data).toEqual('Msg');
+			});
 		});
 	});
 
@@ -90,6 +101,20 @@ describe('CoursesService', () => {
 					url: `http://localhost:3004/courses?sort=date`,
 				})
 				.flush(mockCourses);
+		});
+		it('should set _saveOperationSuccessfulEvent$ action to EMPTY', (done: DoneFn) => {
+			httpClientSpy.get.and.returnValue(of([]));
+			service.getCourses().subscribe((data) => {
+				expect(data).toEqual([]);
+				expect(console.log).toHaveBeenCalled();
+				done();
+			});
+			httpController
+				.expectOne({
+					method: 'GET',
+					url: `http://localhost:3004/courses?sort=date`,
+				})
+				.flush([]);
 		});
 	});
 	describe('addCourse', () => {

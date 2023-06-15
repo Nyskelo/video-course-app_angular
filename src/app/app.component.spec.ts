@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Observable, of } from 'rxjs';
 import { Course } from './utils/global.model';
-import { AuthService } from './core/services/auth.service';
+import { Store } from '@ngrx/store';
 
 const course = {
 	id: 8693,
@@ -26,12 +26,13 @@ const course = {
 	length: 15,
 };
 
+const testStore = jasmine.createSpyObj('Store', ['select', 'dispatch']);
+
 describe('AppComponent', () => {
 	let component: AppComponent;
 	let fixture: ComponentFixture<AppComponent>;
 	let activeRouter: ActivatedRoute;
 	let titleService: Title;
-	let service: AuthService;
 
 	const routerevent = {
 		events: of(
@@ -62,7 +63,7 @@ describe('AppComponent', () => {
 			declarations: [AppComponent],
 			providers: [
 				Title,
-				AuthService,
+				{ provide: Store, useValue: testStore },
 				{ provide: Router, useValue: routerevent },
 				{ provide: ActivatedRoute, useValue: activatedRouteMock },
 				{ provide: HttpClient, useValue: http },
@@ -72,7 +73,6 @@ describe('AppComponent', () => {
 		component = fixture.componentInstance;
 		activeRouter = TestBed.inject(ActivatedRoute);
 		titleService = TestBed.inject(Title);
-		service = TestBed.inject(AuthService);
 	});
 
 	afterEach(() => {
@@ -84,11 +84,10 @@ describe('AppComponent', () => {
 	});
 
 	describe('ngOnInit', () => {
-		it(`should call service.authorization if token is true`, () => {
-			spyOn(service, 'authorization').and.callThrough();
+		it(`should dispatch userAuth if token is true`, () => {
 			component.token = 'token';
 			component.ngOnInit();
-			expect(service.authorization).toHaveBeenCalled();
+			expect(testStore.dispatch).toHaveBeenCalled();
 		});
 		it(`should call settTitle function`, () => {
 			spyOn(component, 'setTitle').and.callThrough();

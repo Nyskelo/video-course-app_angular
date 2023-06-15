@@ -1,11 +1,6 @@
-import {
-	HttpClient,
-	HttpErrorResponse,
-	HttpHeaders,
-	HttpParams,
-} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, map, Observable, of, retry, Subject, tap } from 'rxjs';
+import { Observable, retry, Subject, tap } from 'rxjs';
 import { action, Course, CourseState } from 'src/app/utils/global.model';
 
 @Injectable({
@@ -24,23 +19,16 @@ export class CoursesService {
 	};
 	url = `http://localhost:3004/courses`;
 
-	private handleError<T>(operation: string, result?: T) {
-		return (error: HttpErrorResponse): Observable<T> => {
-			console.log(`${operation} failed: ${error.message}`);
-			return of(result as T);
-		};
-	}
-
 	private _saveOperationSuccessfulEvent$: Subject<{
 		action: action;
-		id: number;
+		course?: Course;
 	}> = new Subject();
 
 	private _searchResultSubject$: Subject<string> = new Subject();
 
 	get saveOperationSuccessfulEvent$(): Observable<{
 		action: action;
-		id: number;
+		course?: Course;
 	}> {
 		return this._saveOperationSuccessfulEvent$.asObservable();
 	}
@@ -59,17 +47,20 @@ export class CoursesService {
 				params,
 			})
 			.pipe(
-				tap((data) => console.log(`fetched ${data.length} courses`)),
-				retry(2),
-				catchError(this.handleError<Course[]>('getCourses', []))
+				tap((data) => {
+					console.log(`fetched ${data.length} courses`);
+					this._saveOperationSuccessfulEvent$.next({
+						action: data.length ? action.GET : action.EMPTY,
+					});
+				}),
+				retry(2)
 			);
 	}
 
 	getCourseByID(id: number) {
-		return this.http.get<Course>(`${this.url}/${id}`).pipe(
-			tap(() => console.log(`fetched course id=${id}`)),
-			catchError(this.handleError<Course>(`getCourseByID id=${id}`))
-		);
+		return this.http
+			.get<Course>(`${this.url}/${id}`)
+			.pipe(tap(() => console.log(`fetched course id=${id}`)));
 	}
 
 	searchCourses(term: string): Observable<Course[]> {
@@ -78,14 +69,16 @@ export class CoursesService {
 				params: { sort: 'date', textFragment: `${term}` },
 			})
 			.pipe(
-				tap((x) =>
+				tap((x) => {
 					x.length
 						? this._searchResultSubject$.next(
 								`found ${x.length} courses matching "${term}"`
 						  )
-						: this._searchResultSubject$.next(`no courses matching "${term}"`)
-				),
-				catchError(this.handleError<Course[]>('searchCourses', []))
+						: this._searchResultSubject$.next(`no courses matching "${term}"`),
+						this._saveOperationSuccessfulEvent$.next({
+							action: x.length ? action.SEARCH : action.EMPTY,
+						});
+				})
 			);
 	}
 
@@ -93,14 +86,13 @@ export class CoursesService {
 		return this.http
 			.put(`${this.url}/${course.id}`, course, this.httpOptions)
 			.pipe(
-				tap(() => console.log(`updated course id=${course.id}`)),
-				map(() =>
+				tap(() => {
+					console.log(`updated course id=${course.id}`);
 					this._saveOperationSuccessfulEvent$.next({
 						action: action.EDIT,
-						id: course.id,
-					})
-				),
-				catchError(this.handleError<Course>('updateCourse'))
+						course: course,
+					});
+				})
 			);
 	}
 
@@ -108,14 +100,11 @@ export class CoursesService {
 		return this.http.post<Course>(`${this.url}`, course, this.httpOptions).pipe(
 			tap((newCourse: Course) => {
 				console.log(`added course w/ id=${newCourse.id}`);
-			}),
-			map((course) =>
 				this._saveOperationSuccessfulEvent$.next({
 					action: action.ADD,
-					id: course.id,
-				})
-			),
-			catchError(this.handleError<Course>('addCourse'))
+					course: newCourse,
+				});
+			})
 		);
 	}
 
@@ -127,10 +116,9 @@ export class CoursesService {
 					console.log(`deleted course id=${course.id}`);
 					this._saveOperationSuccessfulEvent$.next({
 						action: action.DELETE,
-						id: course.id,
+						course: course,
 					});
-				}),
-				catchError(this.handleError<Course>('deleteCourse'))
+				})
 			);
 	}
 }

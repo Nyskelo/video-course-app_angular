@@ -13,10 +13,19 @@ import { CourseCompositionComponent } from './course-composition.component';
 import { InputComponent } from 'src/app/shared/components/input/input.component';
 import { TextareaComponent } from 'src/app/shared/components/textarea/textarea.component';
 
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+
 describe('CourseCompositionComponent', () => {
 	let component: CourseCompositionComponent;
 	let fixture: ComponentFixture<CourseCompositionComponent>;
 	let service: CoursesService;
+	let store: MockStore;
+
+	const initialState = {
+		isLoading: false,
+		courses: [],
+		error: null,
+	};
 	const mockRouter = {
 		navigate: jasmine.createSpy('navigate'),
 		url: 'courses/new',
@@ -51,6 +60,9 @@ describe('CourseCompositionComponent', () => {
 			],
 			providers: [
 				AuthService,
+				provideMockStore({
+					initialState,
+				}),
 				{ provide: Router, useValue: mockRouter },
 				{ provide: ActivatedRoute, useValue: { data: of({ course: course }) } },
 			],
@@ -59,6 +71,7 @@ describe('CourseCompositionComponent', () => {
 		fixture = TestBed.createComponent(CourseCompositionComponent);
 		component = fixture.componentInstance;
 		service = TestBed.inject(CoursesService);
+		store = TestBed.inject(MockStore);
 		fixture.detectChanges();
 	});
 
@@ -136,17 +149,17 @@ describe('CourseCompositionComponent', () => {
 			expect(service.isUpdating.state).toBeFalse();
 			expect(service.isUpdating.action).toEqual(action.SAVE);
 		});
-		it('should trigger service addCourse method when action.ADD', () => {
-			spyOn(service, 'addCourse').and.callThrough();
+		it('should trigger store.dispatch to add course', () => {
+			spyOn(store, 'dispatch').and.callThrough();
 			service.isUpdating.action = action.ADD;
 			component.onSave();
-			expect(service.addCourse).toHaveBeenCalled();
+			expect(store.dispatch).toHaveBeenCalled();
 		});
-		it('should trigger service updateCourse method when action.EDIT', () => {
-			spyOn(service, 'updateCourse').and.callThrough();
+		it('should trigger store.dispatch to update course', () => {
+			spyOn(store, 'dispatch').and.callThrough();
 			service.isUpdating.action = action.EDIT;
 			component.onSave();
-			expect(service.updateCourse).toHaveBeenCalled();
+			expect(store.dispatch).toHaveBeenCalled();
 		});
 	});
 	describe('onCancel', () => {

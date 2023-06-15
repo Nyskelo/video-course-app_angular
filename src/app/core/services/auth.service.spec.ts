@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { of, throwError } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { of } from 'rxjs';
 import { AuthService } from './auth.service';
 
 const user = {
@@ -15,6 +16,8 @@ const user = {
 	password: 'id',
 };
 
+const testStore = jasmine.createSpyObj('Store', ['dispatch']);
+
 describe('AuthService', () => {
 	let service: AuthService;
 	let httpClientSpy: jasmine.SpyObj<HttpClient>;
@@ -22,62 +25,43 @@ describe('AuthService', () => {
 
 	beforeEach(() => {
 		TestBed.configureTestingModule({
-			providers: [{ provide: Router, useValue: mockRouter }],
+			providers: [
+				{ provide: Router, useValue: mockRouter },
+				{ provide: Store, useValue: testStore },
+			],
 		});
 		httpClientSpy = jasmine.createSpyObj('HttpClient', ['get', 'post']);
 		mockRouter = jasmine.createSpyObj('Router', ['navigate']);
-		service = new AuthService(mockRouter, httpClientSpy);
-		spyOn(console, 'log');
+		service = new AuthService(mockRouter, httpClientSpy, testStore);
 	});
 
-	describe('login', () => {
-		it('should set isAuth to true if user auth', () => {
+	describe('userLogin', () => {
+		it('should return token', () => {
 			httpClientSpy.post.and.returnValue(of({ token: user.fakeToken }));
-			spyOn(service, 'login').and.callThrough();
-			service.login({ login: user.login, password: user.password });
-			service.authorization(user.fakeToken);
-			expect(service.isAuthenticated()).toBeTruthy();
-		});
-		it('should set isAuth to false if user not auth', () => {
-			httpClientSpy.post.and.returnValue(throwError(() => new Error()));
-			spyOn(service, 'login').and.callThrough();
-			service.login({ login: user.login, password: user.password });
-			expect(service.isAuthenticated()).toBeFalsy();
+			service
+				.userLogin({ login: user.login, password: user.password })
+				.subscribe((token) => {
+					expect(token).toEqual(user.fakeToken);
+				});
+			expect(httpClientSpy.post).toHaveBeenCalled();
+			expect(testStore.dispatch).toHaveBeenCalled();
 		});
 	});
 
-	describe('authorization', () => {
+	describe('userAuth', () => {
 		it('should set isAuth to false if user not auth', () => {
-			httpClientSpy.post.and.returnValue(throwError(() => new Error()));
-			spyOn(service, 'authorization').and.callThrough();
-			service.authorization(user.fakeToken);
-			expect(service.isAuthenticated()).toBeFalsy();
+			httpClientSpy.post.and.returnValue(of({ user: user }));
+			service.userAuth(user.fakeToken).subscribe((user) => {
+				expect(user).toEqual(user);
+			});
+			expect(httpClientSpy.post).toHaveBeenCalled();
 		});
 	});
 
-	describe('logout', () => {
+	describe('userLogout', () => {
 		it('should set isAuth to false', () => {
-			service.authenticat = true;
-			service.logout();
+			service.userLogout();
 			expect(mockRouter.navigate).toHaveBeenCalled();
-			expect(service.isAuthenticated()).toBeFalsy();
-		});
-	});
-	describe('getUserInfo', () => {
-		it('should return User value', () => {
-			spyOn(service, 'getUserInfo').and.callThrough();
-			service.currentUser = user;
-
-			expect(service.getUserInfo()).toEqual(user);
-		});
-	});
-
-	describe('isAuthenticated', () => {
-		it('should set isAuthenticated value to true', () => {
-			spyOn(service, 'isAuthenticated').and.callThrough();
-			service.authenticat = true;
-			console.log(service.isAuthenticated());
-			expect(service.isAuthenticated()).toEqual(true);
 		});
 	});
 });

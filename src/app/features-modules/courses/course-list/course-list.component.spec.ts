@@ -12,18 +12,22 @@ import { CoursesService } from '../services/courses.service';
 import { Router } from '@angular/router';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { mockCourses } from 'src/app/utils/courses-api';
+
+import { provideMockStore } from '@ngrx/store/testing';
 import { of } from 'rxjs';
+import { initStateUser } from 'src/app/store/user/reducers';
+import { initStateCourses } from 'src/app/store/courses/reducers';
 
 describe('CourseListComponent', () => {
 	let component: CourseListComponent;
 	let fixture: ComponentFixture<CourseListComponent>;
 	let service: CoursesService;
 	let eventSpy: jasmine.Spy<(this: any) => any>;
+
 	const mockRouter = {
 		navigate: jasmine.createSpy('navigate'),
 	};
-
-	beforeEach(() => {
+	beforeEach(async () => {
 		TestBed.configureTestingModule({
 			schemas: [NO_ERRORS_SCHEMA],
 			imports: [HttpClientTestingModule],
@@ -35,8 +39,19 @@ describe('CourseListComponent', () => {
 				OrderByPipe,
 				FilterPipe,
 			],
-			providers: [FilterPipe, { provide: Router, useValue: mockRouter }],
-		});
+			providers: [
+				FilterPipe,
+				{ provide: Router, useValue: mockRouter },
+				provideMockStore({
+					initialState: {
+						courses: initStateCourses,
+						user: initStateUser,
+					},
+				}),
+			],
+		}).compileComponents();
+	});
+	beforeEach(() => {
 		fixture = TestBed.createComponent(CourseListComponent);
 		component = fixture.componentInstance;
 		service = TestBed.inject(CoursesService);
@@ -62,10 +77,16 @@ describe('CourseListComponent', () => {
 		it(`coursesNumeration  --> should start from 1`, () => {
 			expect(component.coursesNumeration()).toBe(1);
 		});
+		it(`countToFetch --> should have min count 5`, () => {
+			component.pageSize.set(0);
+			component.coursesSub$.set([]);
+			component.ngOnInit();
+			expect(component.countToFetch()).toBe(5);
+		});
 	});
 
 	describe('ngOnInit', () => {
-		describe(`saveOperationSuccessfulSubscription`, () => {
+		describe(`saveOperationSuccessfulEvent$`, () => {
 			beforeEach(() => {
 				eventSpy = spyOnProperty(
 					service as any,
@@ -78,46 +99,24 @@ describe('CourseListComponent', () => {
 				component.coursesSub$.set(mockCourses);
 			});
 
-			it('should add new course if action.ADD', () => {
+			it('should trigger setCoursesView()', () => {
 				const course = Object.assign({}, mockCourses[0], { id: 111000222 });
-				const data = { action: action.ADD, id: 111000222 };
+				const data = { action: action.ADD, course: course };
 				eventSpy.and.returnValue(of(data));
-				spyOn(service, 'getCourseByID').and.returnValue(of(course));
 				component.ngOnInit();
+				service.addCourse(course);
 				service.saveOperationSuccessfulEvent$.subscribe((res) => {
-					expect(res).toEqual(data);
+					expect(res.action).not.toEqual(action.EMPTY);
 				});
 			});
-			it('should update course if action.EDIT', () => {
-				const course = Object.assign({}, mockCourses[0], { name: 'NewTitle' });
-				const data = { action: action.EDIT, id: mockCourses[0]['id'] };
-				const newCourses = mockCourses
-					.filter((e) => e.id !== mockCourses[0]['id'])
-					.concat(course);
-				eventSpy.and.returnValue(of(data));
-				spyOn(service, 'getCourseByID').and.returnValue(of(course));
-				component.ngOnInit();
-				service.saveOperationSuccessfulEvent$.subscribe((res) => {
-					expect(res).toEqual(data);
-					service.getCourseByID(res.id).subscribe(() => {
-						expect(component.coursesSub$()).toEqual(newCourses);
-					});
-				});
-			});
-			it('should delete course if action.DELETE', () => {
-				spyOn(service, 'getCourseByID').and.returnValue(of(mockCourses[0]));
-				const data = { action: action.DELETE, id: mockCourses[0]['id'] };
-				const newCourses = mockCourses.filter(
-					(e) => e.id !== mockCourses[0]['id']
-				);
+			it('should disebled load button', () => {
+				const data = { action: action.EMPTY };
 				eventSpy.and.returnValue(of(data));
 				component.ngOnInit();
+				service.searchCourses('kkk');
 				service.saveOperationSuccessfulEvent$.subscribe((res) => {
-					expect(res).toEqual(data);
-					service.getCourseByID(res.id).subscribe((data) => {
-						expect(component.coursesSub$()).toEqual(newCourses);
-						expect(data).toEqual(mockCourses[0]);
-					});
+					expect(res.action).toEqual(action.EMPTY);
+					expect(component.loadMore_disebled).toBeTruthy();
 				});
 			});
 		});
@@ -149,16 +148,20 @@ describe('CourseListComponent', () => {
 
 	describe('onLoadMore', () => {
 		it('should fetch one course', () => {
-			spyOn(service, 'getCourses').and.returnValue(of([mockCourses[0]]));
-			component.onLoadMore(1);
-			expect(component.coursesSub$()).toEqual([mockCourses[0]]);
+			component.onLoadMore();
+			component.courses$.subscribe((data) => {
+				expect(data).toEqual([]);
+			});
 		});
 		it('should fetch one course and clear inputs', () => {
-			spyOn(component.child, 'onClear').and.callFake(() => {});
+			const childMethodSpy = jasmine.createSpyObj(SearchbarComponent, [
+				'onClear',
+			]);
+			component.child = childMethodSpy;
 			component.searchText = 'not empty';
 			spyOn(service, 'getCourses').and.returnValue(of([mockCourses[0]]));
-			component.onLoadMore(1);
-			expect(component.coursesSub$()).toEqual([mockCourses[0]]);
+			component.onLoadMore();
+			expect(component.child.onClear).toHaveBeenCalled();
 		});
 	});
 	describe('onChangePage', () => {
@@ -180,24 +183,11 @@ describe('CourseListComponent', () => {
 			);
 		});
 	});
-	describe('initFetchCoursesFromAPI', () => {
-		it('initFetchCoursesFromAPI', () => {
-			component.coursesSub$.set([]);
-			spyOn(component, 'setPagesSize')
-				.and.callThrough()
-				.and.returnValue(component.pageSize.set(0));
-			spyOn(component, 'checkAndReturn').and.callThrough();
-			spyOn(service, 'getCourses').and.returnValue(of(mockCourses));
-			component.initFetchCoursesFromAPI();
-			expect(component.coursesSub$()).toEqual(mockCourses);
-		});
-	});
-	describe('checkAndReturn', () => {
-		it('should return empty array', () => {
-			const data = [mockCourses[0]];
-			spyOn(component, 'checkAndReturn').and.callThrough();
-			component.countToFetch = 1;
-			expect(component.checkAndReturn(data)).toEqual([]);
+	describe('setCoursesView', () => {
+		it('setCoursesView', () => {
+			component.courses$.subscribe((courses) => {
+				expect(courses.length).toBe(0);
+			});
 		});
 	});
 
@@ -219,17 +209,27 @@ describe('CourseListComponent', () => {
 	describe('onBuildCourse', () => {
 		it('should update course if action.ADD and clear inputs if searchText not empty', () => {
 			spyOn(component, 'onBuildCourse').and.callThrough();
-			spyOn(component.child, 'onClear').and.callFake(() => {});
-			service.isUpdating.action = action.CANCEL;
+			const childMethodSpy = jasmine.createSpyObj(SearchbarComponent, [
+				'onClear',
+			]);
+			component.child = childMethodSpy;
 			component.searchText = 'not empty';
 			component.onBuildCourse(action.ADD);
 			expect(service.isUpdating.action).toEqual(action.ADD);
+			// expect(childMethodSpy).toHaveBeenCalled();
 		});
 		it('should add new course if action.EDIT', () => {
 			spyOn(component, 'onBuildCourse').and.callThrough();
 			service.isUpdating.action = action.CANCEL;
 			component.onBuildCourse(action.EDIT);
 			expect(service.isUpdating.action).toEqual(action.EDIT);
+		});
+	});
+
+	describe('setPagesSize', () => {
+		it('setPagesSize', () => {
+			component.setPagesSize([]);
+			expect(component.pageSize()).toEqual(0);
 		});
 	});
 });

@@ -13,6 +13,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { InputComponent } from 'src/app/shared/components/input/input.component';
 import { TextareaComponent } from 'src/app/shared/components/textarea/textarea.component';
+import { Store } from '@ngrx/store';
+import * as CoursesActions from 'src/app/store/courses/actions';
+import { AppStateInterface } from 'src/app/store';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -25,7 +28,8 @@ export class CourseCompositionComponent implements OnInit, OnDestroy {
 	constructor(
 		private coursesService: CoursesService,
 		private router: Router,
-		private activatedRoute: ActivatedRoute
+		private activatedRoute: ActivatedRoute,
+		private store: Store<AppStateInterface>
 	) {}
 	@ViewChildren(InputComponent) inputs!: QueryList<InputComponent>;
 	@ViewChild(TextareaComponent) textarea!: TextareaComponent;
@@ -84,10 +88,12 @@ export class CourseCompositionComponent implements OnInit, OnDestroy {
 			isTopRated: false,
 		};
 		if (this.coursesService.isUpdating.action === 'Add') {
-			this.coursesService.addCourse(newCourse).subscribe();
+			this.store.dispatch(
+				CoursesActions.addCourse({ course: { ...newCourse, id: Date.now() } })
+			);
 		}
 		if (this.coursesService.isUpdating.action === 'Edit') {
-			this.coursesService.updateCourse(newCourse).subscribe();
+			this.store.dispatch(CoursesActions.updateCourse({ course: newCourse }));
 		}
 		this.coursesService.isUpdating.state = false;
 		this.coursesService.isUpdating.action = action.SAVE;
