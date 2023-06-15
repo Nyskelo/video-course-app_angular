@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
 import { AuthService } from './auth.service';
-import { LoaderService } from './loader.service';
 
 const user = {
 	id: 2,
@@ -23,20 +22,17 @@ describe('AuthService', () => {
 	let service: AuthService;
 	let httpClientSpy: jasmine.SpyObj<HttpClient>;
 	let mockRouter: jasmine.SpyObj<Router>;
-	let loader: LoaderService;
 
 	beforeEach(() => {
 		TestBed.configureTestingModule({
 			providers: [
-				LoaderService,
 				{ provide: Router, useValue: mockRouter },
 				{ provide: Store, useValue: testStore },
 			],
 		});
 		httpClientSpy = jasmine.createSpyObj('HttpClient', ['get', 'post']);
 		mockRouter = jasmine.createSpyObj('Router', ['navigate']);
-		loader = new LoaderService();
-		service = new AuthService(mockRouter, httpClientSpy, testStore, loader);
+		service = new AuthService(mockRouter, httpClientSpy, testStore);
 	});
 
 	describe('userLogin', () => {

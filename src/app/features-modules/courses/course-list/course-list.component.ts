@@ -37,20 +37,18 @@ import { AppStateInterface } from 'src/app/store';
 	encapsulation: ViewEncapsulation.None,
 })
 export class CourseListComponent implements OnInit, OnDestroy, AfterViewInit {
-	courses$: Observable<Course[]>;
 	constructor(
 		private filterPipe: FilterPipe,
 		private coursesService: CoursesService,
 		private router: Router,
 		private store: Store<AppStateInterface>
-	) {
-		this.courses$ = this.store.pipe(select(coursesSelector));
-	}
+	) {}
 	@ViewChild(SearchbarComponent) child!: SearchbarComponent;
 
 	ngOnDestroy(): void {
 		console.log('LIST - CourseList has been destroyed');
 	}
+	courses$!: Observable<Course[]>;
 	initState = false;
 	coursesSub$ = signal<Course[]>([]);
 	coursesSliceSub$ = signal<Course[]>([]);
@@ -90,6 +88,7 @@ export class CourseListComponent implements OnInit, OnDestroy, AfterViewInit {
 	loadMore_disebled = !(this.coursesSub$().length <= this.limitToDisplay);
 
 	ngOnInit(): void {
+		this.courses$ = this.store.pipe(select(coursesSelector));
 		//init fetch
 		this.store.dispatch(
 			CoursesActions.getCourses({

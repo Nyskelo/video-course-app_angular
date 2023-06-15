@@ -1,14 +1,13 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { finalize, Observable, retry, Subject, tap } from 'rxjs';
-import { LoaderService } from 'src/app/core/services/loader.service';
+import { Observable, retry, Subject, tap } from 'rxjs';
 import { action, Course, CourseState } from 'src/app/utils/global.model';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class CoursesService {
-	constructor(private http: HttpClient, private loader: LoaderService) {}
+	constructor(private http: HttpClient) {}
 	courses: Course[] | undefined;
 	isUpdating: CourseState = {
 		state: false,
@@ -39,7 +38,6 @@ export class CoursesService {
 	}
 
 	getCourses(start?: number, count?: number) {
-		this.loader.show();
 		let params = new HttpParams().append('sort', 'date');
 		start && (params = params.append('start', start));
 		count && (params = params.append('count', count));
@@ -55,21 +53,17 @@ export class CoursesService {
 						action: data.length ? action.GET : action.EMPTY,
 					});
 				}),
-				retry(2),
-				finalize(() => this.loader.hide())
+				retry(2)
 			);
 	}
 
 	getCourseByID(id: number) {
-		this.loader.show();
-		return this.http.get<Course>(`${this.url}/${id}`).pipe(
-			tap(() => console.log(`fetched course id=${id}`)),
-			finalize(() => this.loader.hide())
-		);
+		return this.http
+			.get<Course>(`${this.url}/${id}`)
+			.pipe(tap(() => console.log(`fetched course id=${id}`)));
 	}
 
 	searchCourses(term: string): Observable<Course[]> {
-		this.loader.show();
 		return this.http
 			.get<Course[]>(`${this.url}`, {
 				params: { sort: 'date', textFragment: `${term}` },
@@ -84,13 +78,11 @@ export class CoursesService {
 						this._saveOperationSuccessfulEvent$.next({
 							action: x.length ? action.SEARCH : action.EMPTY,
 						});
-				}),
-				finalize(() => this.loader.hide())
+				})
 			);
 	}
 
 	updateCourse(course: Course) {
-		this.loader.show();
 		return this.http
 			.put(`${this.url}/${course.id}`, course, this.httpOptions)
 			.pipe(
@@ -100,13 +92,11 @@ export class CoursesService {
 						action: action.EDIT,
 						course: course,
 					});
-				}),
-				finalize(() => this.loader.hide())
+				})
 			);
 	}
 
 	addCourse(course: Course) {
-		this.loader.show();
 		return this.http.post<Course>(`${this.url}`, course, this.httpOptions).pipe(
 			tap((newCourse: Course) => {
 				console.log(`added course w/ id=${newCourse.id}`);
@@ -114,13 +104,11 @@ export class CoursesService {
 					action: action.ADD,
 					course: newCourse,
 				});
-			}),
-			finalize(() => this.loader.hide())
+			})
 		);
 	}
 
 	deleteCourse(course: Course) {
-		this.loader.show();
 		return this.http
 			.delete<Course[]>(`${this.url}/${course.id}`, this.httpOptions)
 			.pipe(
@@ -130,9 +118,7 @@ export class CoursesService {
 						action: action.DELETE,
 						course: course,
 					});
-					this.loader.hide();
-				}),
-				finalize(() => this.loader.hide())
+				})
 			);
 	}
 }

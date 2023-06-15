@@ -3,6 +3,11 @@ import { AppStateInterface } from '..';
 
 export const selectFeature = (state: AppStateInterface) => state.user;
 
+export const isLoadingSelector = createSelector(
+	selectFeature,
+	(state) => state.isLoading
+);
+
 export const isLoggedInSelector = createSelector(
 	selectFeature,
 	(state) => state.isLoggedIn

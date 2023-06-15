@@ -2,11 +2,23 @@
 
 import { TestBed, inject } from '@angular/core/testing';
 import { LoaderService } from './loader.service';
+import { provideMockStore } from '@ngrx/store/testing';
+import { StoreModule } from '@ngrx/store';
+import { initStateCourses } from 'src/app/store/courses/reducers';
+import { initStateUser } from 'src/app/store/user/reducers';
 
 describe('Service: Loader', () => {
 	beforeEach(() => {
 		TestBed.configureTestingModule({
-			providers: [LoaderService],
+			imports: [StoreModule.forRoot({})],
+			providers: [
+				provideMockStore({
+					initialState: {
+						courses: initStateCourses,
+						user: initStateUser,
+					},
+				}),
+			],
 		});
 	});
 
