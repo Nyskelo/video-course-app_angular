@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, mergeMap, of } from 'rxjs';
+import { catchError, map, switchMap, of } from 'rxjs';
 import { CoursesService } from 'src/app/features-modules/courses/services/courses.service';
 import * as CoursesActions from './actions';
 
@@ -9,7 +9,7 @@ export class CoursesEffects {
 	getCourses$ = createEffect(() =>
 		this.actions$.pipe(
 			ofType(CoursesActions.getCourses),
-			mergeMap((payload) => {
+			switchMap((payload) => {
 				return this.coursesService
 					.getCourses(payload.start, payload.count)
 					.pipe(
@@ -30,7 +30,7 @@ export class CoursesEffects {
 	deleteCourse$ = createEffect(() =>
 		this.actions$.pipe(
 			ofType(CoursesActions.deleteCourse),
-			mergeMap((payload) => {
+			switchMap((payload) => {
 				return this.coursesService.deleteCourse(payload.course).pipe(
 					map(() => {
 						return CoursesActions.deleteCourseSuccess({
@@ -47,7 +47,7 @@ export class CoursesEffects {
 	updateCourse$ = createEffect(() =>
 		this.actions$.pipe(
 			ofType(CoursesActions.updateCourse),
-			mergeMap((payload) => {
+			switchMap((payload) => {
 				return this.coursesService.updateCourse(payload.course).pipe(
 					map(() => {
 						return CoursesActions.updateCourseSuccess({
@@ -64,7 +64,7 @@ export class CoursesEffects {
 	addCourse$ = createEffect(() =>
 		this.actions$.pipe(
 			ofType(CoursesActions.addCourse),
-			mergeMap((payload) => {
+			switchMap((payload) => {
 				return this.coursesService.addCourse(payload.course).pipe(
 					map(() => {
 						return CoursesActions.addCourseSuccess({
@@ -81,7 +81,7 @@ export class CoursesEffects {
 	searchCourses$ = createEffect(() =>
 		this.actions$.pipe(
 			ofType(CoursesActions.searchCourses),
-			mergeMap((payload) => {
+			switchMap((payload) => {
 				return this.coursesService.searchCourses(payload.term).pipe(
 					map((courses) => {
 						return CoursesActions.searchCoursesSuccess({

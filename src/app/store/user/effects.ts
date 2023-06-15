@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, mergeMap, of } from 'rxjs';
+import { catchError, map, switchMap, of } from 'rxjs';
 import { AuthService } from 'src/app/core/services/auth.service';
 import * as UserActions from './actions';
 
@@ -9,7 +9,7 @@ export class UserEffects {
 	userLogin$ = createEffect(() =>
 		this.actions$.pipe(
 			ofType(UserActions.userLogin),
-			mergeMap((payload) => {
+			switchMap((payload) => {
 				return this.authService.userLogin(payload.auth).pipe(
 					map((token) => {
 						return UserActions.userLoginSuccess({
@@ -27,7 +27,7 @@ export class UserEffects {
 	userAuth$ = createEffect(() =>
 		this.actions$.pipe(
 			ofType(UserActions.userAuth),
-			mergeMap((payload) => {
+			switchMap((payload) => {
 				return this.authService.userAuth(payload.token).pipe(
 					map((user) => {
 						return UserActions.userAuthSuccess({
@@ -44,7 +44,7 @@ export class UserEffects {
 	userLogout$ = createEffect(() =>
 		this.actions$.pipe(
 			ofType(UserActions.userLogout),
-			mergeMap(() => {
+			switchMap(() => {
 				return this.authService.userLogout().pipe(
 					map((user) => {
 						return UserActions.userLogoutSuccess({
