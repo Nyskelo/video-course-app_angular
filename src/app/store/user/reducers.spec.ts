@@ -32,14 +32,14 @@ describe('Reducer: User', () => {
 		});
 	});
 	describe('User Login', () => {
-		it('User Login --> should set isLoading to true', () => {
+		it('should set isLoading to true', () => {
 			const expected = { ...fromMyReducers.initStateUser, isLoading: true };
 			const action = UserAction.userLogin({
 				auth: userAuth,
 			});
 			expect(fromMyReducers.userReducers(undefined, action)).toEqual(expected);
 		});
-		it('User Login Success --> should set user to init new User()', () => {
+		it('Success --> should set user to init new User()', () => {
 			const expected = {
 				...fromMyReducers.initStateUser,
 				user: {
@@ -55,7 +55,7 @@ describe('Reducer: User', () => {
 			});
 			expect(fromMyReducers.userReducers(undefined, action)).toEqual(expected);
 		});
-		it('User Login Failure --> should set error to null', () => {
+		it('Failure --> should set error to null', () => {
 			const expected = {
 				...fromMyReducers.initStateUser,
 				error: error,
@@ -65,14 +65,14 @@ describe('Reducer: User', () => {
 		});
 	});
 	describe('User Auth', () => {
-		it('User Auth --> should set isLoading to true', () => {
+		it('should set isLoading to true', () => {
 			const expected = { ...fromMyReducers.initStateUser, isLoading: true };
 			const action = UserAction.userAuth({
 				token,
 			});
 			expect(fromMyReducers.userReducers(undefined, action)).toEqual(expected);
 		});
-		it('User Auth Success --> should set user to init new User()', () => {
+		it('Success --> should set user to init new User()', () => {
 			const user = {
 				id: 111,
 				fakeToken: token,
@@ -93,7 +93,7 @@ describe('Reducer: User', () => {
 			});
 			expect(fromMyReducers.userReducers(undefined, action)).toEqual(expected);
 		});
-		it('User Auth Failure --> should set error to null', () => {
+		it('Failure --> should set error to null', () => {
 			const expected = {
 				...fromMyReducers.initStateUser,
 				error: error,

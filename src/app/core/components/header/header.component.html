@@ -2,7 +2,7 @@
 	<app-logo></app-logo>
 	<nav *ngIf="isGoggedIn$ | async">
 		<ul>
-			<li><app-i-person class="icons" />{{ userName$ | async }} login</li>
+			<li><app-i-person class="icons" />{{ userName() }} login</li>
 			<li>
 				<app-button [text]="'Log off'" class="btn-logoff" (click)="onLogout()"
 					><app-i-output class="icons"

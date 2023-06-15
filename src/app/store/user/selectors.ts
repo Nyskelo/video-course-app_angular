@@ -18,11 +18,6 @@ export const userSelector = createSelector(
 	(state) => state.user
 );
 
-export const userNameSelector = createSelector(
-	selectFeature,
-	(state) => state.user.login
-);
-
 export const errorSelector = createSelector(
 	selectFeature,
 	(state) => state.error

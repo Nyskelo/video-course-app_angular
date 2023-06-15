@@ -22,11 +22,7 @@ describe('isLoggedInSelector', () => {
 			expected.user
 		);
 	});
-	it('userNameSelector should be initStateUser.user.login', () => {
-		expect(fromMySelectors.userNameSelector.projector(initStateUser)).toEqual(
-			initStateUser.user.login
-		);
-	});
+
 	it('errorSelector  should be initStateUser.error', () => {
 		expect(fromMySelectors.errorSelector.projector(initStateUser)).toEqual(
 			initStateUser.error
