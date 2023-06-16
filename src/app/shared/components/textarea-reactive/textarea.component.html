@@ -1,0 +1,58 @@
+<div class="form-row">
+	<!-- LABEL-->
+	<label class="label" for="{{ fieldName }}"
+		>{{ fieldName | titlecase }}
+		<!-- VALIDATION -->
+		<div
+			class="form-errors"
+			*ngIf="formField?.invalid && formField?.dirty && formField?.touched"
+		>
+			<p *ngIf=" formField?.errors?.['required']" class="form-error">
+				*Please provide {{ fieldName }}
+			</p>
+			<p
+				*ngIf="
+					(formField.hasError('minlength') ||
+						formField.hasError('minLengthSpaces')) &&
+					!formField.hasError('required')
+				"
+				class="form-error"
+			>
+				*{{ fieldName | titlecase }} must be a minimum of
+				{{ minLength }} characters
+			</p>
+			<p
+				*ngIf="
+					formField.hasError('maxlength') &&
+					formField.hasError('maxLengthSpaces') &&
+					!formField.hasError('required')
+				"
+				class="form-error"
+			>
+				*{{ fieldName | titlecase }} must be a maximum of
+				{{ maxLength }} characters
+			</p>
+			<p
+				*ngIf="formField.hasError('pattern') && !formField.hasError('required')"
+				class="form-error"
+			>
+				*Please enter valid text
+			</p>
+		</div></label
+	>
+	<!-- INPUT-->
+	<textarea
+		class="form-element__textarea"
+		[placeholder]="placeholder"
+		[value]="value"
+		(input)="onChange($event)"
+		(blur)="touched()"
+		[id]="fieldName"
+		[ngClass]="{
+			invalid: formField?.invalid && formField?.dirty && formField?.touched,
+			valid: formField?.valid && formField?.dirty && formField?.touched
+		}"
+	></textarea>
+	<!-- INPUT COUNT-->
+	<div class="counter">{{ formField?.value?.length || 0 }}/{{ maxLength }}</div>
+</div>

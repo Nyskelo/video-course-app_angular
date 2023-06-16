@@ -1,0 +1,9 @@
+@import 'src/styles/base';
+
+textarea {
+	@include inline-center-cell;
+	border: 1px solid $text-grey1;
+	width: var(--custom-width, 100%);
+	margin-right: 5px;
+	height: auto;
+}

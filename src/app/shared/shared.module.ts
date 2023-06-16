@@ -13,6 +13,8 @@ import { StarDirective } from './directives/star.directive';
 import { IsAuthenticatedDirective } from './directives/isAuthenticated.directive';
 import { TextareaComponent } from './components/textarea/textarea.component';
 import { PaginationModule } from './components/pagination/pagination.module';
+import { InputReactiveComponent } from './components/input_reactive/input.component';
+import { TextareaReactiveComponent } from './components/textarea-reactive/textarea.component';
 
 @NgModule({
 	declarations: [
@@ -26,6 +28,8 @@ import { PaginationModule } from './components/pagination/pagination.module';
 		StarDirective,
 		IsAuthenticatedDirective,
 		TextareaComponent,
+		InputReactiveComponent,
+		TextareaReactiveComponent,
 	],
 	imports: [CommonModule, FormsModule, IconsModule, PaginationModule],
 	exports: [
@@ -43,6 +47,8 @@ import { PaginationModule } from './components/pagination/pagination.module';
 		IsAuthenticatedDirective,
 		TextareaComponent,
 		PaginationModule,
+		InputReactiveComponent,
+		TextareaReactiveComponent,
 	],
 })
 export class SharedModule {}

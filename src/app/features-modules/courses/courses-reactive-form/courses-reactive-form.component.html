@@ -1,0 +1,17 @@
+<div class="form-wrapper">
+	<div [formGroup]="courseForm">
+		<app-r-input
+			formControlName="title"
+			[parentForm]="courseForm"
+			[maxLength]="20"
+			fieldName="title"
+		/>
+		<app-r-textarea
+			formControlName="description"
+			[parentForm]="courseForm"
+			[minLength]="20"
+			[maxLength]="500"
+			fieldName="description"
+		></app-r-textarea>
+	</div>
+</div>
