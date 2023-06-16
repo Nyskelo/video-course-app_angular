@@ -32,10 +32,15 @@ export class CoursesReactiveFormComponent implements OnInit {
 				this.controlSpaces(20, 500),
 			],
 		],
+		date: ['', [Validators.required]],
+		duration: ['', [Validators.required]],
 	});
 
 	get title() {
 		return this.courseForm?.get('title');
+	}
+	get duration() {
+		return this.courseForm?.get('duration');
 	}
 
 	controlSpaces(min: number, max: number) {

@@ -3,6 +3,7 @@
 		<app-r-input
 			formControlName="title"
 			[parentForm]="courseForm"
+			[minLength]="2"
 			[maxLength]="20"
 			fieldName="title"
 		/>
@@ -13,5 +14,22 @@
 			[maxLength]="500"
 			fieldName="description"
 		></app-r-textarea>
+		<app-r-input
+			[type]="'date'"
+			formControlName="date"
+			[parentForm]="courseForm"
+			fieldName="date"
+			[count]="false"
+		/>
+		<app-r-input
+			[type]="'number'"
+			formControlName="duration"
+			[parentForm]="courseForm"
+			fieldName="duration"
+			[count]="false"
+			><span class="duration-info" *ngIf="+(duration?.value || 0)">{{
+				+(duration?.value || 0) | duration
+			}}</span></app-r-input
+		>
 	</div>
 </div>

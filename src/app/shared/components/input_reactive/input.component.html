@@ -1,7 +1,7 @@
 <div class="form-row">
 	<!-- LABEL-->
 	<label class="label" for="{{ fieldName }}"
-		>{{ fieldName | titlecase }}
+		>{{ fieldName | titlecase }}:
 		<!-- VALIDATION -->
 		<div
 			class="form-errors"
@@ -53,7 +53,9 @@
 			invalid: formField?.invalid && formField?.dirty && formField?.touched,
 			valid: formField?.valid && formField?.dirty && formField?.touched
 		}"
-	/>
+	/><ng-content></ng-content>
 	<!-- INPUT COUNT-->
-	<div class="counter">{{ formField?.value?.length }}/{{ maxLength }}</div>
+	<div class="counter" *ngIf="count">
+		{{ formField?.value?.length }}/{{ maxLength }}
+	</div>
 </div>
