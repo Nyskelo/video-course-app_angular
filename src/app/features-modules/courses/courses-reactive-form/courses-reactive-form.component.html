@@ -15,15 +15,17 @@
 			fieldName="description"
 		></app-r-textarea>
 		<app-r-input
-			[type]="'date'"
 			formControlName="date"
 			[parentForm]="courseForm"
 			fieldName="date"
 			[count]="false"
+			[placeholder]="dateFormat.format"
+			[appDateValidator]="dateFormat"
 		/>
 		<app-r-input
 			[type]="'number'"
 			formControlName="duration"
+			[placeholder]="'Enter the minutes...'"
 			[parentForm]="courseForm"
 			fieldName="duration"
 			[count]="false"

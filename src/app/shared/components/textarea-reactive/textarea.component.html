@@ -5,7 +5,7 @@
 		<!-- VALIDATION -->
 		<div
 			class="form-errors"
-			*ngIf="formField?.invalid && formField?.dirty && formField?.touched"
+			*ngIf="formField?.invalid && formField.dirty && formField.touched"
 		>
 			<p *ngIf=" formField?.errors?.['required']" class="form-error">
 				*Please provide {{ fieldName }}
@@ -49,10 +49,10 @@
 		(blur)="touched()"
 		[id]="fieldName"
 		[ngClass]="{
-			invalid: formField?.invalid && formField?.dirty && formField?.touched,
-			valid: formField?.valid && formField?.dirty && formField?.touched
+			invalid: formField.invalid && formField.dirty && formField.touched,
+			valid: formField.valid && formField.dirty && formField.touched
 		}"
 	></textarea>
 	<!-- INPUT COUNT-->
-	<div class="counter">{{ formField?.value?.length || 0 }}/{{ maxLength }}</div>
+	<div class="counter">{{ formField.value.length || 0 }}/{{ maxLength }}</div>
 </div>

@@ -15,6 +15,7 @@ import { TextareaComponent } from './components/textarea/textarea.component';
 import { PaginationModule } from './components/pagination/pagination.module';
 import { InputReactiveComponent } from './components/input_reactive/input.component';
 import { TextareaReactiveComponent } from './components/textarea-reactive/textarea.component';
+import { DateValidatorDirective } from './directives/dateValidator.directive';
 
 @NgModule({
 	declarations: [
@@ -30,6 +31,7 @@ import { TextareaReactiveComponent } from './components/textarea-reactive/textar
 		TextareaComponent,
 		InputReactiveComponent,
 		TextareaReactiveComponent,
+		DateValidatorDirective,
 	],
 	imports: [CommonModule, FormsModule, IconsModule, PaginationModule],
 	exports: [
@@ -49,6 +51,7 @@ import { TextareaReactiveComponent } from './components/textarea-reactive/textar
 		PaginationModule,
 		InputReactiveComponent,
 		TextareaReactiveComponent,
+		DateValidatorDirective,
 	],
 })
 export class SharedModule {}

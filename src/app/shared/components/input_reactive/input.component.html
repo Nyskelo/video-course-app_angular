@@ -5,7 +5,7 @@
 		<!-- VALIDATION -->
 		<div
 			class="form-errors"
-			*ngIf="formField?.invalid && formField?.dirty && formField?.touched"
+			*ngIf="formField?.invalid && formField.dirty && formField.touched"
 		>
 			<p *ngIf=" formField?.errors?.['required']" class="form-error">
 				*Please provide {{ fieldName }}
@@ -38,6 +38,15 @@
 			>
 				*Please enter valid text
 			</p>
+			<p
+				*ngIf="
+					formField.hasError('customValidation') &&
+					!formField.hasError('required')
+				"
+				class="form-error"
+			>
+				*{{ formField.errors?.['customValidationMsg'] }}
+			</p>
 		</div></label
 	>
 	<!-- INPUT-->
@@ -50,12 +59,12 @@
 		(input)="onChange($event)"
 		(blur)="touched()"
 		[ngClass]="{
-			invalid: formField?.invalid && formField?.dirty && formField?.touched,
-			valid: formField?.valid && formField?.dirty && formField?.touched
+			invalid: formField.invalid && formField.dirty && formField.touched,
+			valid: formField.valid && formField.dirty && formField.touched
 		}"
 	/><ng-content></ng-content>
 	<!-- INPUT COUNT-->
 	<div class="counter" *ngIf="count">
-		{{ formField?.value?.length }}/{{ maxLength }}
+		{{ formField.value.length }}/{{ maxLength }}
 	</div>
 </div>

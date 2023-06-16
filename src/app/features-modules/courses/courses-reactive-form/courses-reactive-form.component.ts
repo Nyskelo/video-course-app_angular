@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 @Component({
@@ -6,13 +6,9 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 	templateUrl: './courses-reactive-form.component.html',
 	styleUrls: ['./courses-reactive-form.component.scss'],
 })
-export class CoursesReactiveFormComponent implements OnInit {
+export class CoursesReactiveFormComponent {
 	constructor(private fb: FormBuilder) {}
-	ngOnInit(): void {
-		this.courseForm.valueChanges.subscribe((e) =>
-			console.log(e, this.courseForm.get('title')?.invalid)
-		);
-	}
+	dateFormat = { reg: /^\d{2}\/\d{2}\/\d{4}$/, format: 'dd/mm/yyyy' };
 	courseForm = this.fb.group({
 		title: [
 			'',
@@ -33,7 +29,7 @@ export class CoursesReactiveFormComponent implements OnInit {
 			],
 		],
 		date: ['', [Validators.required]],
-		duration: ['', [Validators.required]],
+		duration: ['', [Validators.required, this.greaterThenZero]],
 	});
 
 	get title() {
@@ -58,5 +54,16 @@ export class CoursesReactiveFormComponent implements OnInit {
 
 			return null;
 		};
+	}
+	greaterThenZero(controls: FormControl) {
+		const removedZeroStart = controls.value.replace(/^0/g, '');
+		controls.value !== removedZeroStart && controls.setValue(removedZeroStart);
+
+		return +controls.value >= 1
+			? null
+			: {
+					customValidation: true,
+					customValidationMsg: 'Duration should be greater than 0',
+			  };
 	}
 }
