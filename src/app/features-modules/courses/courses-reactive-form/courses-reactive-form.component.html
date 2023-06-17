@@ -34,6 +34,39 @@
 				+(duration?.value || 0) | duration
 			}}</span></app-r-input
 		>
+
+		<mat-label>Authors:</mat-label>
+		<mat-form-field class="chip-list">
+			<mat-chip-grid #chipGrid aria-label="Authors selection">
+				<mat-chip-row
+					*ngFor="let author of authorsArray()"
+					(removed)="remove(author)"
+				>
+					{{ author.name }} {{ author.lastName }}
+					<button matChipRemove [attr.aria-label]="'remove ' + author.id">
+						<mat-icon>cancel</mat-icon>
+					</button>
+				</mat-chip-row>
+			</mat-chip-grid>
+			<input
+				placeholder="New Author..."
+				#authorsInput
+				formControlName="authors"
+				[matChipInputFor]="chipGrid"
+				[matAutocomplete]="auto"
+				[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+				(matChipInputTokenEnd)="add($event)"
+			/>
+			<mat-autocomplete
+				#auto="matAutocomplete"
+				(optionSelected)="selected($event)"
+			>
+				<mat-option *ngFor="let author of filteredAuthors()" [value]="author">
+					{{ author.name }} {{ author.lastName }}
+				</mat-option>
+			</mat-autocomplete>
+		</mat-form-field>
+
 		<!-- Buttons -->
 		<div class="actions">
 			<app-button [text]="'Save'" class="btn-course save" (click)="onSave()" />
