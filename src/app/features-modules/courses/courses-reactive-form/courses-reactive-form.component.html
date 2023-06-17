@@ -1,5 +1,6 @@
 <div class="form-wrapper">
 	<div [formGroup]="courseForm">
+		<h1 class="title">{{ action }} Course</h1>
 		<app-r-input
 			formControlName="title"
 			[parentForm]="courseForm"
@@ -33,5 +34,14 @@
 				+(duration?.value || 0) | duration
 			}}</span></app-r-input
 		>
+		<!-- Buttons -->
+		<div class="actions">
+			<app-button [text]="'Save'" class="btn-course save" (click)="onSave()" />
+			<app-button
+				[text]="'Cancel'"
+				class="btn-course cancel"
+				(click)="onCancel()"
+			/>
+		</div>
 	</div>
 </div>

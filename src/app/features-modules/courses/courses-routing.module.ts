@@ -5,6 +5,7 @@ import { CoursesResolver } from 'src/app/core/resolvers/courses.resolver';
 import { customPath } from 'src/app/utils/global.model';
 import { CourseCompositionComponent } from './course-composition/course-composition.component';
 import { CourseListComponent } from './course-list/course-list.component';
+import { CoursesReactiveFormComponent } from './courses-reactive-form/courses-reactive-form.component';
 import { CoursesComponent } from './courses.component';
 
 const routes: Routes = [
@@ -21,12 +22,14 @@ const routes: Routes = [
 			},
 			{
 				path: customPath.courseAdd,
-				component: CourseCompositionComponent,
+				component: CoursesReactiveFormComponent,
+				// component: CourseCompositionComponent,
 				data: { title: 'New Course' },
 			},
 			{
 				path: customPath.courseEdit,
-				component: CourseCompositionComponent,
+				component: CoursesReactiveFormComponent,
+				// component: CourseCompositionComponent,
 				data: { title: 'Edit Course' },
 				resolve: { course: CoursesResolver },
 			},
