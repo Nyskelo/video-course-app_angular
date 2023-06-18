@@ -1,3 +1,11 @@
+@import 'src/styles/base';
 .myInput {
 	--custom-width: 300px;
+}
+input {
+	@include inline-center-cell;
+	border: 1px solid $text-grey1;
+	width: var(--custom-width, inherit);
+	height: var(--custom-height, $indent-h-cell);
+	margin-right: 5px;
 }
