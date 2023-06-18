@@ -1,3 +1,4 @@
+import { initStateAuthors } from '../authors/reducers';
 import { initStateUser } from '../user/reducers';
 import { initStateCourses } from './reducers';
 import * as fromMySelectors from './selectors';
@@ -8,6 +9,7 @@ describe('selectFeature', () => {
 			fromMySelectors.selectFeature({
 				user: initStateUser,
 				courses: initStateCourses,
+				authors: initStateAuthors,
 			})
 		).toEqual(initStateCourses);
 	});
