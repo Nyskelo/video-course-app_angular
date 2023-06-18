@@ -12,7 +12,7 @@ export class CustomRouteReuseStrategy implements RouteReuseStrategy {
 		const path = route.routeConfig?.path as customPath;
 
 		if (path) {
-			return [customPath.coursesList, customPath.courseAdd].includes(path);
+			return [customPath.coursesList].includes(path);
 		}
 		return false;
 	}
@@ -25,8 +25,7 @@ export class CustomRouteReuseStrategy implements RouteReuseStrategy {
 		const path = route.routeConfig?.path as customPath;
 		if (path) {
 			return (
-				[customPath.coursesList, customPath.courseAdd].includes(path) &&
-				!!this.routeStore.get(path)
+				[customPath.coursesList].includes(path) && !!this.routeStore.get(path)
 			);
 		}
 		return false;

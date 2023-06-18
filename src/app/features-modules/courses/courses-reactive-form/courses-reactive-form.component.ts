@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit, signal } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { Store } from '@ngrx/store';
+import { FormBuilder, Validators } from '@angular/forms';
+import { select, Store } from '@ngrx/store';
 import * as CoursesActions from 'src/app/store/courses/actions';
+import * as AuthorsActions from 'src/app/store/authors/actions';
 import { AppStateInterface } from 'src/app/store';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { CoursesService } from '../services/courses.service';
@@ -13,7 +14,15 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { map, startWith } from 'rxjs/operators';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-
+import {
+	controlSpaces,
+	customRequiered,
+	errorAuthorNameExpected,
+	errorNameAndLastnameExpected,
+	greaterThenZero,
+	oneSpaceExpected,
+} from '../util/form-validations.helpers';
+import { authorsSelector } from 'src/app/store/authors/selectors';
 @UntilDestroy({ checkProperties: true })
 @Component({
 	selector: 'app-courses-reactive-form',
@@ -32,6 +41,13 @@ export class CoursesReactiveFormComponent implements OnInit, OnDestroy {
 
 	courseToUpdate!: Course;
 
+	//Authors chips
+	separatorKeysCodes: number[] = [ENTER, COMMA];
+	filteredAuthors = signal<Author[]>([]);
+	authorsArray = signal<Author[]>([]);
+	allAuthors = signal<Author[]>([]);
+	announcer = inject(LiveAnnouncer);
+
 	//FormGroup
 	dateFormat = { reg: /^\d{2}\/\d{2}\/\d{4}$/, format: 'dd/mm/yyyy' };
 	courseForm = this.fb.group({
@@ -40,8 +56,8 @@ export class CoursesReactiveFormComponent implements OnInit, OnDestroy {
 			[
 				Validators.required,
 				Validators.minLength(2),
-				Validators.maxLength(20),
-				this.controlSpaces(2, 20),
+				Validators.maxLength(50),
+				controlSpaces(2, 50),
 			],
 		],
 		description: [
@@ -50,21 +66,16 @@ export class CoursesReactiveFormComponent implements OnInit, OnDestroy {
 				Validators.required,
 				Validators.minLength(20),
 				Validators.maxLength(500),
-				this.controlSpaces(20, 500),
+				controlSpaces(20, 500),
 			],
 		],
 		date: ['', [Validators.required]],
-		duration: ['', [Validators.required, this.greaterThenZero]],
-		authors: ['', [Validators.required]],
+		duration: ['', [Validators.required, greaterThenZero]],
+		authors: [
+			'',
+			[customRequiered(() => this.authorsArray()), oneSpaceExpected],
+		],
 	});
-
-	//Authors chips
-	separatorKeysCodes: number[] = [ENTER, COMMA];
-	filteredAuthors = signal<Author[]>([]);
-	authorsArray = signal<Author[]>([]);
-	allAuthors = signal<Author[]>([]);
-	announcer = inject(LiveAnnouncer);
-
 	get title() {
 		return this.courseForm?.get('title');
 	}
@@ -86,16 +97,29 @@ export class CoursesReactiveFormComponent implements OnInit, OnDestroy {
 	}
 	ngOnInit(): void {
 		console.log('ADD|EDIT - CourseCompos has been init');
-		//Subscribe to authors field event
+
+		//Fetch to authors
+		this.store.dispatch(AuthorsActions.getAuthors());
+		this.store.pipe(select(authorsSelector)).subscribe((authors) => {
+			this.allAuthors.set(authors);
+			this.filteredAuthors.set(authors);
+		});
+
+		// Subscribe to authors field event
 		this.authors?.valueChanges
 			.pipe(
-				startWith(null),
-				map((fruit: string | null) =>
-					fruit ? this._filter(fruit) : this.allAuthors().slice()
-				)
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				startWith(null as any),
+				map((author: string | null) => {
+					if (this.authors?.invalid) {
+						return null;
+					}
+					return author ? this._filter(author) : this.allAuthors().slice();
+				})
 			)
 			.subscribe((authors) => {
-				this.filteredAuthors.set(authors);
+				authors && this.filteredAuthors.set(authors);
+				!authors && this.filteredAuthors.set([]);
 			});
 
 		//Set course to update
@@ -121,27 +145,32 @@ export class CoursesReactiveFormComponent implements OnInit, OnDestroy {
 
 	//Authors chips field methods
 	add(event: MatChipInputEvent): void {
-		const author = (event.value || '').split(' ');
-		if (author) {
-			this.authorsArray.update((prev) => [
-				...prev,
-				{
-					name: author[0],
-					lastName: author[1] || author[0],
-					id: new Date().valueOf(),
-				},
-			]);
+		const author = (event.value || '').trim();
+		if (author && author.split(' ').length < 2) {
+			this.authors?.setErrors(errorNameAndLastnameExpected);
+			this.authors?.markAsTouched();
+			return;
+		}
+		if (author && !this.authors?.errors?.['customValidation']) {
+			const newAuthors = {
+				name: author,
+				id: new Date().valueOf(),
+			};
+			this.store.dispatch(AuthorsActions.addAuthor({ author: newAuthors }));
+			this.authorsArray.update((prev) => [...prev, newAuthors]);
+			console.log('authorsArray', this.authorsArray());
 		}
 
 		// Clear the input value
-		event.chipInput.inputElement.value = '';
-		this.authors?.setValue(null);
+		!this.authors?.errors?.['customValidation'] &&
+			(event.chipInput.inputElement.value = '');
+		!this.authors?.errors?.['customValidation'] && this.authors?.setValue(null);
 	}
 	remove(author: Author): void {
 		const index = this.authorsArray().indexOf(author);
 		if (index >= 0) {
 			this.authorsArray().splice(index, 1);
-			this.announcer.announce(`Removed ${author.name} ${author.lastName}`);
+			this.announcer.announce(`Removed ${author.name}`);
 		}
 	}
 	selected(event: MatAutocompleteSelectedEvent): void {
@@ -151,48 +180,18 @@ export class CoursesReactiveFormComponent implements OnInit, OnDestroy {
 	}
 	private _filter(value: string): Author[] {
 		const regex = new RegExp(value, 'gi');
-		return this.allAuthors().filter(
-			(fruit: Author) =>
-				fruit.name.match(regex) || fruit?.lastName?.match(regex)
+		return this.allAuthors().filter((author: Author) =>
+			author.name.match(regex)
 		);
-	}
-
-	//Form validations methods
-	controlSpaces(min: number, max: number) {
-		return (controls: FormControl) => {
-			let removedSpaces = controls.value.split('  ').join(' ');
-			controls.value !== removedSpaces && controls.setValue(removedSpaces);
-			if (controls && controls.value.trim().length < min) {
-				removedSpaces = controls.value.replace(/^\s/g, '');
-				controls.value !== removedSpaces && controls.setValue(removedSpaces);
-				return { minLengthSpaces: true };
-			}
-			if (controls && controls.value.trim().length > max) {
-				return { maxLengthSpaces: true };
-			}
-
-			return null;
-		};
-	}
-	greaterThenZero(controls: FormControl) {
-		const removedZeroStart = controls.value;
-		controls.value !== removedZeroStart && controls.setValue(+removedZeroStart);
-		const isValid = +controls.value >= 1 && !/^0/g.test(controls.value);
-		const isInValidZero =
-			/^0/g.test(controls.value) && controls.value.length > 1;
-		const msg = isInValidZero
-			? 'Duration cannot start with 0'
-			: 'Duration should be greater than 0';
-		return isValid
-			? null
-			: {
-					customValidation: true,
-					customValidationMsg: msg,
-			  };
 	}
 
 	//Course action methods
 	onSave() {
+		if (!this.authorsArray().length) {
+			this.authors?.setErrors(errorAuthorNameExpected);
+			this.authors?.markAsTouched();
+			return null;
+		}
 		const newCourse = {
 			...this.courseToUpdate,
 			name: this.courseForm.value.title as string,
@@ -220,17 +219,13 @@ export class CoursesReactiveFormComponent implements OnInit, OnDestroy {
 		this.coursesService.isUpdating.state = false;
 		this.coursesService.isUpdating.action = action.SAVE;
 		this.router.navigate([customPath.coursesList]);
-		console.log(newCourse);
+		return true;
 	}
 	onCancel(): void {
 		this.coursesService.isUpdating.state = false;
 		this.coursesService.isUpdating.action = action.CANCEL;
 		this.router.navigate([customPath.coursesList]);
 	}
-	onClear() {
-		this.courseForm.reset();
-	}
-
 	get action() {
 		return this.router.url.match(/new$/gi) ? 'Add' : 'Edit';
 	}

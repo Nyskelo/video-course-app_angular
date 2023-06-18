@@ -1,6 +1,19 @@
 <div class="form-wrapper">
-	<div [formGroup]="courseForm">
+	<form
+		[formGroup]="courseForm"
+		(ngSubmit)="
+			courseForm.valid
+				? onSave() && courseForm.reset()
+				: $event.preventDefault()
+		"
+		(keyup.enter)="
+			courseForm.valid
+				? onSave() && courseForm.reset()
+				: $event.preventDefault()
+		"
+	>
 		<h1 class="title">{{ action }} Course</h1>
+		<!-- TITLE INPUT -->
 		<app-r-input
 			formControlName="title"
 			[parentForm]="courseForm"
@@ -8,6 +21,7 @@
 			[maxLength]="20"
 			fieldName="title"
 		/>
+		<!-- DESCRIPTION INPUT -->
 		<app-r-textarea
 			formControlName="description"
 			[parentForm]="courseForm"
@@ -15,6 +29,7 @@
 			[maxLength]="500"
 			fieldName="description"
 		></app-r-textarea>
+		<!-- DATE INPUT -->
 		<app-r-input
 			formControlName="date"
 			[parentForm]="courseForm"
@@ -23,6 +38,7 @@
 			[placeholder]="dateFormat.format"
 			[appDateValidator]="dateFormat"
 		/>
+		<!-- DURATION INPUT -->
 		<app-r-input
 			[type]="'number'"
 			formControlName="duration"
@@ -34,47 +50,86 @@
 				+(duration?.value || 0) | duration
 			}}</span></app-r-input
 		>
-
-		<mat-label>Authors:</mat-label>
-		<mat-form-field class="chip-list">
-			<mat-chip-grid #chipGrid aria-label="Authors selection">
-				<mat-chip-row
-					*ngFor="let author of authorsArray()"
-					(removed)="remove(author)"
+		<!-- AUTHORS CHIPS AUTHOCOMPLETE -->
+		<div>
+			<mat-label
+				>Authors:
+				<!-- Errors authors field -->
+				<div
+					class="mat-form-errors"
+					*ngIf="authors?.invalid && authors?.dirty && authors?.touched"
 				>
-					{{ author.name }} {{ author.lastName }}
-					<button matChipRemove [attr.aria-label]="'remove ' + author.id">
-						<mat-icon>cancel</mat-icon>
-					</button>
-				</mat-chip-row>
-			</mat-chip-grid>
-			<input
-				placeholder="New Author..."
-				#authorsInput
-				formControlName="authors"
-				[matChipInputFor]="chipGrid"
-				[matAutocomplete]="auto"
-				[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-				(matChipInputTokenEnd)="add($event)"
-			/>
-			<mat-autocomplete
-				#auto="matAutocomplete"
-				(optionSelected)="selected($event)"
+					<p *ngIf=" authors?.errors?.['customRequiered']" class="form-error">
+						*Please add Author Name
+					</p>
+					<p
+						*ngIf="
+						authors?.hasError('customValidation') &&
+						!authors?.errors?.['customRequiered']
+					"
+						class="form-error"
+					>
+						*{{ authors?.errors?.['customValidationMsg'] }}
+					</p>
+				</div></mat-label
 			>
-				<mat-option *ngFor="let author of filteredAuthors()" [value]="author">
-					{{ author.name }} {{ author.lastName }}
-				</mat-option>
-			</mat-autocomplete>
-		</mat-form-field>
+			<mat-form-field
+				class="chip-list"
+				[ngClass]="{
+				'mat-invalid':
+					(authors?.hasError('customValidation') ||
+						authors?.hasError('customRequiered')) &&
+					authors?.dirty &&
+					authors?.touched,				
+				'mat-valid': authors?.valid && authors?.dirty && authors?.touched,
+			}"
+			>
+				<mat-chip-grid #chipGrid aria-label="Authors selection">
+					<mat-chip-row
+						*ngFor="let author of authorsArray()"
+						(removed)="remove(author)"
+					>
+						{{ author.name }}
+						<button matChipRemove [attr.aria-label]="'remove ' + author.id">
+							<mat-icon>cancel</mat-icon>
+						</button>
+					</mat-chip-row>
+				</mat-chip-grid>
+				<input
+					placeholder="New Author..."
+					#authorsInput
+					formControlName="authors"
+					[matChipInputFor]="chipGrid"
+					[matAutocomplete]="auto"
+					[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+					(matChipInputTokenEnd)="add($event)"
+				/>
+
+				<mat-autocomplete
+					#auto="matAutocomplete"
+					(optionSelected)="selected($event)"
+				>
+					<mat-option *ngFor="let author of filteredAuthors()" [value]="author">
+						{{ author.name }}
+					</mat-option>
+				</mat-autocomplete>
+			</mat-form-field>
+		</div>
 
 		<!-- Buttons -->
 		<div class="actions">
-			<app-button [text]="'Save'" class="btn-course save" (click)="onSave()" />
+			<app-button
+				[text]="'Save'"
+				[type]="'submit'"
+				class="btn-course save"
+				[disabled]="courseForm.invalid"
+				[ngClass]="courseForm.invalid ? 'disabled' : ''"
+			/>
 			<app-button
 				[text]="'Cancel'"
 				class="btn-course cancel"
 				(click)="onCancel()"
 			/>
 		</div>
-	</div>
+	</form>
 </div>
