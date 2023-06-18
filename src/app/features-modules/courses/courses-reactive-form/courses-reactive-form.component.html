@@ -1,16 +1,8 @@
 <div class="form-wrapper">
 	<form
 		[formGroup]="courseForm"
-		(ngSubmit)="
-			courseForm.valid
-				? onSave() && courseForm.reset()
-				: $event.preventDefault()
-		"
-		(keyup.enter)="
-			courseForm.valid
-				? onSave() && courseForm.reset()
-				: $event.preventDefault()
-		"
+		(ngSubmit)="courseForm.valid ? onSave() : $event.preventDefault()"
+		(keyup.enter)="courseForm.valid ? onSave() : $event.preventDefault()"
 	>
 		<h1 class="title">{{ action }} Course</h1>
 		<!-- TITLE INPUT -->
