@@ -9,6 +9,7 @@ import { CoursesService } from './courses.service';
 import { action } from 'src/app/utils/global.model';
 import { of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { mockAuthors } from 'src/app/utils/authors-api';
 
 describe('CoursesService', () => {
 	let service: CoursesService;
@@ -188,6 +189,63 @@ describe('CoursesService', () => {
 					url: `http://localhost:3004/courses?sort=date&textFragment=______ABCDSDFG_____`,
 				})
 				.flush([]);
+		});
+	});
+	describe('getAuthors', () => {
+		it('should fetch all authors', (done: DoneFn) => {
+			service.getAuthors().subscribe((data) => {
+				expect(data).toEqual(mockAuthors);
+				expect(console.log).toHaveBeenCalled();
+				done();
+			});
+			httpController
+				.expectOne({
+					method: 'GET',
+					url: `http://localhost:3004/authors`,
+				})
+				.flush(mockAuthors);
+		});
+		it('should return []', (done: DoneFn) => {
+			service.getAuthors().subscribe((data) => {
+				expect(data).toEqual([]);
+				expect(console.log).toHaveBeenCalled();
+				done();
+			});
+			httpController
+				.expectOne({
+					method: 'GET',
+					url: `http://localhost:3004/authors`,
+				})
+				.flush([]);
+		});
+	});
+	describe('addAuthor', () => {
+		it('should add new author', (done: DoneFn) => {
+			const data = Object.assign({}, mockAuthors[0], { id: 111000222 });
+			service.addAuthor(data).subscribe(() => {
+				expect(console.log).toHaveBeenCalled();
+				done();
+			});
+			httpController
+				.expectOne({
+					method: 'POST',
+					url: `http://localhost:3004/authors`,
+				})
+				.flush(data);
+		});
+	});
+	describe('deleteAuthor', () => {
+		it('should delete author', (done: DoneFn) => {
+			service.deleteAuthor(mockAuthors[0]).subscribe(() => {
+				expect(console.log).toHaveBeenCalled();
+				done();
+			});
+			httpController
+				.expectOne({
+					method: 'DELETE',
+					url: `http://localhost:3004/authors/${mockAuthors[0]['id']}`,
+				})
+				.flush(mockAuthors[0]);
 		});
 	});
 });

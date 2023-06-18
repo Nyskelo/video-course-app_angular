@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { isLoggedInGuard } from 'src/app/core/guards/isLoggedIn.guard';
 import { CoursesResolver } from 'src/app/core/resolvers/courses.resolver';
 import { customPath } from 'src/app/utils/global.model';
-import { CourseCompositionComponent } from './course-composition/course-composition.component';
 import { CourseListComponent } from './course-list/course-list.component';
 import { CoursesReactiveFormComponent } from './courses-reactive-form/courses-reactive-form.component';
 import { CoursesComponent } from './courses.component';
@@ -23,7 +22,6 @@ const routes: Routes = [
 			{
 				path: customPath.courseAdd,
 				component: CoursesReactiveFormComponent,
-				// component: CourseCompositionComponent,
 				data: { title: 'New Course' },
 			},
 			{

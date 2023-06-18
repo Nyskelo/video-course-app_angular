@@ -14,6 +14,8 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { map, startWith } from 'rxjs/operators';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
+import * as moment from 'moment';
+
 import {
 	controlSpaces,
 	customRequiered,
@@ -192,25 +194,24 @@ export class CoursesReactiveFormComponent implements OnInit, OnDestroy {
 			this.authors?.markAsTouched();
 			return null;
 		}
+		const date = (this.courseForm.value.date as string).replace(
+			/(\d{2}).*(\d{2}).*(\d{4})/,
+			'$2-$1-$3'
+		);
 		const newCourse = {
 			...this.courseToUpdate,
-			name: this.courseForm.value.title as string,
-			description: this.courseForm.value.description as string,
+			name: `${this.courseForm.value.title}`,
+			description: `${this.courseForm.value.description}`,
 			length: Number(this.courseForm.value.duration),
-			date: new Date(this.courseForm.value.date as string).toLocaleDateString(
-				'en-GB',
-				{
-					day: 'numeric',
-					month: 'numeric',
-					year: 'numeric',
-				}
-			),
+			date: moment(date).format('YYYY-MM-DDTHH:mm'),
 			authors: this.authorsArray(),
 			isTopRated: false,
 		};
 		if (this.coursesService.isUpdating.action === 'Add') {
 			this.store.dispatch(
-				CoursesActions.addCourse({ course: { ...newCourse, id: Date.now() } })
+				CoursesActions.addCourse({
+					course: { ...newCourse, id: Date.now() },
+				})
 			);
 		}
 		if (this.coursesService.isUpdating.action === 'Edit') {

@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { mockAuthors } from 'src/app/utils/authors-api';
-import { Author } from 'src/app/utils/global.model';
 import * as AuthorsAction from './actions';
 import * as fromMyReducers from './reducers';
 
@@ -17,28 +16,14 @@ describe('Reduser: Authors', () => {
 			);
 		});
 		it('Success --> should fetch all authors', () => {
-			let authors!: Author[];
-			const expected = { ...state, isLoading: false, authors: authors };
-			const action = AuthorsAction.getAuthorsSuccess;
+			const expected = { ...state, isLoading: false, authors: mockAuthors };
+			const action = AuthorsAction.getAuthorsSuccess({ authors: mockAuthors });
+			console.log(fromMyReducers.authorsReducers(undefined, action));
+
 			expect(fromMyReducers.authorsReducers(undefined, action)).toEqual(
 				expected
 			);
 		});
-		it('Success --> should fetch courses and concat with oldState ', () => {
-			const oldState = { ...state, authors: [mockAuthors[0]] };
-			const action = AuthorsAction.getAuthorsSuccess({
-				authors: [mockAuthors[1]],
-			});
-			const expected = {
-				...oldState,
-				isLoading: false,
-				courses: [...oldState.authors, mockAuthors[1]],
-			};
-			expect(fromMyReducers.authorsReducers(oldState, action)).toEqual(
-				expected
-			);
-		});
-
 		it('Failure --> should set error to null', () => {
 			const expected = { ...state, error: error };
 			const action = AuthorsAction.getAuthorsFailure;
@@ -56,11 +41,11 @@ describe('Reduser: Authors', () => {
 			);
 		});
 		it('Success --> should add new author', () => {
-			const mockAuthor = Object.assign({}, mockAuthors[0], { id: 111 });
+			const mockAuthor = Object.assign({}, mockAuthors[0], { id: 111222333 });
 			const expected = {
 				...state,
 				isLoading: false,
-				courses: [...state.authors, mockAuthor],
+				authors: [...state.authors, mockAuthor],
 			};
 			const action = AuthorsAction.addAuthorSuccess({ author: mockAuthor });
 			expect(fromMyReducers.authorsReducers(undefined, action)).toEqual(

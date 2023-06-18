@@ -56,7 +56,7 @@
 		[type]="type"
 		[value]="value"
 		[id]="fieldName"
-		(input)="onChange($event)"
+		(input)="changed($any($event.target).value)"
 		(blur)="touched()"
 		[ngClass]="{
 			invalid: formField.invalid && formField.dirty && formField.touched,

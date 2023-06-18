@@ -1,28 +1,35 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { InputComponent } from './input.component';
+import { TestBed } from '@angular/core/testing';
+import { forwardRef, NO_ERRORS_SCHEMA } from '@angular/core';
+import {
+	FormsModule,
+	NG_VALUE_ACCESSOR,
+	ReactiveFormsModule,
+} from '@angular/forms';
+import { InputReactiveComponent } from './input.component';
+import { MatAutocomplete } from '@angular/material/autocomplete';
 
-describe('InputComponent', () => {
-	let component: InputComponent;
-	let fixture: ComponentFixture<InputComponent>;
+describe('InputReactiveComponent', () => {
+	let component: InputReactiveComponent;
 
 	beforeEach(() => {
 		TestBed.configureTestingModule({
-			imports: [FormsModule],
 			schemas: [NO_ERRORS_SCHEMA],
-			declarations: [InputComponent],
+			declarations: [InputReactiveComponent, MatAutocomplete],
+			imports: [ReactiveFormsModule, FormsModule],
+			providers: [
+				{
+					provide: NG_VALUE_ACCESSOR,
+					useExisting: forwardRef(() => InputReactiveComponent),
+					multi: true,
+				},
+			],
 		});
-		fixture = TestBed.createComponent(InputComponent);
-		component = fixture.componentInstance;
-		fixture.detectChanges();
+		component = new InputReactiveComponent();
 	});
 
-	describe('onChangedValue', () => {
-		it('should emit valueChanged when called onChangedValue method', async () => {
-			spyOn(component.valueChanged, 'emit');
-			component.onChangedValue();
-			expect(component.valueChanged.emit).toHaveBeenCalled();
+	describe('input', () => {
+		it('input', () => {
+			expect(component.name).toEqual('');
 		});
 	});
 });

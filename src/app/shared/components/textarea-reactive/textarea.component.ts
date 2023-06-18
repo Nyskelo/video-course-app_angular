@@ -54,8 +54,4 @@ export class TextareaReactiveComponent implements ControlValueAccessor {
 	setDisabledState(isDisabled: boolean): void {
 		this.isDisabled = isDisabled;
 	}
-	onChange(event: Event): void {
-		const value: string = (<HTMLTextAreaElement>event.target).value;
-		this.changed(value);
-	}
 }

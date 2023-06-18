@@ -57,8 +57,4 @@ export class InputReactiveComponent implements ControlValueAccessor {
 	setDisabledState(isDisabled: boolean): void {
 		this.isDisabled = isDisabled;
 	}
-	onChange(event: Event): void {
-		const value: string = (<HTMLInputElement>event.target).value;
-		this.changed(value);
-	}
 }
