@@ -182,8 +182,9 @@ export class CoursesReactiveFormComponent implements OnInit, OnDestroy {
 	}
 	private _filter(value: string): Author[] {
 		const regex = new RegExp(value, 'gi');
-		return this.allAuthors().filter((author: Author) =>
-			author.name.match(regex)
+		return this.allAuthors().filter(
+			(author: Author) =>
+				author.name.match(regex) && !this.authorsArray().includes(author)
 		);
 	}
 
