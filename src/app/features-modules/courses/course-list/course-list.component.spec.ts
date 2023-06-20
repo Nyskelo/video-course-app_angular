@@ -17,6 +17,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { of } from 'rxjs';
 import { initStateUser } from 'src/app/store/user/reducers';
 import { initStateCourses } from 'src/app/store/courses/reducers';
+import { initStateAuthors } from 'src/app/store/authors/reducers';
 
 describe('CourseListComponent', () => {
 	let component: CourseListComponent;
@@ -46,6 +47,7 @@ describe('CourseListComponent', () => {
 					initialState: {
 						courses: initStateCourses,
 						user: initStateUser,
+						authors: initStateAuthors,
 					},
 				}),
 			],

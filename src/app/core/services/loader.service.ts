@@ -3,6 +3,7 @@ import { select, Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { AppStateInterface } from 'src/app/store';
 import * as courses from 'src/app/store/courses/selectors';
+import * as authors from 'src/app/store/authors/selectors';
 import * as user from 'src/app/store/user/selectors';
 
 @Injectable({
@@ -18,6 +19,9 @@ export class LoaderService {
 		.subscribe((boolean) => this.isLoading.next(boolean));
 	isLoadingCourses = this.store
 		.pipe(select(user.isLoadingSelector))
+		.subscribe((boolean) => this.isLoading.next(boolean));
+	isLoadingAuthors = this.store
+		.pipe(select(authors.isLoadingSelector))
 		.subscribe((boolean) => this.isLoading.next(boolean));
 
 	show() {

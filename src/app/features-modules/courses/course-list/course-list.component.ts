@@ -7,7 +7,6 @@ import {
 	OnInit,
 	signal,
 	ViewChild,
-	ViewEncapsulation,
 } from '@angular/core';
 import { FilterPipe } from 'src/app/shared/pipes/filter.pipe';
 import { action, Course } from 'src/app/utils/global.model';
@@ -34,7 +33,6 @@ import { AppStateInterface } from 'src/app/store';
 	templateUrl: './course-list.component.html',
 	styleUrls: ['./course-list.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	encapsulation: ViewEncapsulation.None,
 })
 export class CourseListComponent implements OnInit, OnDestroy, AfterViewInit {
 	constructor(

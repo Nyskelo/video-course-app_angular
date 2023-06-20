@@ -1,30 +1,30 @@
 <div class="login" *ngIf="!token">
-	<div class="login-form">
+	<form
+		class="login-form"
+		[formGroup]="form"
+		(ngSubmit)="form.valid ? onSubmit() : $event.preventDefault()"
+		(keyup.enter)="form.valid ? onSubmit() : $event.preventDefault()"
+	>
 		<h1 class="login-title">Login</h1>
-		<label for="email" class="label-title"
-			><p>Email: <span class="required">*required</span></p>
-			<app-input
-				[title]="'email'"
-				[placeholder]="'Email'"
-				[id]="'email'"
-				(valueChanged)="onInputEmailValue($event)"
-				class="input-login"
-			/>
-		</label>
-		<label for="password" class="label-title"
-			><p>Password: <span class="required">*required</span></p>
-			<app-input
-				[title]="'password'"
-				[type]="'password'"
-				[placeholder]="'Password'"
-				[id]="'password'"
-				(valueChanged)="onInputPasswordValue($event)"
-				class="input-login"
-			/>
-		</label>
+		<app-r-input
+			formControlName="email"
+			[parentForm]="form"
+			fieldName="email"
+			[minLength]="2"
+			[maxLength]="20"
+		/>
+		<app-r-input
+			formControlName="password"
+			[parentForm]="form"
+			fieldName="password"
+			[type]="'password'"
+			[minLength]="2"
+			[maxLength]="20"
+		/>
+
 		<div>
 			<a href="#"><span class="link">Forgot password?</span></a>
 			<app-button [text]="'Login'" class="btn-login" (click)="onSubmit()" />
 		</div>
-	</div>
+	</form>
 </div>

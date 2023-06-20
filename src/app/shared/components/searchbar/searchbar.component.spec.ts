@@ -30,9 +30,8 @@ describe('SearchbarComponent', () => {
 	});
 	describe('onClear', () => {
 		it('should reset input value', () => {
-			spyOn(component.childInput.valueChanged, 'emit');
 			component.onClear();
-			expect(component.childInput.valueChanged.emit).toHaveBeenCalledWith('');
+			expect(component.form.value.search).toEqual('');
 		});
 	});
 });

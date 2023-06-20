@@ -6,6 +6,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { StoreModule } from '@ngrx/store';
 import { initStateCourses } from 'src/app/store/courses/reducers';
 import { initStateUser } from 'src/app/store/user/reducers';
+import { initStateAuthors } from 'src/app/store/authors/reducers';
 
 describe('Service: Loader', () => {
 	beforeEach(() => {
@@ -16,6 +17,7 @@ describe('Service: Loader', () => {
 					initialState: {
 						courses: initStateCourses,
 						user: initStateUser,
+						authors: initStateAuthors,
 					},
 				}),
 			],

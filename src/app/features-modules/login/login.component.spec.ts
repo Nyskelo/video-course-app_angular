@@ -42,37 +42,19 @@ describe('LoginComponent', () => {
 		spyOn(window, 'alert');
 	});
 
-	describe('onInputEmailValue', () => {
-		it('should set email value', () => {
-			spyOn(component, 'onInputEmailValue').and.callThrough();
-			const newInputValue = 'new-email';
-			component.onInputEmailValue(newInputValue);
-			expect(component.email()).toEqual(newInputValue);
-		});
-	});
-
-	describe('onInputPasswordValue', () => {
-		it('should set password value', () => {
-			spyOn(component, 'onInputPasswordValue').and.callThrough();
-			const newInputValue = 'new-password';
-			component.onInputPasswordValue(newInputValue);
-			expect(component.password()).toEqual(newInputValue);
-		});
-	});
-
 	describe('onSubmit', () => {
 		it('should not be called if any field is empty', () => {
 			spyOn(component, 'onSubmit').and.callThrough();
-			component.email.set('');
-			component.password.set('one');
+			component.email.setValue('');
+			component.password.setValue('one');
 			component.onSubmit();
 			expect(window.alert).toHaveBeenCalled();
 		});
 
 		it('should call the service login method if the data is valid', () => {
 			spyOn(mockedStore, 'dispatch').and.callThrough();
-			component.email.set('not empty');
-			component.password.set('not empty');
+			component.email.setValue('not empty');
+			component.password.setValue('not empty');
 			component.onSubmit();
 			expect(mockedStore.dispatch).toHaveBeenCalled();
 		});

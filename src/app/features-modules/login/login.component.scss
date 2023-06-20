@@ -12,9 +12,7 @@
 		&-title {
 			justify-self: left;
 		}
-		& .label-title {
-			@include label-title;
-		}
+
 		& .link {
 			font-size: x-small;
 			float: left;

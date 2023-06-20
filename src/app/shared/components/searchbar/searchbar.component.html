@@ -1,8 +1,11 @@
-<div>
-	<app-input
+<form #form="ngForm">
+	<input
 		[title]="'search'"
 		[placeholder]="'Type to search'"
-		(valueChanged)="onInputValueChanged($event)"
 		class="myInput"
-	></app-input>
-</div>
+		type="text"
+		name="search"
+		ngModel
+		(input)="onInputValueChanged(form.value.search)"
+	/>
+</form>

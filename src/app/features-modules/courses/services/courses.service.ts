@@ -1,7 +1,12 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, retry, Subject, tap } from 'rxjs';
-import { action, Course, CourseState } from 'src/app/utils/global.model';
+import {
+	action,
+	Author,
+	Course,
+	CourseState,
+} from 'src/app/utils/global.model';
 
 @Injectable({
 	providedIn: 'root',
@@ -18,10 +23,12 @@ export class CoursesService {
 		headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
 	};
 	url = `http://localhost:3004/courses`;
+	urlAuthors = `http://localhost:3004/authors`;
 
 	private _saveOperationSuccessfulEvent$: Subject<{
 		action: action;
 		course?: Course;
+		author?: Author;
 	}> = new Subject();
 
 	private _searchResultSubject$: Subject<string> = new Subject();
@@ -55,6 +62,17 @@ export class CoursesService {
 				}),
 				retry(2)
 			);
+	}
+	getAuthors() {
+		return this.http.get<Author[]>(`${this.urlAuthors}`).pipe(
+			tap((data) => {
+				console.log(`fetched ${data.length} authors`);
+				this._saveOperationSuccessfulEvent$.next({
+					action: data.length ? action.GET : action.EMPTY,
+				});
+			}),
+			retry(2)
+		);
 	}
 
 	getCourseByID(id: number) {
@@ -108,6 +126,20 @@ export class CoursesService {
 		);
 	}
 
+	addAuthor(author: Author) {
+		return this.http
+			.post<Author>(`${this.urlAuthors}`, author, this.httpOptions)
+			.pipe(
+				tap((newAuthor: Author) => {
+					console.log(`added author w/ id=${newAuthor.id}`);
+					this._saveOperationSuccessfulEvent$.next({
+						action: action.ADD,
+						author: newAuthor,
+					});
+				})
+			);
+	}
+
 	deleteCourse(course: Course) {
 		return this.http
 			.delete<Course[]>(`${this.url}/${course.id}`, this.httpOptions)
@@ -117,6 +149,20 @@ export class CoursesService {
 					this._saveOperationSuccessfulEvent$.next({
 						action: action.DELETE,
 						course: course,
+					});
+				})
+			);
+	}
+
+	deleteAuthor(author: Author) {
+		return this.http
+			.delete<Author[]>(`${this.urlAuthors}/${author.id}`, this.httpOptions)
+			.pipe(
+				tap(() => {
+					console.log(`deleted author id=${author.id}`);
+					this._saveOperationSuccessfulEvent$.next({
+						action: action.DELETE,
+						author: author,
 					});
 				})
 			);

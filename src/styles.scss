@@ -56,5 +56,75 @@ textarea {
 	min-width: 150px;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+	height: 100%;
+}
+body {
+	margin: 0;
+	font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+//Chips-mat-autocomplete
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+	background-color: #fff;
+	background-clip: padding-box;
+	border: 1px solid #bdbdbd;
+	border-radius: 0.25rem;
+	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.mdc-text-field--filled:not(.mdc-text-field--disabled):focus-within {
+	color: #212529;
+	background-color: #fff;
+	border-color: #bdbdbd;
+	outline: 0;
+	box-shadow: 0 0 0 0.22rem rgba(158, 158, 158, 0.25);
+}
+.mat-mdc-form-field-focus-overlay {
+	/* background-color: rgba(0,0,0,.87); */
+	color: #212529;
+	background-color: #fff;
+	border: 1px solid red;
+	outline: 0;
+	box-shadow: 0 0 0 0.2rem rgba(158, 158, 158, 0.25);
+}
+.mat-mdc-form-field {
+	margin: 5px 0 20px 0;
+}
+.mdc-text-field--filled .mdc-line-ripple::after {
+	border-bottom-color: var(--mdc-theme-primary, #66a300);
+}
+.mdc-text-field--no-label:not(.mdc-text-field--outlined):not(
+		.mdc-text-field--textarea
+	)
+	.mat-mdc-form-field-infix {
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+.chip-list {
+	width: 100%;
+}
+.mdc-text-field {
+	padding: 0 10px !important;
+}
+.mat-invalid {
+	border-left: 4px solid red;
+	border-bottom-left-radius: 5px;
+	border-top-left-radius: 5px;
+}
+.mat-valid {
+	border-left: 4px solid rgb(26, 255, 0);
+	border-bottom-left-radius: 5px;
+	border-top-left-radius: 5px;
+}
+.mat-form-errors {
+	color: #db3a34;
+	font-style: italic;
+	text-align: right;
+	& .form-error {
+		margin: 0;
+	}
+}
+.mat-mdc-form-field-subscript-wrapper {
+	display: none;
+}

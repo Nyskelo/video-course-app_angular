@@ -8,12 +8,14 @@ import { FilterPipe } from 'src/app/shared/pipes/filter.pipe';
 import { CourseCompositionComponent } from './course-composition/course-composition.component';
 import { RouteReuseStrategy } from '@angular/router';
 import { CustomRouteReuseStrategy } from 'src/app/features-modules/courses/cache-reuse-strategy.strategy';
+import { CoursesReactiveFormComponent } from './courses-reactive-form/courses-reactive-form.component';
 
 @NgModule({
 	declarations: [
 		CoursesComponent,
 		CourseListComponent,
 		CourseCompositionComponent,
+		CoursesReactiveFormComponent,
 	],
 	imports: [CoursesRoutingModule, SharedModule],
 	exports: [CoursesComponent, CoursesRoutingModule],

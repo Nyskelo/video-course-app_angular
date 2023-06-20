@@ -89,7 +89,9 @@ export class CourseCompositionComponent implements OnInit, OnDestroy {
 		};
 		if (this.coursesService.isUpdating.action === 'Add') {
 			this.store.dispatch(
-				CoursesActions.addCourse({ course: { ...newCourse, id: Date.now() } })
+				CoursesActions.addCourse({
+					course: { ...newCourse, id: Date.now() },
+				})
 			);
 		}
 		if (this.coursesService.isUpdating.action === 'Edit') {

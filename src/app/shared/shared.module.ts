@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, CommonModule, NgFor } from '@angular/common';
 import { InputComponent } from './components/input/input.component';
 import { ButtonComponent } from './components/button/button.component';
 import { IconsModule } from './components/icons/_icons.module';
 import { SearchbarComponent } from './components/searchbar/searchbar.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DurationPipe } from './pipes/duration.pipe';
 import { OrderByPipe } from './pipes/orderBy.pipe';
 import { FilterPipe } from './pipes/filter.pipe';
@@ -13,7 +13,13 @@ import { StarDirective } from './directives/star.directive';
 import { IsAuthenticatedDirective } from './directives/isAuthenticated.directive';
 import { TextareaComponent } from './components/textarea/textarea.component';
 import { PaginationModule } from './components/pagination/pagination.module';
-
+import { InputReactiveComponent } from './components/input_reactive/input.component';
+import { TextareaReactiveComponent } from './components/textarea-reactive/textarea.component';
+import { DateValidatorDirective } from './directives/dateValidator.directive';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 @NgModule({
 	declarations: [
 		InputComponent,
@@ -26,8 +32,23 @@ import { PaginationModule } from './components/pagination/pagination.module';
 		StarDirective,
 		IsAuthenticatedDirective,
 		TextareaComponent,
+		InputReactiveComponent,
+		TextareaReactiveComponent,
+		DateValidatorDirective,
 	],
-	imports: [CommonModule, FormsModule, IconsModule, PaginationModule],
+	imports: [
+		CommonModule,
+		FormsModule,
+		IconsModule,
+		PaginationModule,
+		MatFormFieldModule,
+		MatChipsModule,
+		NgFor,
+		MatIconModule,
+		MatAutocompleteModule,
+		ReactiveFormsModule,
+		AsyncPipe,
+	],
 	exports: [
 		CommonModule,
 		FormsModule,
@@ -43,6 +64,16 @@ import { PaginationModule } from './components/pagination/pagination.module';
 		IsAuthenticatedDirective,
 		TextareaComponent,
 		PaginationModule,
+		InputReactiveComponent,
+		TextareaReactiveComponent,
+		DateValidatorDirective,
+		MatFormFieldModule,
+		MatChipsModule,
+		NgFor,
+		MatIconModule,
+		MatAutocompleteModule,
+		ReactiveFormsModule,
+		AsyncPipe,
 	],
 })
 export class SharedModule {}

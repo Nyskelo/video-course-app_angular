@@ -1,3 +1,4 @@
+import { initStateAuthors } from '../authors/reducers';
 import { initStateCourses } from '../courses/reducers';
 import { initStateUser } from './reducers';
 import * as fromMySelectors from './selectors';
@@ -8,6 +9,7 @@ describe('isLoggedInSelector', () => {
 			fromMySelectors.selectFeature({
 				user: initStateUser,
 				courses: initStateCourses,
+				authors: initStateAuthors,
 			})
 		).toEqual(initStateUser);
 	});

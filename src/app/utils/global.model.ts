@@ -11,7 +11,6 @@ export interface Course {
 export interface Author {
 	id: string | number;
 	name: string;
-	lastName?: string;
 }
 export class User {
 	id!: number;

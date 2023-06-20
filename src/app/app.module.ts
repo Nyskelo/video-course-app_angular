@@ -19,6 +19,8 @@ import { coursesReducers } from './store/courses/reducers';
 import { userReducers } from './store/user/reducers';
 import { CoursesEffects } from './store/courses/effects';
 import { UserEffects } from './store/user/effects';
+import { authorsReducers } from './store/authors/reducers';
+import { AuthorsEffects } from './store/authors/effects';
 
 @NgModule({
 	declarations: [
@@ -36,8 +38,12 @@ import { UserEffects } from './store/user/effects';
 		HttpClientModule,
 		BrowserAnimationsModule,
 		MatProgressSpinnerModule,
-		EffectsModule.forRoot([CoursesEffects, UserEffects]),
-		StoreModule.forRoot({ courses: coursesReducers, user: userReducers }),
+		EffectsModule.forRoot([CoursesEffects, UserEffects, AuthorsEffects]),
+		StoreModule.forRoot({
+			courses: coursesReducers,
+			user: userReducers,
+			authors: authorsReducers,
+		}),
 		StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
 	],
 	providers: [],
