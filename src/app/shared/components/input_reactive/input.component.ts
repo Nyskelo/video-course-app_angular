@@ -30,6 +30,7 @@ export class InputReactiveComponent implements ControlValueAccessor {
 	@Input() id = '';
 	@Input() name = '';
 	@Input() type = 'text';
+	@Input() label = 'text';
 	@Input() maxLength = 0;
 	@Input() minLength = 0;
 	@Input() parentForm!: FormGroup;

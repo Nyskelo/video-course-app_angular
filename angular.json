@@ -17,6 +17,7 @@
 				"build": {
 					"builder": "@angular-devkit/build-angular:browser",
 					"options": {
+						"allowedCommonJsDependencies": ["@messageformat/core", "moment"],
 						"outputPath": "dist/video-course-app_angular",
 						"index": "src/index.html",
 						"main": "src/main.ts",
@@ -25,9 +26,9 @@
 						"inlineStyleLanguage": "scss",
 						"assets": ["src/favicon.ico", "src/assets"],
 						"styles": [
-              "@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.scss"
-            ],
+							"@angular/material/prebuilt-themes/indigo-pink.css",
+							"src/styles.scss"
+						],
 						"scripts": [],
 						"aot": true
 					},
@@ -84,9 +85,9 @@
 						"inlineStyleLanguage": "scss",
 						"assets": ["src/favicon.ico", "src/assets"],
 						"styles": [
-              "@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.scss"
-            ],
+							"@angular/material/prebuilt-themes/indigo-pink.css",
+							"src/styles.scss"
+						],
 						"scripts": []
 					}
 				},

@@ -128,3 +128,20 @@ body {
 .mat-mdc-form-field-subscript-wrapper {
 	display: none;
 }
+.mat-input {
+	margin-left: 2px !important;
+	&::placeholder {
+		color: rgb(204, 204, 204) !important;
+		font-weight: 200;
+	}
+}
+.selected::after {
+	content: '☑';
+	color: rgb(51, 0, 255);
+	position: relative;
+	right: 5px;
+	font-size: 20px;
+}
+.mat-pseudo-checkbox {
+	display: none !important;
+}

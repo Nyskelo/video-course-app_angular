@@ -1,0 +1,51 @@
+{
+	"common": {
+		"placeholder": "Type here...",
+		"placeholder-search": "Type to search...",
+		"add": "Add",
+		"edit": "Edit",
+		"save": "Save",
+		"cancel": "Cancel",
+		"delete": "Delete"
+	},
+	"auth": {
+		"logged": "login",
+		"logoff": "Log off",
+		"password": "password",
+		"email": "email",
+		"login": "login",
+		"link_1": "Forgot password?"
+	},
+	"courses": {
+		"course": "course",
+		"course-add": "Add course",
+		"course-name": "Video course",
+		"courses": "courses",
+		"courses-search-data": "found {value1,plural, one{# course} other{# courses}} matching --> {value2}",
+		"courses-search-nodata": "no courses matching --> {value}",
+		"title": "title",
+		"description": "description",
+		"date": "date",
+		"duration": "duration",
+		"duration-placeholder": "Enter the minutes...",
+		"duration-min": "min",
+		"duration-hours": "h",
+		"authors": "authors",
+		"authors-placeholder": "New author..."
+	},
+	"errors": {
+		"required": "*Please provide {{value}}",
+		"date-format": "*Please provide correct date format - {value}",
+		"minLength": "*{value1} must be a minimum of {value2} characters",
+		"maxLength": "*{value1} must be a maximum of {value2} characters",
+		"pattern": "*Please enter valid text",
+		"errorNameAndLastnameExpected": "*Please add correct first name and lastname",
+		"errorAuthorNameExpected": "*Please add Author Name",
+		"greaterThenZero1": "*Duration cannot start with 0",
+		"greaterThenZero2": "*Duration should be greater than 0"
+	},
+	"pagination": {
+		"load-more": "LOAD MORE",
+		"no-data": "NO DATA, FEEL FREE TO ADD NEW COURSE"
+	}
+}

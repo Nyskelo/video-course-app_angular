@@ -27,7 +27,9 @@
 		<label for="duration" class="label-title w-25"
 			><p>
 				Duration: <span class="required">*required</span
-				><span class="duration-info">{{ duration | duration }}</span>
+				><span class="duration-info">{{
+					duration | duration : { h: 'h', min: 'min' }
+				}}</span>
 			</p>
 			<app-input
 				[title]="'duration'"

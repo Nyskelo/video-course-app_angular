@@ -1,0 +1,6 @@
+{
+    "recommendations": [
+        "chr33z.lingua-vscode",
+        "lingva":"../src/assets/i18n/*.json",
+    ]
+}

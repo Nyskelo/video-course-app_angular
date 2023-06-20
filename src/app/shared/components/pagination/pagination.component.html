@@ -11,6 +11,6 @@
 		(click)="loadMore.emit(pages().length + 1)"
 		[ngClass]="{ disabled: loadButton }"
 	>
-		LOAD MORE
+		{{ label }}
 	</li>
 </ul>

@@ -1,14 +1,14 @@
 <div class="form-row">
 	<!-- LABEL-->
 	<label class="label" for="{{ fieldName }}"
-		>{{ fieldName | titlecase }}:
+		>{{ label | titlecase }}:
 		<!-- VALIDATION -->
 		<div
 			class="form-errors"
 			*ngIf="formField?.invalid && formField.dirty && formField.touched"
 		>
 			<p *ngIf=" formField?.errors?.['required']" class="form-error">
-				*Please provide {{ fieldName }}
+				{{ 'errors.required' | translate : { value: label } }}
 			</p>
 			<p
 				*ngIf="
@@ -18,8 +18,10 @@
 				"
 				class="form-error"
 			>
-				*{{ fieldName | titlecase }} must be a minimum of
-				{{ minLength }} characters
+				{{
+					'errors.minLength'
+						| translate : { value1: label | titlecase, value2: minLength }
+				}}
 			</p>
 			<p
 				*ngIf="
@@ -29,14 +31,16 @@
 				"
 				class="form-error"
 			>
-				*{{ fieldName | titlecase }} must be a maximum of
-				{{ maxLength }} characters
+				{{
+					'errors.maxLength'
+						| translate : { value1: label | titlecase, value2: maxLength }
+				}}
 			</p>
 			<p
 				*ngIf="formField.hasError('pattern') && !formField.hasError('required')"
 				class="form-error"
 			>
-				*Please enter valid text
+				{{ 'errors.pattern' | translate }}
 			</p>
 		</div></label
 	>

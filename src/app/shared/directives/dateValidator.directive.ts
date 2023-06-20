@@ -17,13 +17,13 @@ import {
 	],
 })
 export class DateValidatorDirective implements Validator {
-	@Input() appDateValidator!: { reg: RegExp; format: string };
+	@Input() appDateValidator!: { reg: RegExp; format: string; error: string };
 	validate(control: AbstractControl): ValidationErrors | null {
 		const correctFormat = this.appDateValidator.reg.test(control.value);
 		return !correctFormat
 			? {
 					customValidation: true,
-					customValidationMsg: `Please provide correct date format - ${this.appDateValidator.format}`,
+					customValidationMsg: this.appDateValidator.error,
 			  }
 			: null;
 	}
