@@ -18,6 +18,7 @@
 	},
 	"courses": {
 		"course": "course",
+		"course-new": "New Course",
 		"course-add": "Add course",
 		"course-name": "Video course",
 		"courses": "courses",

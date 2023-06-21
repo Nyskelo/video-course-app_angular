@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { storeTranslate } from 'src/app/core/components/header/header.component';
 import { isLoggedInGuard } from 'src/app/core/guards/isLoggedIn.guard';
 import { CoursesResolver } from 'src/app/core/resolvers/courses.resolver';
 import { customPath } from 'src/app/utils/global.model';
@@ -17,17 +18,18 @@ const routes: Routes = [
 			{
 				path: customPath.coursesList,
 				component: CourseListComponent,
-				data: { title: 'Courses', shouldReuse: true },
+				data: { shouldReuse: true },
+				title: 'Courses',
 			},
 			{
 				path: customPath.courseAdd,
 				component: CoursesReactiveFormComponent,
 				data: { title: 'New Course' },
+				title: () => storeTranslate.instant('courses.course-new'),
 			},
 			{
 				path: customPath.courseEdit,
 				component: CoursesReactiveFormComponent,
-				// component: CourseCompositionComponent,
 				data: { title: 'Edit Course' },
 				resolve: { course: CoursesResolver },
 			},

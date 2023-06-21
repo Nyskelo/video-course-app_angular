@@ -6,6 +6,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
 import * as UserActions from 'src/app/store/user/actions';
 import { AppStateInterface } from 'src/app/store';
+import { storeTranslate } from './core/components/header/header.component';
 @UntilDestroy({ checkProperties: true })
 @Component({
 	selector: 'app-root',
@@ -25,6 +26,15 @@ export class AppComponent implements OnInit {
 	}
 
 	ngOnInit() {
+		//subscribe to dynumically translate title "New Course"
+		storeTranslate.onLangChange.subscribe(() => {
+			if (this.router.url?.match(/new/g)) {
+				this.titleService.setTitle(
+					storeTranslate.instant('courses.course-new')
+				);
+			}
+		});
+
 		this.token &&
 			this.store.dispatch(UserActions.userAuth({ token: this.token }));
 		this.setTitle();
@@ -40,11 +50,9 @@ export class AppComponent implements OnInit {
 
 	setTitle() {
 		this.router.events.subscribe(() => {
-			this.getChild(this.activatedRoute).data.subscribe(({ course, title }) => {
+			this.getChild(this.activatedRoute).data.subscribe(({ course }) => {
 				if (course) {
 					this.titleService.setTitle(course['name']);
-				} else {
-					this.titleService.setTitle(title);
 				}
 			});
 		});
