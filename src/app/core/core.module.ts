@@ -4,7 +4,6 @@ import { SharedModule } from '../shared/shared.module';
 import { CoursesResolver } from './resolvers/courses.resolver';
 import { AuthTokenInterceptorService } from './services/auth-token-interceptor.service';
 import { AuthService } from './services/auth.service';
-// import { LoaderInterceptor } from './services/loader-intersceptor.service';
 import { LoaderService } from './services/loader.service';
 
 @NgModule({
@@ -20,11 +19,6 @@ import { LoaderService } from './services/loader.service';
 			useClass: AuthTokenInterceptorService,
 			multi: true,
 		},
-		// {
-		// 	provide: HTTP_INTERCEPTORS,
-		// 	useClass: LoaderInterceptor,
-		// 	multi: true,
-		// },
 	],
 })
 export class CoreModule {}

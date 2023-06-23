@@ -2,12 +2,25 @@
 	<app-logo></app-logo>
 	<nav *ngIf="isGoggedIn$ | async">
 		<ul>
-			<li><app-i-person class="icons" />{{ userName() }} login</li>
 			<li>
-				<app-button [text]="'Log off'" class="btn-logoff" (click)="onLogout()"
+				<app-i-person class="icons" />{{ userName() }}
+				{{ 'auth.logged' | translate }}
+			</li>
+			<li>
+				<app-button
+					[text]="'auth.logoff' | translate | titlecase"
+					class="btn-logoff"
+					(click)="onLogout()"
 					><app-i-output class="icons"
 				/></app-button>
 			</li>
 		</ul>
 	</nav>
+	<label for=""
+		><select #languageselect (change)="translate.use(languageselect.value)">
+			<option *ngFor="let lang of translate.getLangs()" value="{{ lang }}">
+				{{ lang }}
+			</option>
+		</select>
+	</label>
 </header>

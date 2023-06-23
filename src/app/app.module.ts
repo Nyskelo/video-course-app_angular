@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -21,7 +21,17 @@ import { CoursesEffects } from './store/courses/effects';
 import { UserEffects } from './store/user/effects';
 import { authorsReducers } from './store/authors/reducers';
 import { AuthorsEffects } from './store/authors/effects';
+import {
+	TranslateCompiler,
+	TranslateLoader,
+	TranslateModule,
+} from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 
+export function HttpLoaderFactory(http: HttpClient) {
+	return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -45,8 +55,18 @@ import { AuthorsEffects } from './store/authors/effects';
 			authors: authorsReducers,
 		}),
 		StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
+		TranslateModule.forRoot({
+			loader: {
+				provide: TranslateLoader,
+				useFactory: HttpLoaderFactory,
+				deps: [HttpClient],
+			},
+			compiler: {
+				provide: TranslateCompiler,
+				useClass: TranslateMessageFormatCompiler,
+			},
+		}),
 	],
-	providers: [],
 	bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,0 +1,52 @@
+{
+	"common": {
+		"placeholder": "Введіть тут...",
+		"placeholder-search": "Пошук...",
+		"add": "Додати",
+		"edit": "Редагувати",
+		"save": "Зберегти",
+		"cancel": "Назад",
+		"delete": "Видалити"
+	},
+	"auth": {
+		"logged": "увійш(-ов/-ла)",
+		"logoff": "вийти",
+		"password": "пароль",
+		"email": "електронна пошта",
+		"login": "увійти",
+		"link_1": "Забули пароль?"
+	},
+	"courses": {
+		"course": "курс",
+		"course-new": "Новий курс",
+		"course-name": "Відео курс",
+		"course-add": "Додати курс",
+		"courses": "курси",
+		"courses-search-data": "знайдено {value1,plural, one{# курс} few{#курса} other{# курсів}} matching --> {value2}",
+		"courses-search-nodata": "нічого не знайдено за запитом --> {value}",
+		"title": "назва",
+		"description": "опис",
+		"date": "дата",
+		"duration": "тривалість",
+		"duration-placeholder": "Введіть хвилини...",
+		"duration-min": "хв",
+		"duration-hours": "г",
+		"authors": "автори",
+		"authors-placeholder": "Додати автора..."
+	},
+	"errors": {
+		"required": "*Будь-ласка, введіть значення",
+		"date-format": "*Будь ласка, вкажіть правильний формат дати - {value}",
+		"minLength": "*{value1} має бути не менше {value2} знаків",
+		"maxLength": "*{value1} має бути не більше {value2} знаків",
+		"pattern": "*Будь-ласка, введіть корректний текст",
+		"errorNameAndLastnameExpected": "*Будь ласка, вкажіть правильне ім'я та прізвище",
+		"errorAuthorNameExpected": "*Будь ласка, додайте автора",
+		"greaterThenZero1": "*Тривалість не може починатися з 0",
+		"greaterThenZero2": "*Тривалість повинна бути більше, ніж 0"
+	},
+	"pagination": {
+		"load-more": "ЗАВАНТАЖИТИ БІЛЬШЕ",
+		"no-data": "ЗА ЗАПИТОМ НІЧОГО НЕ ЗНАЙДЕНО, СМІЛИВО ДОДАВАЙТЕ НОВИЙ КУРС"
+	}
+}

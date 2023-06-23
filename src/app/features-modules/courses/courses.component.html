@@ -1,7 +1,7 @@
 <div class="wrapper">
 	<section>
 		<h4 class="routeTitle">
-			Courses
+			{{ 'courses.courses' | translate | titlecase }}
 			<span *ngIf="routeTitle && routeTitle !== 'Courses'"
 				>/ {{ routeTitle }}</span
 			>
@@ -10,5 +10,4 @@
 	<main>
 		<router-outlet></router-outlet>
 	</main>
-	<!-- <app-courses-reactive-form></app-courses-reactive-form> -->
 </div>

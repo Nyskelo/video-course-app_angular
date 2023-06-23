@@ -19,12 +19,11 @@ import * as moment from 'moment';
 import {
 	controlSpaces,
 	customRequiered,
-	errorAuthorNameExpected,
-	errorNameAndLastnameExpected,
 	greaterThenZero,
 	oneSpaceExpected,
 } from '../util/form-validations.helpers';
 import { authorsSelector } from 'src/app/store/authors/selectors';
+import { storeTranslate } from 'src/app/core/components/header/header.component';
 @UntilDestroy({ checkProperties: true })
 @Component({
 	selector: 'app-courses-reactive-form',
@@ -51,7 +50,13 @@ export class CoursesReactiveFormComponent implements OnInit, OnDestroy {
 	announcer = inject(LiveAnnouncer);
 
 	//FormGroup
-	dateFormat = { reg: /^\d{2}\/\d{2}\/\d{4}$/, format: 'dd/mm/yyyy' };
+	dateFormat = {
+		reg: /^\d{2}\/\d{2}\/\d{4}$/,
+		format: 'dd/mm/yyyy',
+		error: storeTranslate.instant('errors.date-format', {
+			value: 'dd/mm/yyyy',
+		}),
+	};
 	courseForm = this.fb.group({
 		title: [
 			'',
@@ -128,9 +133,7 @@ export class CoursesReactiveFormComponent implements OnInit, OnDestroy {
 		this.activatedRoute.data.subscribe(({ course }) => {
 			if (course) {
 				this.courseToUpdate = course;
-				this.authors?.setValue(course.authors);
 				this.authorsArray.set(course.authors);
-				this.allAuthors.set(course.authors);
 				this.duration?.setValue(course.length);
 				this.title?.setValue(course.name);
 				this.description?.setValue(course.description);
@@ -149,7 +152,9 @@ export class CoursesReactiveFormComponent implements OnInit, OnDestroy {
 	add(event: MatChipInputEvent): void {
 		const author = (event.value || '').trim();
 		if (author && author.split(' ').length < 2) {
-			this.authors?.setErrors(errorNameAndLastnameExpected);
+			this.authors?.setErrors({
+				customFullNameRequiered: true,
+			});
 			this.authors?.markAsTouched();
 			return;
 		}
@@ -176,22 +181,24 @@ export class CoursesReactiveFormComponent implements OnInit, OnDestroy {
 		}
 	}
 	selected(event: MatAutocompleteSelectedEvent): void {
-		this.authorsArray.update((prev) => [...prev, event.option.value]);
+		!this.authorsArray().includes(event.option.value) &&
+			this.authorsArray.update((prev) => [...prev, event.option.value]);
 		this.authorsInput.nativeElement.value = '';
 		this.authors?.setValue(null);
 	}
 	private _filter(value: string): Author[] {
 		const regex = new RegExp(value, 'gi');
-		return this.allAuthors().filter(
-			(author: Author) =>
-				author.name.match(regex) && !this.authorsArray().includes(author)
+		return this.allAuthors().filter((author: Author) =>
+			author.name.match(regex)
 		);
 	}
 
 	//Course action methods
 	onSave() {
 		if (!this.authorsArray().length) {
-			this.authors?.setErrors(errorAuthorNameExpected);
+			this.authors?.setErrors({
+				customRequiered: true,
+			});
 			this.authors?.markAsTouched();
 			return null;
 		}
@@ -229,7 +236,9 @@ export class CoursesReactiveFormComponent implements OnInit, OnDestroy {
 		this.router.navigate([customPath.coursesList]);
 	}
 	get action() {
-		return this.router.url.match(/new$/gi) ? 'Add' : 'Edit';
+		return this.router.url.match(/new$/gi)
+			? storeTranslate.instant('common.add')
+			: storeTranslate.instant('common.edit');
 	}
 	get state() {
 		return this.coursesService.isUpdating.state;

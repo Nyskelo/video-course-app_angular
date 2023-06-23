@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, retry, Subject, tap } from 'rxjs';
+import { storeTranslate } from 'src/app/core/components/header/header.component';
 import {
 	action,
 	Author,
@@ -90,9 +91,18 @@ export class CoursesService {
 				tap((x) => {
 					x.length
 						? this._searchResultSubject$.next(
-								`found ${x.length} courses matching "${term}"`
+								// `found ${x.length} courses matching "${term}"`
+								storeTranslate.instant('courses.courses-search-data', {
+									value1: x.length,
+									value2: term,
+								})
 						  )
-						: this._searchResultSubject$.next(`no courses matching "${term}"`),
+						: this._searchResultSubject$.next(
+								// `no courses matching "${term}"`
+								storeTranslate.instant('courses.courses-search-nodata', {
+									value: term,
+								})
+						  ),
 						this._saveOperationSuccessfulEvent$.next({
 							action: x.length ? action.SEARCH : action.EMPTY,
 						});

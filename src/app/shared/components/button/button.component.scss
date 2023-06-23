@@ -4,7 +4,7 @@ button {
 	@include inline-center-cell;
 	background-color: var(--custom-bg-color, $btn-blue);
 	color: var(--custom-color, #fff);
-	font-size: var(--custom-font-size, 12px);
+	font-size: var(--custom-font-size, 14px);
 	font-weight: var(--custom-font-weight, normal);
 	border: none;
 	min-width: 80px;

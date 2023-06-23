@@ -20,6 +20,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import {
+	TranslateCompiler,
+	TranslateLoader,
+	TranslateModule,
+} from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpClient } from '@angular/common/http';
+import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 @NgModule({
 	declarations: [
 		InputComponent,
@@ -48,6 +56,17 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 		MatAutocompleteModule,
 		ReactiveFormsModule,
 		AsyncPipe,
+		TranslateModule.forChild({
+			loader: {
+				provide: TranslateLoader,
+				useFactory: (http: HttpClient) => new TranslateHttpLoader(http),
+				deps: [HttpClient],
+			},
+			compiler: {
+				provide: TranslateCompiler,
+				useClass: TranslateMessageFormatCompiler,
+			},
+		}),
 	],
 	exports: [
 		CommonModule,
@@ -74,6 +93,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 		MatAutocompleteModule,
 		ReactiveFormsModule,
 		AsyncPipe,
+		TranslateModule,
 	],
 })
 export class SharedModule {}

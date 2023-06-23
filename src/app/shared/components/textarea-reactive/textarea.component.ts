@@ -30,6 +30,7 @@ export class TextareaReactiveComponent implements ControlValueAccessor {
 	@Input() placeholder = 'Type here...';
 	@Input() maxLength = 20;
 	@Input() minLength = 2;
+	@Input() label = 'label';
 	@Input() parentForm!: FormGroup;
 	@Input() fieldName = '';
 

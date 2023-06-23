@@ -5,13 +5,15 @@
 		(ngSubmit)="form.valid ? onSubmit() : $event.preventDefault()"
 		(keyup.enter)="form.valid ? onSubmit() : $event.preventDefault()"
 	>
-		<h1 class="login-title">Login</h1>
+		<h1 class="login-title">{{ 'auth.login' | translate | titlecase }}</h1>
 		<app-r-input
 			formControlName="email"
 			[parentForm]="form"
 			fieldName="email"
 			[minLength]="2"
 			[maxLength]="20"
+			[label]="'auth.email' | translate"
+			[placeholder]="'common.placeholder' | translate"
 		/>
 		<app-r-input
 			formControlName="password"
@@ -20,11 +22,19 @@
 			[type]="'password'"
 			[minLength]="2"
 			[maxLength]="20"
+			[label]="'auth.password' | translate"
+			[placeholder]="'common.placeholder' | translate"
 		/>
 
 		<div>
-			<a href="#"><span class="link">Forgot password?</span></a>
-			<app-button [text]="'Login'" class="btn-login" (click)="onSubmit()" />
+			<a href="#"
+				><span class="link">{{ 'auth.link_1' | translate }}</span></a
+			>
+			<app-button
+				[text]="'auth.login' | translate | titlecase"
+				class="btn-login"
+				(click)="onSubmit()"
+			/>
 		</div>
 	</form>
 </div>

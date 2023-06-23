@@ -4,7 +4,7 @@
 		(ngSubmit)="courseForm.valid ? onSave() : $event.preventDefault()"
 		(keyup.enter)="courseForm.valid ? onSave() : $event.preventDefault()"
 	>
-		<h1 class="title">{{ action }} Course</h1>
+		<h1 class="title">{{ action }} {{ 'courses.course' | translate }}</h1>
 		<!-- TITLE INPUT -->
 		<app-r-input
 			formControlName="title"
@@ -12,6 +12,8 @@
 			[minLength]="2"
 			[maxLength]="20"
 			fieldName="title"
+			[label]="'courses.title' | translate"
+			[placeholder]="'common.placeholder' | translate"
 		/>
 		<!-- DESCRIPTION INPUT -->
 		<app-r-textarea
@@ -20,6 +22,8 @@
 			[minLength]="20"
 			[maxLength]="500"
 			fieldName="description"
+			[label]="'courses.description' | translate"
+			[placeholder]="'common.placeholder' | translate"
 		></app-r-textarea>
 		<!-- DATE INPUT -->
 		<app-r-input
@@ -29,39 +33,46 @@
 			[count]="false"
 			[placeholder]="dateFormat.format"
 			[appDateValidator]="dateFormat"
+			[label]="'courses.date' | translate"
 		/>
 		<!-- DURATION INPUT -->
 		<app-r-input
 			[type]="'number'"
 			formControlName="duration"
-			[placeholder]="'Enter the minutes...'"
+			[placeholder]="'courses.duration-placeholder' | translate"
 			[parentForm]="courseForm"
 			fieldName="duration"
 			[count]="false"
+			[label]="'courses.duration' | translate"
 			><span class="duration-info" *ngIf="+(duration?.value || 0)">{{
-				+(duration?.value || 0) | duration
+				+(duration?.value || 0)
+					| duration
+						: {
+								h: 'courses.duration-hours' | translate,
+								min: 'courses.duration-min' | translate
+						  }
 			}}</span></app-r-input
 		>
 		<!-- AUTHORS CHIPS AUTHOCOMPLETE -->
 		<div>
 			<mat-label
-				>Authors:
+				>{{ 'courses.authors' | translate | titlecase }}:
 				<!-- Errors authors field -->
 				<div
 					class="mat-form-errors"
 					*ngIf="authors?.invalid && authors?.dirty && authors?.touched"
 				>
 					<p *ngIf=" authors?.errors?.['customRequiered']" class="form-error">
-						*Please add Author Name
+						{{ 'errors.errorAuthorNameExpected' | translate }}
 					</p>
 					<p
 						*ngIf="
-						authors?.hasError('customValidation') &&
+						authors?.hasError('customFullNameRequiered') &&
 						!authors?.errors?.['customRequiered']
 					"
 						class="form-error"
 					>
-						*{{ authors?.errors?.['customValidationMsg'] }}
+						{{ 'errors.errorNameAndLastnameExpected' | translate }}
 					</p>
 				</div></mat-label
 			>
@@ -69,7 +80,7 @@
 				class="chip-list"
 				[ngClass]="{
 				'mat-invalid':
-					(authors?.hasError('customValidation') ||
+					(authors?.hasError('customFullNameRequiered') ||
 						authors?.hasError('customRequiered')) &&
 					authors?.dirty &&
 					authors?.touched,				
@@ -88,20 +99,25 @@
 					</mat-chip-row>
 				</mat-chip-grid>
 				<input
-					placeholder="New Author..."
+					[placeholder]="'courses.authors-placeholder' | translate"
 					#authorsInput
 					formControlName="authors"
 					[matChipInputFor]="chipGrid"
 					[matAutocomplete]="auto"
 					[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
 					(matChipInputTokenEnd)="add($event)"
+					class="mat-input"
 				/>
 
 				<mat-autocomplete
 					#auto="matAutocomplete"
 					(optionSelected)="selected($event)"
 				>
-					<mat-option *ngFor="let author of filteredAuthors()" [value]="author">
+					<mat-option
+						*ngFor="let author of filteredAuthors()"
+						[value]="author"
+						[class.selected]="authorsArray().includes(author)"
+					>
 						{{ author.name }}
 					</mat-option>
 				</mat-autocomplete>
@@ -111,14 +127,14 @@
 		<!-- Buttons -->
 		<div class="actions">
 			<app-button
-				[text]="'Save'"
+				[text]="'common.save' | translate"
 				[type]="'submit'"
 				class="btn-course save"
 				[disabled]="courseForm.invalid"
 				[ngClass]="courseForm.invalid ? 'disabled' : ''"
 			/>
 			<app-button
-				[text]="'Cancel'"
+				[text]="'common.cancel' | translate"
 				class="btn-course cancel"
 				(click)="onCancel()"
 			/>

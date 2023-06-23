@@ -1,4 +1,5 @@
 import { FormControl } from '@angular/forms';
+import { storeTranslate } from 'src/app/core/components/header/header.component';
 import { Author } from 'src/app/utils/global.model';
 
 //Form validations methods
@@ -28,8 +29,8 @@ export function greaterThenZero(controls: FormControl) {
 	const isValid = +controls.value >= 1 && !/^0/g.test(controls.value);
 	const isInValidZero = /^0/g.test(controls.value) && controls.value.length > 1;
 	const msg = isInValidZero
-		? 'Duration cannot start with 0'
-		: 'Duration should be greater than 0';
+		? storeTranslate.instant('errors.greaterThenZero1')
+		: storeTranslate.instant('errors.greaterThenZero2');
 	return isValid
 		? null
 		: {
@@ -38,32 +39,34 @@ export function greaterThenZero(controls: FormControl) {
 		  };
 }
 
-export const errorNameAndLastnameExpected = {
-	customValidation: true,
-	customValidationMsg: `Please add correct first name and lastname`,
-};
 export function oneSpaceExpected(controls: FormControl) {
 	const value = controls.value;
 	controls.value !== value && controls.setValue(value);
 	const NAME_REGEX = /^[a-z]+\s[a-z]+$/gi;
-	const NAME_REGEX_Next = /^[a-z]+\s\s$/gi;
+	const NAME_REGEX_Next = /^[a-z]+\s\s+$/gi;
 	const NAME_REGEX_Digit = /\d+/g;
 	const result = NAME_REGEX.test(controls.value);
 	if (NAME_REGEX_Digit.test(controls.value)) {
-		return errorNameAndLastnameExpected;
+		return {
+			customValidation: true,
+			customValidationMsg: storeTranslate.instant(
+				'errors.errorNameAndLastnameExpected'
+			),
+		};
 	}
 	if (NAME_REGEX_Next.test(controls.value)) {
 		return result || controls.value === null || controls.value === ''
 			? null
-			: errorNameAndLastnameExpected;
+			: {
+					customFullNameRequiered: true,
+					customValidationMsg: storeTranslate.instant(
+						'errors.errorNameAndLastnameExpected'
+					),
+			  };
 	}
 	return null;
 }
 
-export const errorAuthorNameExpected = {
-	customRequiered: true,
-	customValidationMsg: `Please add Author Name`,
-};
 export function customRequiered(arrayOfAuthors: () => Author[]) {
 	return (controls: FormControl) => {
 		const value = controls.value;
@@ -72,6 +75,11 @@ export function customRequiered(arrayOfAuthors: () => Author[]) {
 			(controls.value && !Array.isArray(controls.value)) ||
 			arrayOfAuthors()?.length > 0
 			? null
-			: errorAuthorNameExpected;
+			: {
+					customRequiered: true,
+					customValidationMsg: storeTranslate.get(
+						'errors.errorAuthorNameExpected'
+					),
+			  };
 	};
 }

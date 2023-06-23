@@ -19,6 +19,7 @@ export class PaginationComponent {
 	@Input() total = signal<number>(5);
 	@Input() limit = 5;
 	@Input() loadButton = false;
+	@Input() label = 'label';
 	@Output() changePage = new EventEmitter<number>();
 	@Output() loadMore = new EventEmitter<number>();
 
