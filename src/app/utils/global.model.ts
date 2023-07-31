@@ -46,3 +46,5 @@ export interface CourseState {
 	state: boolean;
 	action: action;
 }
+
+export type c = { fff: 'd' };
