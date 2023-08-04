@@ -10,8 +10,8 @@
 			<p
 				*ngIf=" formField?.errors?.['required']"
 				class="form-error"
-				[translate]="'errors.required'"
 				[translateParams]="{ value: label }"
+				[translate]="'errors.required'"
 			></p>
 			<p
 				*ngIf="
@@ -59,6 +59,7 @@
 	<!-- INPUT-->
 	<input
 		class="form-element__input"
+		title="title"
 		[placeholder]="placeholder"
 		[type]="type"
 		[value]="value"

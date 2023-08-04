@@ -35,7 +35,7 @@
 		"authors-placeholder": "New author..."
 	},
 	"errors": {
-		"required": "*Please provide {{value}}",
+		"required": "*Please provide {value}",
 		"date-format": "*Please provide correct date format - {value}",
 		"minLength": "*{value1} must be a minimum of {value2} characters",
 		"maxLength": "*{value1} must be a maximum of {value2} characters",
